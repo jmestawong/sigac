@@ -1,0 +1,5 @@
+@if (notificacion(); as n) {
+  <div class="toast" [class.toast-error]="n.tipo === 'error'" [class.toast-exito]="n.tipo === 'exito'">
+    {{ n.mensaje }}
+  </div>
+}

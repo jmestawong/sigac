@@ -1,0 +1,26 @@
+<div class="login-page">
+  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>SIGAC</h1>
+    <p class="subtitle">Sistema de Gestión Administrativa y de Caja</p>
+
+    <label for="username">Usuario</label>
+    <input id="username" type="text" formControlName="username" autocomplete="username" />
+    @if (form.controls.username.invalid && form.controls.username.touched) {
+      <span class="field-error">El usuario es obligatorio.</span>
+    }
+
+    <label for="password">Contraseña</label>
+    <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+    @if (form.controls.password.invalid && form.controls.password.touched) {
+      <span class="field-error">La contraseña es obligatoria.</span>
+    }
+
+    @if (errorLogin()) {
+      <p class="form-error">{{ errorLogin() }}</p>
+    }
+
+    <button type="submit" [disabled]="cargando()">
+      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+</div>

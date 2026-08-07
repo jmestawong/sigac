@@ -1,0 +1,9 @@
+@if (authService.isAuthenticated()) {
+  <nav class="topbar">
+    <span class="brand">SIGAC</span>
+    <button type="button" class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
+  </nav>
+}
+
+<router-outlet></router-outlet>
+<app-toast></app-toast>

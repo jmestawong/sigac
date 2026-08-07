@@ -1,0 +1,72 @@
+<section class="form-page">
+  <div class="form-card">
+    <h1>{{ esEdicion() ? 'Editar socio' : 'Nuevo socio' }}</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="codigo">Código</label>
+        <input id="codigo" type="text" formControlName="codigo" />
+        @if (form.controls.codigo.invalid && form.controls.codigo.touched) {
+          <span class="field-error">El código es obligatorio.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="nombres">Nombres</label>
+        <input id="nombres" type="text" formControlName="nombres" />
+        @if (form.controls.nombres.invalid && form.controls.nombres.touched) {
+          <span class="field-error">Los nombres son obligatorios.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="apellidos">Apellidos</label>
+        <input id="apellidos" type="text" formControlName="apellidos" />
+        @if (form.controls.apellidos.invalid && form.controls.apellidos.touched) {
+          <span class="field-error">Los apellidos son obligatorios.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="accion">Acción</label>
+        <select id="accion" formControlName="accion">
+          <option value="" disabled>Selecciona una acción</option>
+          <option value="Ordinaria">Ordinaria</option>
+          <option value="Preferente">Preferente</option>
+          <option value="Fundador">Fundador</option>
+        </select>
+        @if (form.controls.accion.invalid && form.controls.accion.touched) {
+          <span class="field-error">La acción es obligatoria.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="etapa">Etapa</label>
+        <select id="etapa" formControlName="etapa">
+          <option value="" disabled>Selecciona una etapa</option>
+          <option value="Activo">Activo</option>
+          <option value="Suspendido">Suspendido</option>
+          <option value="Inactivo">Inactivo</option>
+        </select>
+        @if (form.controls.etapa.invalid && form.controls.etapa.touched) {
+          <span class="field-error">La etapa es obligatoria.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" />
+        @if (form.controls.fechaNacimiento.invalid && form.controls.fechaNacimiento.touched) {
+          <span class="field-error">La fecha de nacimiento es obligatoria.</span>
+        }
+      </div>
+
+      <div class="acciones-form">
+        <a routerLink="/socios" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

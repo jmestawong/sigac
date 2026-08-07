@@ -1,0 +1,49 @@
+<section class="socios-page">
+  <header class="page-header">
+    <div>
+      <h1>Socios</h1>
+      <p class="conectado">
+        Conectado como <strong>{{ authService.username() }}</strong> ({{ authService.rol() }})
+      </p>
+    </div>
+    <a class="btn btn-primary" routerLink="/socios/nuevo">+ Nuevo socio</a>
+  </header>
+
+  @if (cargando()) {
+    <p class="estado">Cargando socios...</p>
+  } @else if (socios().length === 0) {
+    <p class="estado">Aún no hay socios registrados.</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Acción</th>
+            <th>Etapa</th>
+            <th>Fecha nacimiento</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (socio of socios(); track socio.id) {
+            <tr>
+              <td>{{ socio.codigo }}</td>
+              <td>{{ socio.nombres }}</td>
+              <td>{{ socio.apellidos }}</td>
+              <td>{{ socio.accion }}</td>
+              <td><span class="etapa-badge">{{ socio.etapa }}</span></td>
+              <td>{{ socio.fechaNacimiento }}</td>
+              <td class="acciones">
+                <a [routerLink]="['/socios', socio.id, 'editar']" class="btn btn-secondary">Editar</a>
+                <button type="button" class="btn btn-danger" (click)="eliminar(socio)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
