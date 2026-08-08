@@ -68,5 +68,30 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./puestos/puesto-form/puesto-form').then((m) => m.PuestoForm),
   },
+  {
+    path: 'servicios',
+    canActivate: [authGuard],
+    loadComponent: () => import('./servicios-cobrables/servicio-list/servicio-list').then((m) => m.ServicioList),
+  },
+  {
+    path: 'servicios/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () => import('./servicios-cobrables/servicio-form/servicio-form').then((m) => m.ServicioForm),
+  },
+  {
+    path: 'servicios/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./servicios-cobrables/servicio-form/servicio-form').then((m) => m.ServicioForm),
+  },
+  {
+    path: 'cuentas-por-cobrar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./cuentas-por-cobrar/cuenta-list/cuenta-list').then((m) => m.CuentaList),
+  },
+  {
+    path: 'cuentas-por-cobrar/generar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./cuentas-por-cobrar/generar/generar').then((m) => m.Generar),
+  },
   { path: '**', redirectTo: 'socios' },
 ];

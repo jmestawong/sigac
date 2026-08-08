@@ -1,0 +1,55 @@
+@import '../../shared/catalogo.css';
+@import '../../shared/formulario.css';
+
+.generar-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.form-card {
+  margin-bottom: 1.5rem;
+}
+
+.lista-seleccion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.lista-seleccion-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: none;
+  overflow: visible;
+}
+
+.opcion-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #334155;
+}
+
+.opcion-checkbox input {
+  width: auto;
+}
+
+.ayuda {
+  color: #64748b;
+  font-size: 0.82rem;
+  margin: 0.4rem 0 0;
+}
+
+.resultado h2 {
+  margin: 0 0 1rem;
+  color: #1e293b;
+  font-size: 1.1rem;
+}

@@ -44,9 +44,9 @@
         <label for="etapa">Etapa</label>
         <select id="etapa" formControlName="etapa">
           <option value="" disabled>Selecciona una etapa</option>
-          <option value="Activo">Activo</option>
-          <option value="Suspendido">Suspendido</option>
-          <option value="Inactivo">Inactivo</option>
+          <option value="1">Etapa 1</option>
+          <option value="2">Etapa 2</option>
+          <option value="3">Etapa 3</option>
         </select>
         @if (form.controls.etapa.invalid && form.controls.etapa.touched) {
           <span class="field-error">La etapa es obligatoria.</span>

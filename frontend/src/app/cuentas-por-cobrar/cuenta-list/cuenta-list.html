@@ -1,0 +1,57 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Cuentas por cobrar</h1>
+    <a class="btn btn-primary" routerLink="/cuentas-por-cobrar/generar">+ Generar cuentas</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por servicio, período, estado, puesto o socio..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando cuentas por cobrar...</p>
+  } @else if (cuentas().length === 0) {
+    <p class="estado">Aún no se han generado cuentas por cobrar.</p>
+  } @else if (cuentasFiltradas().length === 0) {
+    <p class="estado">No hay cuentas que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Destinatario</th>
+            <th>Período</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cuenta of cuentasFiltradas(); track cuenta.id) {
+            <tr>
+              <td>{{ cuenta.servicio.nombre }}</td>
+              <td>
+                @if (cuenta.puesto) {
+                  {{ cuenta.puesto.numero }} — {{ cuenta.puesto.nombreInquilino }}
+                } @else if (cuenta.socio) {
+                  {{ cuenta.socio.nombres }} {{ cuenta.socio.apellidos }} ({{ cuenta.socio.codigo }})
+                }
+              </td>
+              <td>{{ cuenta.periodo }}</td>
+              <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+              <td><span class="estado-badge">{{ cuenta.estado }}</span></td>
+              <td class="acciones">
+                <button type="button" class="btn btn-danger" (click)="eliminar(cuenta)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

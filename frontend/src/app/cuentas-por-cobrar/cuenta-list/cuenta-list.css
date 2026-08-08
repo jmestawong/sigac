@@ -1,0 +1,10 @@
+@import '../../shared/catalogo.css';
+
+.estado-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
