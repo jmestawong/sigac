@@ -1,0 +1,44 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Giros</h1>
+    <a class="btn btn-primary" routerLink="/giros/nuevo">+ Nuevo giro</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por nombre..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando giros...</p>
+  } @else if (giros().length === 0) {
+    <p class="estado">Aún no hay giros registrados.</p>
+  } @else if (girosFiltrados().length === 0) {
+    <p class="estado">No hay giros que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (giro of girosFiltrados(); track giro.id) {
+            <tr>
+              <td>{{ giro.nombre }}</td>
+              <td class="acciones">
+                <a [routerLink]="['/giros', giro.id, 'editar']" class="btn btn-secondary">Editar</a>
+                <button type="button" class="btn btn-danger" (click)="eliminar(giro)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
