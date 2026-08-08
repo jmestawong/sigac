@@ -1,0 +1,50 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Bancos</h1>
+    <a class="btn btn-primary" routerLink="/bancos/nuevo">+ Nueva cuenta</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por banco, cuenta, CCI o moneda..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando cuentas bancarias...</p>
+  } @else if (bancos().length === 0) {
+    <p class="estado">Aún no hay cuentas bancarias registradas.</p>
+  } @else if (bancosFiltrados().length === 0) {
+    <p class="estado">No hay cuentas que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Banco</th>
+            <th>Número de cuenta</th>
+            <th>CCI</th>
+            <th>Moneda</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (banco of bancosFiltrados(); track banco.id) {
+            <tr>
+              <td>{{ banco.nombre }}</td>
+              <td>{{ banco.numeroCuenta }}</td>
+              <td>{{ banco.cci }}</td>
+              <td>{{ banco.moneda }}</td>
+              <td class="acciones">
+                <a [routerLink]="['/bancos', banco.id, 'editar']" class="btn btn-secondary">Editar</a>
+                <button type="button" class="btn btn-danger" (click)="eliminar(banco)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

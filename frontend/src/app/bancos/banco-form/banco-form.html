@@ -1,0 +1,50 @@
+<section class="form-page">
+  <div class="form-card">
+    <h1>{{ esEdicion() ? 'Editar cuenta bancaria' : 'Nueva cuenta bancaria' }}</h1>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="field">
+        <label for="nombre">Banco</label>
+        <input id="nombre" type="text" formControlName="nombre" />
+        @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
+          <span class="field-error">El nombre del banco es obligatorio.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="numeroCuenta">Número de cuenta</label>
+        <input id="numeroCuenta" type="text" formControlName="numeroCuenta" />
+        @if (form.controls.numeroCuenta.invalid && form.controls.numeroCuenta.touched) {
+          <span class="field-error">El número de cuenta es obligatorio.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="cci">CCI</label>
+        <input id="cci" type="text" formControlName="cci" />
+        @if (form.controls.cci.invalid && form.controls.cci.touched) {
+          <span class="field-error">El CCI es obligatorio.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="moneda">Moneda</label>
+        <select id="moneda" formControlName="moneda">
+          <option value="" disabled>Selecciona una moneda</option>
+          <option value="PEN">Soles (PEN)</option>
+          <option value="USD">Dólares (USD)</option>
+        </select>
+        @if (form.controls.moneda.invalid && form.controls.moneda.touched) {
+          <span class="field-error">La moneda es obligatoria.</span>
+        }
+      </div>
+
+      <div class="acciones-form">
+        <a routerLink="/bancos" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
