@@ -1,0 +1,13 @@
+@import '../../shared/formulario.css';
+
+.field-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.field-checkbox input {
+  width: auto;
+}

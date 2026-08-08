@@ -1,0 +1,52 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Servicios cobrables</h1>
+    <a class="btn btn-primary" routerLink="/servicios/nuevo">+ Nuevo servicio</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por nombre, recurrencia, destinatario o moneda..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando servicios...</p>
+  } @else if (servicios().length === 0) {
+    <p class="estado">Aún no hay servicios registrados.</p>
+  } @else if (serviciosFiltrados().length === 0) {
+    <p class="estado">No hay servicios que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Recurrencia</th>
+            <th>Costo</th>
+            <th>Destinatario</th>
+            <th>Tipo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (servicio of serviciosFiltrados(); track servicio.id) {
+            <tr>
+              <td>{{ servicio.nombre }}</td>
+              <td>{{ servicio.recurrencia }}</td>
+              <td>{{ servicio.moneda }} {{ servicio.costo }}</td>
+              <td>{{ servicio.destinatario }}</td>
+              <td>{{ servicio.esPorConsumo ? 'Por consumo' : 'Costo fijo' }}</td>
+              <td class="acciones">
+                <a [routerLink]="['/servicios', servicio.id, 'editar']" class="btn btn-secondary">Editar</a>
+                <button type="button" class="btn btn-danger" (click)="eliminar(servicio)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
