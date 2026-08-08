@@ -1,7 +1,12 @@
 @if (authService.isAuthenticated()) {
   <nav class="topbar">
     <span class="brand">SIGAC</span>
-    <button type="button" class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
+    <div class="topbar-usuario">
+      <span class="usuario-info">
+        {{ authService.username() }} <span class="rol-badge">{{ authService.rol() }}</span>
+      </span>
+      <button type="button" class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
+    </div>
   </nav>
 }
 

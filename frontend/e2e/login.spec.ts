@@ -6,7 +6,8 @@ test.describe('Login', () => {
   test('inicia sesión con credenciales válidas y redirige a /socios', async ({ page }) => {
     await login(page);
 
-    await expect(page.getByText('Conectado como')).toBeVisible();
+    await expect(page.getByText('admin').first()).toBeVisible();
+    await expect(page.getByText('ADMIN', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Cerrar sesión' })).toBeVisible();
   });
 

@@ -11,3 +11,24 @@
   font-weight: 700;
   letter-spacing: 0.05em;
 }
+
+.topbar-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.usuario-info {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+
+.rol-badge {
+  background: #334155;
+  color: #e2e8f0;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}

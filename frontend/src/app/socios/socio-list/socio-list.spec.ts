@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
-import { AuthService } from '../../core/services/auth.service';
 import { Socio } from '../../core/models/socio.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { SocioService } from '../../core/services/socio.service';
@@ -40,7 +39,6 @@ describe('SocioList', () => {
         provideRouter([]),
         { provide: SocioService, useValue: socioService },
         { provide: NotificationService, useValue: notificationService },
-        { provide: AuthService, useValue: { username: () => 'admin', rol: () => 'ADMIN' } },
       ],
     });
   });

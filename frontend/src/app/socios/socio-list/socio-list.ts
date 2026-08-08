@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { SocioService } from '../../core/services/socio.service';
 import { Socio } from '../../core/models/socio.model';
@@ -15,7 +14,6 @@ import { Socio } from '../../core/models/socio.model';
 export class SocioList {
   private readonly socioService = inject(SocioService);
   private readonly notificationService = inject(NotificationService);
-  readonly authService = inject(AuthService);
 
   readonly socios = signal<Socio[]>([]);
   readonly cargando = signal(true);
