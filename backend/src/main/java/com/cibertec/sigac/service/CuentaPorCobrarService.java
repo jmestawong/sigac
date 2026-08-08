@@ -6,6 +6,8 @@ import com.cibertec.sigac.dto.CuentaPorCobrarResponse;
 import com.cibertec.sigac.dto.GenerarPuestosConsumoRequest;
 import com.cibertec.sigac.dto.GenerarPuestosMontoFijoRequest;
 import com.cibertec.sigac.dto.GenerarSociosRequest;
+import com.cibertec.sigac.dto.ResumenPuestoResponse;
+import com.cibertec.sigac.dto.ResumenSocioResponse;
 
 public interface CuentaPorCobrarService {
 
@@ -20,4 +22,8 @@ public interface CuentaPorCobrarService {
     List<CuentaPorCobrarResponse> generarParaPuestosConsumo(GenerarPuestosConsumoRequest request);
 
     List<CuentaPorCobrarResponse> generarParaSocios(GenerarSociosRequest request);
+
+    ResumenSocioResponse resumenPorSocio(Long socioId);
+
+    ResumenPuestoResponse resumenPorPuesto(Long puestoId);
 }

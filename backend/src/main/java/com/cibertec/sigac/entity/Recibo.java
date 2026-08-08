@@ -1,6 +1,8 @@
 package com.cibertec.sigac.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,47 +20,49 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * El correlativo se asigna despues de persistir (dos fases dentro de la
+ * misma transaccion), por eso la columna admite null a nivel de esquema
+ * aunque en la practica ningun recibo confirmado queda sin el.
+ */
 @Entity
-@Table(name = "cuentas_por_cobrar")
+@Table(name = "recibos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CuentaPorCobrar {
+public class Recibo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, length = 20)
+    private String correlativo;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
-    private EstadoCuenta estado;
+    @Column(nullable = false, length = 20)
+    private TipoRecibo tipo;
+
+    @Column(nullable = false)
+    private LocalDateTime fecha;
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal monto;
 
-    @Column(nullable = false, length = 20)
-    private String periodo;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "puesto_id", nullable = true)
-    private Puesto puesto;
+    @JoinColumn(name = "banco_id", nullable = true)
+    private Banco banco;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "socio_id", nullable = true)
-    private Socio socio;
+    @Column(name = "fecha_deposito")
+    private LocalDate fechaDeposito;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "servicio_id", nullable = false)
-    private ServicioCobrable servicio;
+    @Column(length = 150)
+    private String depositante;
 
-    @Column(name = "lectura_inicial", precision = 12, scale = 2)
-    private BigDecimal lecturaInicial;
+    @Column(length = 100)
+    private String categoria;
 
-    @Column(name = "lectura_final", precision = 12, scale = 2)
-    private BigDecimal lecturaFinal;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "recibo_id", nullable = true)
-    private Recibo recibo;
+    @Column(length = 255)
+    private String concepto;
 }

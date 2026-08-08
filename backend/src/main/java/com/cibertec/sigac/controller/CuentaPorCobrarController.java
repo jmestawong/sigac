@@ -16,6 +16,8 @@ import com.cibertec.sigac.dto.CuentaPorCobrarResponse;
 import com.cibertec.sigac.dto.GenerarPuestosConsumoRequest;
 import com.cibertec.sigac.dto.GenerarPuestosMontoFijoRequest;
 import com.cibertec.sigac.dto.GenerarSociosRequest;
+import com.cibertec.sigac.dto.ResumenPuestoResponse;
+import com.cibertec.sigac.dto.ResumenSocioResponse;
 import com.cibertec.sigac.service.CuentaPorCobrarService;
 
 import jakarta.validation.Valid;
@@ -62,5 +64,15 @@ public class CuentaPorCobrarController {
     @ResponseStatus(HttpStatus.CREATED)
     public List<CuentaPorCobrarResponse> generarParaSocios(@Valid @RequestBody GenerarSociosRequest request) {
         return cuentaPorCobrarService.generarParaSocios(request);
+    }
+
+    @GetMapping("/resumen/socio/{socioId}")
+    public ResumenSocioResponse resumenPorSocio(@PathVariable Long socioId) {
+        return cuentaPorCobrarService.resumenPorSocio(socioId);
+    }
+
+    @GetMapping("/resumen/puesto/{puestoId}")
+    public ResumenPuestoResponse resumenPorPuesto(@PathVariable Long puestoId) {
+        return cuentaPorCobrarService.resumenPorPuesto(puestoId);
     }
 }

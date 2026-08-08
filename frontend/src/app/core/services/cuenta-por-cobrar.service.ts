@@ -8,6 +8,8 @@ import {
   GenerarPuestosConsumoRequest,
   GenerarPuestosMontoFijoRequest,
   GenerarSociosRequest,
+  ResumenPuesto,
+  ResumenSocio,
 } from '../models/cuenta-por-cobrar.model';
 
 @Injectable({ providedIn: 'root' })
@@ -34,5 +36,13 @@ export class CuentaPorCobrarService {
 
   generarParaSocios(request: GenerarSociosRequest): Observable<CuentaPorCobrar[]> {
     return this.http.post<CuentaPorCobrar[]>(`${this.baseUrl}/generar/socios`, request);
+  }
+
+  resumenPorSocio(socioId: number): Observable<ResumenSocio> {
+    return this.http.get<ResumenSocio>(`${this.baseUrl}/resumen/socio/${socioId}`);
+  }
+
+  resumenPorPuesto(puestoId: number): Observable<ResumenPuesto> {
+    return this.http.get<ResumenPuesto>(`${this.baseUrl}/resumen/puesto/${puestoId}`);
   }
 }

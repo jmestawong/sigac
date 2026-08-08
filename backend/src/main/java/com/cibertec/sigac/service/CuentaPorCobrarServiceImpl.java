@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cibertec.sigac.dto.BancoResponse;
 import com.cibertec.sigac.dto.CuentaPorCobrarResponse;
 import com.cibertec.sigac.dto.GenerarPuestosConsumoRequest;
 import com.cibertec.sigac.dto.GenerarPuestosMontoFijoRequest;
@@ -16,11 +17,16 @@ import com.cibertec.sigac.dto.GenerarSociosRequest;
 import com.cibertec.sigac.dto.GiroResponse;
 import com.cibertec.sigac.dto.LecturaPuestoRequest;
 import com.cibertec.sigac.dto.PuestoResponse;
+import com.cibertec.sigac.dto.ReciboResponse;
+import com.cibertec.sigac.dto.ResumenPuestoResponse;
+import com.cibertec.sigac.dto.ResumenSocioResponse;
 import com.cibertec.sigac.dto.ServicioCobrableResponse;
 import com.cibertec.sigac.dto.SocioResponse;
+import com.cibertec.sigac.entity.Banco;
 import com.cibertec.sigac.entity.CuentaPorCobrar;
 import com.cibertec.sigac.entity.EstadoCuenta;
 import com.cibertec.sigac.entity.Puesto;
+import com.cibertec.sigac.entity.Recibo;
 import com.cibertec.sigac.entity.ServicioCobrable;
 import com.cibertec.sigac.entity.Socio;
 import com.cibertec.sigac.entity.TipoDestinatario;
@@ -134,6 +140,87 @@ public class CuentaPorCobrarServiceImpl implements CuentaPorCobrarService {
         return guardarYMapear(cuentas);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ResumenSocioResponse resumenPorSocio(Long socioId) {
+        Socio socio = socioRepository.findById(socioId)
+                .orElseThrow(() -> new ResourceNotFoundException("Socio no encontrado con id " + socioId));
+
+        List<CuentaPorCobrar> cuentasSocio = cuentaPorCobrarRepository.findBySocioIdOrderByIdDesc(socioId);
+        List<CuentaPorCobrar> cuentasPuestos = cuentaPorCobrarRepository.findByPuesto_Socio_IdOrderByIdDesc(socioId);
+
+        return ResumenSocioResponse.builder()
+                .socio(toSocioResponse(socio))
+                .cuentasSocio(cuentasSocio.stream().map(this::toResponse).toList())
+                .cuentasPuestos(cuentasPuestos.stream().map(this::toResponse).toList())
+                .movimientos(extraerRecibosUnicos(cuentasSocio, cuentasPuestos).stream()
+                        .map(this::toReciboResponse)
+                        .toList())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResumenPuestoResponse resumenPorPuesto(Long puestoId) {
+        Puesto puesto = buscarPuesto(puestoId);
+
+        List<CuentaPorCobrar> cuentasPuesto = cuentaPorCobrarRepository.findByPuestoIdOrderByIdDesc(puestoId);
+        List<CuentaPorCobrar> cuentasSocioAsociado = puesto.getSocio() != null
+                ? cuentaPorCobrarRepository.findBySocioIdOrderByIdDesc(puesto.getSocio().getId())
+                : List.of();
+
+        return ResumenPuestoResponse.builder()
+                .puesto(toPuestoResponse(puesto))
+                .cuentasPuesto(cuentasPuesto.stream().map(this::toResponse).toList())
+                .cuentasSocioAsociado(cuentasSocioAsociado.stream().map(this::toResponse).toList())
+                .movimientos(extraerRecibosUnicos(cuentasPuesto, cuentasSocioAsociado).stream()
+                        .map(this::toReciboResponse)
+                        .toList())
+                .build();
+    }
+
+    @SafeVarargs
+    private List<Recibo> extraerRecibosUnicos(List<CuentaPorCobrar>... listas) {
+        Map<Long, Recibo> unicos = new LinkedHashMap<>();
+        for (List<CuentaPorCobrar> lista : listas) {
+            for (CuentaPorCobrar cuenta : lista) {
+                if (cuenta.getRecibo() != null) {
+                    unicos.putIfAbsent(cuenta.getRecibo().getId(), cuenta.getRecibo());
+                }
+            }
+        }
+        return new ArrayList<>(unicos.values());
+    }
+
+    private ReciboResponse toReciboResponse(Recibo recibo) {
+        return ReciboResponse.builder()
+                .id(recibo.getId())
+                .correlativo(recibo.getCorrelativo())
+                .tipo(recibo.getTipo())
+                .fecha(recibo.getFecha())
+                .monto(recibo.getMonto())
+                .banco(toBancoResponse(recibo.getBanco()))
+                .fechaDeposito(recibo.getFechaDeposito())
+                .depositante(recibo.getDepositante())
+                .categoria(recibo.getCategoria())
+                .concepto(recibo.getConcepto())
+                .cuentas(List.of())
+                .build();
+    }
+
+    private BancoResponse toBancoResponse(Banco banco) {
+        if (banco == null) {
+            return null;
+        }
+        return BancoResponse.builder()
+                .id(banco.getId())
+                .nombre(banco.getNombre())
+                .numeroCuenta(banco.getNumeroCuenta())
+                .cci(banco.getCci())
+                .moneda(banco.getMoneda())
+                .build();
+    }
+
     private CuentaPorCobrar crearCuentaPorConsumo(ServicioCobrable servicio, String periodo, LecturaPuestoRequest lectura) {
         Puesto puesto = buscarPuesto(lectura.getPuestoId());
         BigDecimal diferencia = lectura.getLecturaFinal().subtract(lectura.getLecturaInicial());
@@ -200,6 +287,7 @@ public class CuentaPorCobrarServiceImpl implements CuentaPorCobrarService {
                 .servicio(toServicioResponse(cuenta.getServicio()))
                 .lecturaInicial(cuenta.getLecturaInicial())
                 .lecturaFinal(cuenta.getLecturaFinal())
+                .reciboCorrelativo(cuenta.getRecibo() != null ? cuenta.getRecibo().getCorrelativo() : null)
                 .build();
     }
 

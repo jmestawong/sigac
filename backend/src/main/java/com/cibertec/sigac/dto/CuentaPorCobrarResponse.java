@@ -24,4 +24,5 @@ public class CuentaPorCobrarResponse {
     private ServicioCobrableResponse servicio;
     private BigDecimal lecturaInicial;
     private BigDecimal lecturaFinal;
+    private String reciboCorrelativo;
 }

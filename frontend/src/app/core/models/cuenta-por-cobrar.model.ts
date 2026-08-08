@@ -1,4 +1,5 @@
 import { Puesto } from './puesto.model';
+import { Recibo } from './recibo.model';
 import { ServicioCobrable } from './servicio-cobrable.model';
 import { Socio } from './socio.model';
 
@@ -14,6 +15,7 @@ export interface CuentaPorCobrar {
   servicio: ServicioCobrable;
   lecturaInicial: number | null;
   lecturaFinal: number | null;
+  reciboCorrelativo: string | null;
 }
 
 export interface GenerarPuestosMontoFijoRequest {
@@ -41,4 +43,18 @@ export interface GenerarSociosRequest {
   monto: number;
   etapas: string[];
   sociosUnicos: boolean;
+}
+
+export interface ResumenSocio {
+  socio: Socio;
+  cuentasSocio: CuentaPorCobrar[];
+  cuentasPuestos: CuentaPorCobrar[];
+  movimientos: Recibo[];
+}
+
+export interface ResumenPuesto {
+  puesto: Puesto;
+  cuentasPuesto: CuentaPorCobrar[];
+  cuentasSocioAsociado: CuentaPorCobrar[];
+  movimientos: Recibo[];
 }
