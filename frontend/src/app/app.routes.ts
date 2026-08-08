@@ -23,5 +23,50 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./socios/socio-form/socio-form').then((m) => m.SocioForm),
   },
+  {
+    path: 'giros',
+    canActivate: [authGuard],
+    loadComponent: () => import('./giros/giro-list/giro-list').then((m) => m.GiroList),
+  },
+  {
+    path: 'giros/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () => import('./giros/giro-form/giro-form').then((m) => m.GiroForm),
+  },
+  {
+    path: 'giros/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./giros/giro-form/giro-form').then((m) => m.GiroForm),
+  },
+  {
+    path: 'bancos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./bancos/banco-list/banco-list').then((m) => m.BancoList),
+  },
+  {
+    path: 'bancos/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () => import('./bancos/banco-form/banco-form').then((m) => m.BancoForm),
+  },
+  {
+    path: 'bancos/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./bancos/banco-form/banco-form').then((m) => m.BancoForm),
+  },
+  {
+    path: 'puestos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./puestos/puesto-list/puesto-list').then((m) => m.PuestoList),
+  },
+  {
+    path: 'puestos/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () => import('./puestos/puesto-form/puesto-form').then((m) => m.PuestoForm),
+  },
+  {
+    path: 'puestos/:id/editar',
+    canActivate: [authGuard],
+    loadComponent: () => import('./puestos/puesto-form/puesto-form').then((m) => m.PuestoForm),
+  },
   { path: '**', redirectTo: 'socios' },
 ];

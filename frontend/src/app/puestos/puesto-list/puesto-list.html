@@ -1,0 +1,52 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Puestos</h1>
+    <a class="btn btn-primary" routerLink="/puestos/nuevo">+ Nuevo puesto</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por número, inquilino, giro o socio..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando puestos...</p>
+  } @else if (puestos().length === 0) {
+    <p class="estado">Aún no hay puestos registrados.</p>
+  } @else if (puestosFiltrados().length === 0) {
+    <p class="estado">No hay puestos que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Inquilino</th>
+            <th>Giro</th>
+            <th>Socio</th>
+            <th>Vigencia</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (puesto of puestosFiltrados(); track puesto.id) {
+            <tr>
+              <td>{{ puesto.numero }}</td>
+              <td>{{ puesto.nombreInquilino }}</td>
+              <td>{{ puesto.giro.nombre }}</td>
+              <td>{{ puesto.socio ? puesto.socio.nombres + ' ' + puesto.socio.apellidos : '—' }}</td>
+              <td>{{ puesto.fechaInicioVigencia }} a {{ puesto.fechaFinVigencia }}</td>
+              <td class="acciones">
+                <a [routerLink]="['/puestos', puesto.id, 'editar']" class="btn btn-secondary">Editar</a>
+                <button type="button" class="btn btn-danger" (click)="eliminar(puesto)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
