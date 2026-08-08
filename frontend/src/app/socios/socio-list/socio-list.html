@@ -1,13 +1,23 @@
-<section class="socios-page">
+<section class="catalogo-page">
   <header class="page-header">
     <h1>Socios</h1>
     <a class="btn btn-primary" routerLink="/socios/nuevo">+ Nuevo socio</a>
   </header>
 
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por código, nombres, apellidos o etapa..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
   @if (cargando()) {
     <p class="estado">Cargando socios...</p>
   } @else if (socios().length === 0) {
     <p class="estado">Aún no hay socios registrados.</p>
+  } @else if (sociosFiltrados().length === 0) {
+    <p class="estado">No hay socios que coincidan con "{{ filtro() }}".</p>
   } @else {
     <div class="table-wrapper">
       <table>
@@ -23,7 +33,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (socio of socios(); track socio.id) {
+          @for (socio of sociosFiltrados(); track socio.id) {
             <tr>
               <td>{{ socio.codigo }}</td>
               <td>{{ socio.nombres }}</td>

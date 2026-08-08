@@ -1,52 +1,4 @@
-.socios-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-.page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-}
-
-h1 {
-  margin: 0;
-  color: #1e293b;
-}
-
-.estado {
-  color: #64748b;
-  padding: 2rem 0;
-  text-align: center;
-}
-
-.table-wrapper {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.9rem;
-}
-
-th {
-  background: #f8fafc;
-  color: #475569;
-  font-weight: 600;
-}
+@import '../../shared/catalogo.css';
 
 .etapa-badge {
   background: #eff6ff;
@@ -55,10 +7,4 @@ th {
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
-}
-
-.acciones {
-  display: flex;
-  gap: 0.5rem;
-  white-space: nowrap;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
@@ -17,6 +17,20 @@ export class SocioList {
 
   readonly socios = signal<Socio[]>([]);
   readonly cargando = signal(true);
+  readonly filtro = signal('');
+
+  readonly sociosFiltrados = computed(() => {
+    const termino = this.filtro().trim().toLowerCase();
+    if (!termino) {
+      return this.socios();
+    }
+    return this.socios().filter((socio) =>
+      [socio.codigo, socio.nombres, socio.apellidos, socio.accion, socio.etapa]
+        .join(' ')
+        .toLowerCase()
+        .includes(termino),
+    );
+  });
 
   constructor() {
     this.cargarSocios();

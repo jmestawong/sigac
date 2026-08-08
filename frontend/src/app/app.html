@@ -1,6 +1,12 @@
 @if (authService.isAuthenticated()) {
   <nav class="topbar">
-    <span class="brand">SIGAC</span>
+    <div class="topbar-izquierda">
+      <span class="brand">SIGAC</span>
+      <a routerLink="/socios" routerLinkActive="activo">Socios</a>
+      <a routerLink="/puestos" routerLinkActive="activo">Puestos</a>
+      <a routerLink="/giros" routerLinkActive="activo">Giros</a>
+      <a routerLink="/bancos" routerLinkActive="activo">Bancos</a>
+    </div>
     <div class="topbar-usuario">
       <span class="usuario-info">
         {{ authService.username() }} <span class="rol-badge">{{ authService.rol() }}</span>
