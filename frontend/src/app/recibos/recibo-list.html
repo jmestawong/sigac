@@ -1,0 +1,55 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Recibos</h1>
+    <a class="btn btn-primary" routerLink="/ingresos-externos">+ Ingreso externo</a>
+  </header>
+
+  <input
+    type="text"
+    class="filtro"
+    placeholder="Buscar por correlativo, tipo, depositante o categoría..."
+    [value]="filtro()"
+    (input)="filtro.set($any($event.target).value)"
+  />
+
+  @if (cargando()) {
+    <p class="estado">Cargando recibos...</p>
+  } @else if (recibos().length === 0) {
+    <p class="estado">Aún no se han generado recibos.</p>
+  } @else if (recibosFiltrados().length === 0) {
+    <p class="estado">No hay recibos que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Correlativo</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Monto</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (recibo of recibosFiltrados(); track recibo.id) {
+            <tr>
+              <td>{{ recibo.correlativo }}</td>
+              <td>{{ recibo.tipo }}</td>
+              <td>{{ recibo.fecha | date: 'short' }}</td>
+              <td>{{ recibo.monto }}</td>
+              <td>
+                @if (recibo.tipo === 'CANJE_BANCARIO' && recibo.banco) {
+                  {{ recibo.banco.nombre }} · depósito {{ recibo.fechaDeposito }}
+                } @else if (recibo.tipo === 'INGRESO_EXTERNO') {
+                  {{ recibo.depositante }} · {{ recibo.categoria }} · {{ recibo.concepto }}
+                } @else {
+                  {{ recibo.cuentas.length }} cuenta(s)
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

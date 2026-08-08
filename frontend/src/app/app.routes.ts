@@ -93,5 +93,20 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./cuentas-por-cobrar/generar/generar').then((m) => m.Generar),
   },
+  {
+    path: 'cobranza',
+    canActivate: [authGuard],
+    loadComponent: () => import('./cobranza/cobranza').then((m) => m.Cobranza),
+  },
+  {
+    path: 'recibos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./recibos/recibo-list').then((m) => m.ReciboList),
+  },
+  {
+    path: 'ingresos-externos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./ingresos-externos/ingreso-form').then((m) => m.IngresoForm),
+  },
   { path: '**', redirectTo: 'socios' },
 ];

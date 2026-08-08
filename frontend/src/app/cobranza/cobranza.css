@@ -1,0 +1,108 @@
+@import '../shared/catalogo.css';
+@import '../shared/formulario.css';
+
+.cobranza-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.form-card {
+  margin-bottom: 1.5rem;
+}
+
+.buscador .modo-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.lista-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.opcion-resultado {
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.88rem;
+  color: #334155;
+  cursor: pointer;
+}
+
+.opcion-resultado:hover {
+  background: #f1f5f9;
+}
+
+.opcion-resultado.seleccionada {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  color: #1e293b;
+}
+
+h3 {
+  margin: 1.5rem 0 0.75rem;
+  color: #334155;
+  font-size: 0.95rem;
+}
+
+.estado-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.total-pago {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1.25rem 0 1rem;
+  font-size: 0.95rem;
+}
+
+.canje-form {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.canje-form select,
+.canje-form input {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.recibo-destacado {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+}
+
+.recibo-destacado h2 {
+  color: #15803d;
+}

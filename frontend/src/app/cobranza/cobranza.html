@@ -1,0 +1,353 @@
+<section class="cobranza-page">
+  <header class="page-header">
+    <h1>Cobranza</h1>
+  </header>
+
+  <div class="form-card buscador">
+    <div class="modo-toggle">
+      <button type="button" class="btn" [class.btn-primary]="modo() === 'SOCIO'" [class.btn-secondary]="modo() !== 'SOCIO'" (click)="cambiarModo('SOCIO')">
+        Buscar por socio
+      </button>
+      <button type="button" class="btn" [class.btn-primary]="modo() === 'PUESTO'" [class.btn-secondary]="modo() !== 'PUESTO'" (click)="cambiarModo('PUESTO')">
+        Buscar por puesto
+      </button>
+    </div>
+
+    <input
+      type="text"
+      class="filtro"
+      [placeholder]="modo() === 'SOCIO' ? 'Buscar por código, nombres o apellidos...' : 'Buscar por número o inquilino...'"
+      [value]="filtroTexto()"
+      (input)="filtroTexto.set($any($event.target).value)"
+    />
+
+    <div class="lista-resultados">
+      @if (modo() === 'SOCIO') {
+        @for (socio of sociosFiltrados(); track socio.id) {
+          <button
+            type="button"
+            class="opcion-resultado"
+            [class.seleccionada]="seleccionadoId() === socio.id"
+            (click)="seleccionar(socio.id)"
+          >
+            {{ socio.nombres }} {{ socio.apellidos }} ({{ socio.codigo }})
+          </button>
+        }
+        @if (sociosFiltrados().length === 0) {
+          <p class="estado">Sin resultados.</p>
+        }
+      } @else {
+        @for (puesto of puestosFiltrados(); track puesto.id) {
+          <button
+            type="button"
+            class="opcion-resultado"
+            [class.seleccionada]="seleccionadoId() === puesto.id"
+            (click)="seleccionar(puesto.id)"
+          >
+            {{ puesto.numero }} — {{ puesto.nombreInquilino }}
+          </button>
+        }
+        @if (puestosFiltrados().length === 0) {
+          <p class="estado">Sin resultados.</p>
+        }
+      }
+    </div>
+  </div>
+
+  @if (cargandoResumen()) {
+    <p class="estado">Cargando resumen...</p>
+  }
+
+  @if (ultimoRecibo(); as recibo) {
+    <div class="form-card recibo-destacado">
+      <h2>Recibo {{ recibo.correlativo }}</h2>
+      <p>{{ recibo.tipo }} · {{ recibo.monto }} · {{ recibo.fecha | date: 'short' }}</p>
+    </div>
+  }
+
+  <!-- Vista por SOCIO -->
+  @if (modo() === 'SOCIO' && resumenSocio(); as resumen) {
+    <div class="form-card">
+      <h2>{{ resumen.socio.nombres }} {{ resumen.socio.apellidos }} ({{ resumen.socio.codigo }})</h2>
+
+      <h3>Cuentas del socio</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Servicio</th>
+              <th>Período</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Decisión</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cuenta of resumen.cuentasSocio; track cuenta.id) {
+              <tr>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
+                  }
+                </td>
+                <td>{{ cuenta.servicio.nombre }}</td>
+                <td>{{ cuenta.periodo }}</td>
+                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
+                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
+                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
+                    </select>
+                  }
+                </td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <button type="button" class="btn btn-secondary" (click)="abrirCanje(cuenta.id)">Canjear</button>
+                  }
+                </td>
+              </tr>
+              @if (canjeAbiertoParaCuenta() === cuenta.id) {
+                <tr>
+                  <td colspan="7">
+                    <div class="canje-form">
+                      <select (change)="canjeBancoId.set($any($event.target).value ? Number($any($event.target).value) : null)">
+                        <option value="">Selecciona un banco</option>
+                        @for (banco of bancos(); track banco.id) {
+                          <option [value]="banco.id">{{ banco.nombre }} — {{ banco.numeroCuenta }}</option>
+                        }
+                      </select>
+                      <input type="date" (input)="canjeFecha.set($any($event.target).value)" />
+                      <button type="button" class="btn btn-primary" (click)="confirmarCanje(cuenta.id)">Confirmar canje</button>
+                      <button type="button" class="btn btn-secondary" (click)="cerrarCanje()">Cancelar</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+            @if (resumen.cuentasSocio.length === 0) {
+              <tr><td colspan="7" class="estado">Sin cuentas directas.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Cuentas de sus puestos</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Puesto</th>
+              <th>Servicio</th>
+              <th>Período</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Decisión</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cuenta of resumen.cuentasPuestos; track cuenta.id) {
+              <tr>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
+                  }
+                </td>
+                <td>{{ cuenta.puesto?.numero }}</td>
+                <td>{{ cuenta.servicio.nombre }}</td>
+                <td>{{ cuenta.periodo }}</td>
+                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
+                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
+                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
+                    </select>
+                  }
+                </td>
+              </tr>
+            }
+            @if (resumen.cuentasPuestos.length === 0) {
+              <tr><td colspan="7" class="estado">Sin cuentas de puestos.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total-pago">
+        <span>Total a pagar (cuentas marcadas "Abonar"):</span>
+        <strong>{{ totalAPagar() }}</strong>
+      </div>
+      <button type="button" class="btn btn-primary" [disabled]="procesando()" (click)="confirmarPago()">
+        {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
+      </button>
+
+      <h3>Movimientos</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Correlativo</th><th>Tipo</th><th>Fecha</th><th>Monto</th></tr></thead>
+          <tbody>
+            @for (recibo of resumen.movimientos; track recibo.id) {
+              <tr>
+                <td>{{ recibo.correlativo }}</td>
+                <td>{{ recibo.tipo }}</td>
+                <td>{{ recibo.fecha | date: 'short' }}</td>
+                <td>{{ recibo.monto }}</td>
+              </tr>
+            }
+            @if (resumen.movimientos.length === 0) {
+              <tr><td colspan="4" class="estado">Sin movimientos registrados.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  <!-- Vista por PUESTO -->
+  @if (modo() === 'PUESTO' && resumenPuesto(); as resumen) {
+    <div class="form-card">
+      <h2>{{ resumen.puesto.numero }} — {{ resumen.puesto.nombreInquilino }}</h2>
+
+      <h3>Cuentas del puesto</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Servicio</th>
+              <th>Período</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Decisión</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cuenta of resumen.cuentasPuesto; track cuenta.id) {
+              <tr>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
+                  }
+                </td>
+                <td>{{ cuenta.servicio.nombre }}</td>
+                <td>{{ cuenta.periodo }}</td>
+                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
+                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
+                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
+                    </select>
+                  }
+                </td>
+              </tr>
+            }
+            @if (resumen.cuentasPuesto.length === 0) {
+              <tr><td colspan="6" class="estado">Sin cuentas del puesto.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Cuentas del socio asociado</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Servicio</th>
+              <th>Período</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Decisión</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (cuenta of resumen.cuentasSocioAsociado; track cuenta.id) {
+              <tr>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
+                  }
+                </td>
+                <td>{{ cuenta.servicio.nombre }}</td>
+                <td>{{ cuenta.periodo }}</td>
+                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
+                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
+                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
+                    </select>
+                  }
+                </td>
+                <td>
+                  @if (cuenta.estado === 'PENDIENTE') {
+                    <button type="button" class="btn btn-secondary" (click)="abrirCanje(cuenta.id)">Canjear</button>
+                  }
+                </td>
+              </tr>
+              @if (canjeAbiertoParaCuenta() === cuenta.id) {
+                <tr>
+                  <td colspan="7">
+                    <div class="canje-form">
+                      <select (change)="canjeBancoId.set($any($event.target).value ? Number($any($event.target).value) : null)">
+                        <option value="">Selecciona un banco</option>
+                        @for (banco of bancos(); track banco.id) {
+                          <option [value]="banco.id">{{ banco.nombre }} — {{ banco.numeroCuenta }}</option>
+                        }
+                      </select>
+                      <input type="date" (input)="canjeFecha.set($any($event.target).value)" />
+                      <button type="button" class="btn btn-primary" (click)="confirmarCanje(cuenta.id)">Confirmar canje</button>
+                      <button type="button" class="btn btn-secondary" (click)="cerrarCanje()">Cancelar</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+            @if (resumen.cuentasSocioAsociado.length === 0) {
+              <tr><td colspan="7" class="estado">Este puesto no tiene socio asociado o sin cuentas.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total-pago">
+        <span>Total a pagar (cuentas marcadas "Abonar"):</span>
+        <strong>{{ totalAPagar() }}</strong>
+      </div>
+      <button type="button" class="btn btn-primary" [disabled]="procesando()" (click)="confirmarPago()">
+        {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
+      </button>
+
+      <h3>Movimientos</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Correlativo</th><th>Tipo</th><th>Fecha</th><th>Monto</th></tr></thead>
+          <tbody>
+            @for (recibo of resumen.movimientos; track recibo.id) {
+              <tr>
+                <td>{{ recibo.correlativo }}</td>
+                <td>{{ recibo.tipo }}</td>
+                <td>{{ recibo.fecha | date: 'short' }}</td>
+                <td>{{ recibo.monto }}</td>
+              </tr>
+            }
+            @if (resumen.movimientos.length === 0) {
+              <tr><td colspan="4" class="estado">Sin movimientos registrados.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</section>
