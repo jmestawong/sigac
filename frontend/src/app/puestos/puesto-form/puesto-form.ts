@@ -53,13 +53,22 @@ export class PuestoForm {
     { validators: vigenciaValida },
   );
 
+  private readonly valoresIniciales = this.form.getRawValue();
+
   constructor() {
     this.giroService.listar().subscribe((giros) => this.giros.set(giros));
     this.socioService.listar().subscribe((socios) => this.socios.set(socios));
 
-    const idParam = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
 
-    if (idParam) {
+      if (!idParam) {
+        this.puestoId.set(null);
+        this.esEdicion.set(false);
+        this.form.reset(this.valoresIniciales);
+        return;
+      }
+
       const id = Number(idParam);
       this.puestoId.set(id);
       this.esEdicion.set(true);
@@ -74,7 +83,7 @@ export class PuestoForm {
           socioId: puesto.socio ? puesto.socio.id : null,
         });
       });
-    }
+    });
   }
 
   submit(): void {

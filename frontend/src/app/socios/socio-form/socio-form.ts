@@ -31,10 +31,19 @@ export class SocioForm {
     fechaNacimiento: ['', Validators.required],
   });
 
-  constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
+  private readonly valoresIniciales = this.form.getRawValue();
 
-    if (idParam) {
+  constructor() {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+
+      if (!idParam) {
+        this.socioId.set(null);
+        this.esEdicion.set(false);
+        this.form.reset(this.valoresIniciales);
+        return;
+      }
+
       const id = Number(idParam);
       this.socioId.set(id);
       this.esEdicion.set(true);
@@ -49,7 +58,7 @@ export class SocioForm {
           fechaNacimiento: socio.fechaNacimiento,
         });
       });
-    }
+    });
   }
 
   submit(): void {

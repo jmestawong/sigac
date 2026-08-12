@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { Socio, SocioRequest } from '../../core/models/socio.model';
@@ -51,7 +51,10 @@ describe('SocioForm', () => {
         { provide: NotificationService, useValue: notificationService },
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { paramMap: { get: () => idRuta } } },
+          useValue: {
+            snapshot: { paramMap: { get: () => idRuta } },
+            paramMap: of(convertToParamMap(idRuta ? { id: idRuta } : {})),
+          },
         },
       ],
     });

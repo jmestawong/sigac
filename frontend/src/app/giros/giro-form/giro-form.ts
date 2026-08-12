@@ -26,10 +26,19 @@ export class GiroForm {
     nombre: ['', Validators.required],
   });
 
-  constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
+  private readonly valoresIniciales = this.form.getRawValue();
 
-    if (idParam) {
+  constructor() {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+
+      if (!idParam) {
+        this.giroId.set(null);
+        this.esEdicion.set(false);
+        this.form.reset(this.valoresIniciales);
+        return;
+      }
+
       const id = Number(idParam);
       this.giroId.set(id);
       this.esEdicion.set(true);
@@ -37,7 +46,7 @@ export class GiroForm {
       this.giroService.obtener(id).subscribe((giro) => {
         this.form.patchValue({ nombre: giro.nombre });
       });
-    }
+    });
   }
 
   submit(): void {

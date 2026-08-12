@@ -29,10 +29,19 @@ export class BancoForm {
     moneda: ['' as 'PEN' | 'USD' | '', Validators.required],
   });
 
-  constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
+  private readonly valoresIniciales = this.form.getRawValue();
 
-    if (idParam) {
+  constructor() {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+
+      if (!idParam) {
+        this.bancoId.set(null);
+        this.esEdicion.set(false);
+        this.form.reset(this.valoresIniciales);
+        return;
+      }
+
       const id = Number(idParam);
       this.bancoId.set(id);
       this.esEdicion.set(true);
@@ -45,7 +54,7 @@ export class BancoForm {
           moneda: banco.moneda,
         });
       });
-    }
+    });
   }
 
   submit(): void {

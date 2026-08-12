@@ -33,10 +33,19 @@ export class ServicioForm {
     esPorConsumo: [false],
   });
 
-  constructor() {
-    const idParam = this.route.snapshot.paramMap.get('id');
+  private readonly valoresIniciales = this.form.getRawValue();
 
-    if (idParam) {
+  constructor() {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+
+      if (!idParam) {
+        this.servicioId.set(null);
+        this.esEdicion.set(false);
+        this.form.reset(this.valoresIniciales);
+        return;
+      }
+
       const id = Number(idParam);
       this.servicioId.set(id);
       this.esEdicion.set(true);
@@ -51,7 +60,7 @@ export class ServicioForm {
           esPorConsumo: servicio.esPorConsumo,
         });
       });
-    }
+    });
 
     this.form.controls.destinatario.valueChanges.subscribe((destinatario) => {
       if (destinatario === 'SOCIO') {
