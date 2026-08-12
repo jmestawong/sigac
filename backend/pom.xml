@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<jjwt.version>0.12.6</jjwt.version>
+		<poi.version>5.5.1</poi.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -69,6 +70,13 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Excel: carga masiva de egresos y generacion de reportes XLSX -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
 		</dependency>
 
 		<!-- H2: usado en pruebas (@DataJpaTest) y en el perfil "dev" para correr
