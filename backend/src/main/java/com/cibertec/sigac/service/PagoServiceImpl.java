@@ -1,6 +1,7 @@
 package com.cibertec.sigac.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,10 +146,20 @@ public class PagoServiceImpl implements PagoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReciboResponse> listarRecibos() {
+    public List<ReciboResponse> listarRecibos(LocalDate fecha, TipoRecibo tipo) {
         return reciboRepository.findAllByOrderByIdDesc().stream()
+                .filter(recibo -> fecha == null || recibo.getFecha().toLocalDate().isEqual(fecha))
+                .filter(recibo -> tipo == null || recibo.getTipo() == tipo)
                 .map(recibo -> toReciboResponse(recibo, cuentaPorCobrarRepository.findByReciboId(recibo.getId())))
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReciboResponse obtenerReciboPorId(Long id) {
+        Recibo recibo = reciboRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Recibo no encontrado con id " + id));
+        return toReciboResponse(recibo, cuentaPorCobrarRepository.findByReciboId(id));
     }
 
     private Recibo crearReciboConCorrelativo(Recibo recibo) {
