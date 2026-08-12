@@ -87,4 +87,45 @@ class SocioFlowIntegrationTest {
         mockMvc.perform(get("/api/socios/" + id).header("Authorization", authHeader))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void operador_puedeConsultarSociosPeroNoEscribirCatalogos() throws Exception {
+        String loginBody = """
+                {"username":"operador","password":"operador123"}
+                """;
+
+        String loginResponse = mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(loginBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol", is("OPERADOR")))
+                .andReturn().getResponse().getContentAsString();
+
+        String token = loginResponse.replaceAll(".*\"token\":\"([^\"]+)\".*", "$1");
+        String authHeader = "Bearer " + token;
+
+        // Puede leer el catalogo de socios
+        mockMvc.perform(get("/api/socios").header("Authorization", authHeader))
+                .andExpect(status().isOk());
+
+        // No puede crear, actualizar ni eliminar socios (catalogo exclusivo de ADMIN)
+        String crearBody = """
+                {"codigo":"OP-001","nombres":"X","apellidos":"Y","accion":"Ordinaria","etapa":"1","fechaNacimiento":"1992-04-10"}
+                """;
+
+        mockMvc.perform(post("/api/socios")
+                        .header("Authorization", authHeader)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(crearBody))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(put("/api/socios/1")
+                        .header("Authorization", authHeader)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(crearBody))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(delete("/api/socios/1").header("Authorization", authHeader))
+                .andExpect(status().isForbidden());
+    }
 }
