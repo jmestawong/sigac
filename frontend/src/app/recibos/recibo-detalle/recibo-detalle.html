@@ -1,0 +1,66 @@
+<section class="voucher-page">
+  @if (cargando()) {
+    <p class="estado">Cargando voucher...</p>
+  } @else if (recibo(); as recibo) {
+    <div class="voucher-card">
+      <header class="voucher-header">
+        <h1>Voucher de recibo</h1>
+        <span class="tipo-badge">{{ recibo.tipo }}</span>
+      </header>
+
+      <div class="voucher-correlativo">{{ recibo.correlativo }}</div>
+
+      <dl class="voucher-detalle">
+        <dt>Fecha</dt>
+        <dd>{{ recibo.fecha | date: 'medium' }}</dd>
+
+        <dt>Monto</dt>
+        <dd class="importe">S/ {{ recibo.monto }}</dd>
+
+        @if (recibo.tipo === 'CANJE_BANCARIO' && recibo.banco) {
+          <dt>Banco</dt>
+          <dd>{{ recibo.banco.nombre }} · {{ recibo.banco.numeroCuenta }}</dd>
+          <dt>Fecha de depósito</dt>
+          <dd>{{ recibo.fechaDeposito }}</dd>
+        }
+
+        @if (recibo.tipo === 'INGRESO_EXTERNO') {
+          <dt>Depositante</dt>
+          <dd>{{ recibo.depositante }}</dd>
+          <dt>Categoría</dt>
+          <dd>{{ recibo.categoria }}</dd>
+          <dt>Concepto</dt>
+          <dd>{{ recibo.concepto }}</dd>
+        }
+      </dl>
+
+      @if (recibo.cuentas.length > 0) {
+        <div class="cuentas-cubiertas">
+          <h2>Cuentas cubiertas</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Servicio</th>
+                <th>Periodo</th>
+                <th>Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (cuenta of recibo.cuentas; track cuenta.id) {
+                <tr>
+                  <td>{{ cuenta.servicio.nombre }}</td>
+                  <td>{{ cuenta.periodo }}</td>
+                  <td>{{ cuenta.monto }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <a routerLink="/recibos" class="btn btn-secondary">Volver al listado</a>
+    </div>
+  } @else {
+    <p class="estado">No se encontró el recibo solicitado.</p>
+  }
+</section>

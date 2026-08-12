@@ -104,9 +104,40 @@ export const routes: Routes = [
     loadComponent: () => import('./recibos/recibo-list').then((m) => m.ReciboList),
   },
   {
+    path: 'recibos/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./recibos/recibo-detalle/recibo-detalle').then((m) => m.ReciboDetalle),
+  },
+  {
     path: 'ingresos-externos',
     canActivate: [authGuard],
     loadComponent: () => import('./ingresos-externos/ingreso-form').then((m) => m.IngresoForm),
+  },
+  {
+    path: 'egresos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./egresos/egreso-list/egreso-list').then((m) => m.EgresoList),
+  },
+  {
+    path: 'egresos/nuevo',
+    canActivate: [authGuard],
+    loadComponent: () => import('./egresos/egreso-form/egreso-form').then((m) => m.EgresoForm),
+  },
+  {
+    path: 'egresos/carga-masiva',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./egresos/egreso-carga-masiva/egreso-carga-masiva').then((m) => m.EgresoCargaMasiva),
+  },
+  {
+    path: 'egresos/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./egresos/egreso-detalle/egreso-detalle').then((m) => m.EgresoDetalle),
+  },
+  {
+    path: 'reportes',
+    canActivate: [authGuard],
+    loadComponent: () => import('./reportes/reportes').then((m) => m.Reportes),
   },
   { path: '**', redirectTo: 'socios' },
 ];

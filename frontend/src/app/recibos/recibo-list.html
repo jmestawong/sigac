@@ -4,13 +4,22 @@
     <a class="btn btn-primary" routerLink="/ingresos-externos">+ Ingreso externo</a>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por correlativo, tipo, depositante o categoría..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <div class="filtros">
+    <input type="date" class="filtro-fecha" [value]="fecha()" (change)="cambiarFecha($any($event.target).value)" />
+    <select class="filtro-tipo" [value]="tipo()" (change)="cambiarTipo($any($event.target).value)">
+      <option value="">Todos los tipos</option>
+      <option value="PAGO_CUENTAS">Pago de cuentas</option>
+      <option value="CANJE_BANCARIO">Canje bancario</option>
+      <option value="INGRESO_EXTERNO">Ingreso externo</option>
+    </select>
+    <input
+      type="text"
+      class="filtro"
+      placeholder="Buscar por correlativo, tipo, depositante o categoría..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </div>
 
   @if (cargando()) {
     <p class="estado">Cargando recibos...</p>
@@ -28,6 +37,7 @@
             <th>Fecha</th>
             <th>Monto</th>
             <th>Detalle</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +55,9 @@
                 } @else {
                   {{ recibo.cuentas.length }} cuenta(s)
                 }
+              </td>
+              <td class="acciones">
+                <a [routerLink]="['/recibos', recibo.id]" class="btn btn-secondary">Ver voucher</a>
               </td>
             </tr>
           }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,7 @@ import {
   ProcesarPagoRequest,
   ProcesarPagoResponse,
   Recibo,
+  TipoRecibo,
 } from '../models/recibo.model';
 
 @Injectable({ providedIn: 'root' })
@@ -30,7 +31,18 @@ export class PagoService {
     return this.http.post<Recibo>(`${this.baseUrl}/ingreso-externo`, request);
   }
 
-  listarRecibos(): Observable<Recibo[]> {
-    return this.http.get<Recibo[]>(this.recibosUrl);
+  listarRecibos(fecha?: string, tipo?: TipoRecibo): Observable<Recibo[]> {
+    let params = new HttpParams();
+    if (fecha) {
+      params = params.set('fecha', fecha);
+    }
+    if (tipo) {
+      params = params.set('tipo', tipo);
+    }
+    return this.http.get<Recibo[]>(this.recibosUrl, { params });
+  }
+
+  obtenerRecibo(id: number): Observable<Recibo> {
+    return this.http.get<Recibo>(`${this.recibosUrl}/${id}`);
   }
 }

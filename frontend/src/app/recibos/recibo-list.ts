@@ -3,7 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { PagoService } from '../core/services/pago.service';
-import { Recibo } from '../core/models/recibo.model';
+import { Recibo, TipoRecibo } from '../core/models/recibo.model';
 
 @Component({
   selector: 'app-recibo-list',
@@ -17,6 +17,8 @@ export class ReciboList {
   readonly recibos = signal<Recibo[]>([]);
   readonly cargando = signal(true);
   readonly filtro = signal('');
+  readonly fecha = signal('');
+  readonly tipo = signal<TipoRecibo | ''>('');
 
   readonly recibosFiltrados = computed(() => {
     const termino = this.filtro().trim().toLowerCase();
@@ -33,7 +35,24 @@ export class ReciboList {
   });
 
   constructor() {
-    this.pagoService.listarRecibos().subscribe({
+    this.cargarRecibos();
+  }
+
+  cambiarFecha(valor: string): void {
+    this.fecha.set(valor);
+    this.cargarRecibos();
+  }
+
+  cambiarTipo(valor: string): void {
+    this.tipo.set(valor as TipoRecibo | '');
+    this.cargarRecibos();
+  }
+
+  cargarRecibos(): void {
+    this.cargando.set(true);
+    const tipo = this.tipo();
+
+    this.pagoService.listarRecibos(this.fecha() || undefined, tipo || undefined).subscribe({
       next: (recibos) => {
         this.recibos.set(recibos);
         this.cargando.set(false);

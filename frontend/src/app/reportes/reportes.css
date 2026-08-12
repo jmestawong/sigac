@@ -1,0 +1,42 @@
+@import '../shared/catalogo.css';
+@import '../shared/formulario.css';
+
+.rango-fechas {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 420px;
+}
+
+.rango-fechas .field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.reportes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.reporte-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.reporte-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: #1e293b;
+}
+
+.reporte-card p {
+  color: #64748b;
+  font-size: 0.85rem;
+  flex-grow: 1;
+  margin: 0 0 1.25rem;
+}

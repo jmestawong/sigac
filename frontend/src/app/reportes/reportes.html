@@ -1,0 +1,28 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Reportes</h1>
+  </header>
+
+  <div class="rango-fechas">
+    <div class="field">
+      <label for="desde">Desde</label>
+      <input id="desde" type="date" [value]="desde()" (change)="desde.set($any($event.target).value)" />
+    </div>
+    <div class="field">
+      <label for="hasta">Hasta</label>
+      <input id="hasta" type="date" [value]="hasta()" (change)="hasta.set($any($event.target).value)" />
+    </div>
+  </div>
+
+  <div class="reportes-grid">
+    @for (opcion of opciones; track opcion.tipo) {
+      <div class="reporte-card">
+        <h2>{{ opcion.titulo }}</h2>
+        <p>{{ opcion.descripcion }}</p>
+        <button type="button" class="btn btn-primary" [disabled]="descargando() === opcion.tipo" (click)="descargar(opcion)">
+          {{ descargando() === opcion.tipo ? 'Generando...' : 'Descargar XLSX' }}
+        </button>
+      </div>
+    }
+  </div>
+</section>
