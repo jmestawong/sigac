@@ -1,0 +1,40 @@
+<section class="voucher-page">
+  @if (cargando()) {
+    <p class="estado">Cargando comprobante...</p>
+  } @else if (egreso(); as egreso) {
+    <div class="voucher-card">
+      <header class="voucher-header">
+        <h1>Comprobante de egreso</h1>
+        <span class="estado-badge estado-{{ egreso.estado.toLowerCase() }}">{{ egreso.estado }}</span>
+      </header>
+
+      <div class="voucher-correlativo">{{ egreso.correlativo }}</div>
+
+      <dl class="voucher-detalle">
+        <dt>Número de documento</dt>
+        <dd>{{ egreso.numeroDocumento }}</dd>
+
+        <dt>Proveedor</dt>
+        <dd>{{ egreso.proveedor }}</dd>
+
+        <dt>Fecha</dt>
+        <dd>{{ egreso.fecha }}</dd>
+
+        <dt>Importe</dt>
+        <dd class="importe">S/ {{ egreso.importe | number: '1.2-2' }}</dd>
+
+        @if (egreso.documentoAsociado) {
+          <dt>Documento asociado</dt>
+          <dd>{{ egreso.documentoAsociado }}</dd>
+        }
+
+        <dt>Motivo</dt>
+        <dd>{{ egreso.motivo }}</dd>
+      </dl>
+
+      <a routerLink="/egresos" class="btn btn-secondary">Volver al listado</a>
+    </div>
+  } @else {
+    <p class="estado">No se encontró el egreso solicitado.</p>
+  }
+</section>

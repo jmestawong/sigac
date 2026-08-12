@@ -1,0 +1,38 @@
+@import '../../shared/formulario.css';
+@import '../../shared/catalogo.css';
+
+.form-page {
+  max-width: 800px;
+}
+
+.ayuda {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin: -0.5rem 0 1.25rem;
+}
+
+.resultado {
+  margin-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.25rem;
+}
+
+.errores {
+  background: #fef2f2;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.errores h2 {
+  font-size: 0.9rem;
+  color: #b91c1c;
+  margin: 0 0 0.5rem;
+}
+
+.errores ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #991b1b;
+  font-size: 0.85rem;
+}

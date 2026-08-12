@@ -1,0 +1,68 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1>Egresos</h1>
+    <div class="acciones-header">
+      <a class="btn btn-secondary" routerLink="/egresos/carga-masiva">Carga masiva</a>
+      <a class="btn btn-primary" routerLink="/egresos/nuevo">+ Nuevo egreso</a>
+    </div>
+  </header>
+
+  <div class="filtros">
+    <input
+      type="month"
+      class="filtro-mes"
+      [value]="mes()"
+      (change)="cambiarMes($any($event.target).value)"
+    />
+    <input
+      type="text"
+      class="filtro"
+      placeholder="Buscar por correlativo, documento, proveedor o motivo..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </div>
+
+  @if (cargando()) {
+    <p class="estado">Cargando egresos...</p>
+  } @else if (egresos().length === 0) {
+    <p class="estado">No hay egresos registrados en este mes.</p>
+  } @else if (egresosFiltrados().length === 0) {
+    <p class="estado">No hay egresos que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Correlativo</th>
+            <th>Documento</th>
+            <th>Proveedor</th>
+            <th>Fecha</th>
+            <th>Importe</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (egreso of egresosFiltrados(); track egreso.id) {
+            <tr>
+              <td>{{ egreso.correlativo }}</td>
+              <td>{{ egreso.numeroDocumento }}</td>
+              <td>{{ egreso.proveedor }}</td>
+              <td>{{ egreso.fecha }}</td>
+              <td>{{ egreso.importe | number: '1.2-2' }}</td>
+              <td><span class="estado-badge estado-{{ egreso.estado.toLowerCase() }}">{{ egreso.estado }}</span></td>
+              <td class="acciones">
+                <a [routerLink]="['/egresos', egreso.id]" class="btn btn-secondary">Ver</a>
+                @if (egreso.estado === 'REGISTRADO') {
+                  <button type="button" class="btn btn-primary" (click)="procesar(egreso)">Procesar</button>
+                  <button type="button" class="btn btn-danger" (click)="anular(egreso)">Anular</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

@@ -1,0 +1,64 @@
+<section class="form-page">
+  <div class="form-card">
+    <h1>Carga masiva de egresos</h1>
+    <p class="ayuda">
+      Sube un archivo Excel (.xlsx) con las columnas: numeroDocumento, proveedor, fecha (AAAA-MM-DD), importe,
+      documentoAsociado (opcional) y motivo. Las filas con errores se reportan sin bloquear las filas válidas.
+    </p>
+
+    <div class="field">
+      <label for="archivo">Archivo .xlsx</label>
+      <input id="archivo" type="file" accept=".xlsx" (change)="seleccionarArchivo($event)" />
+    </div>
+
+    <div class="acciones-form">
+      <a routerLink="/egresos" class="btn btn-secondary">Volver</a>
+      <button type="button" class="btn btn-primary" [disabled]="!archivo() || subiendo()" (click)="subir()">
+        {{ subiendo() ? 'Procesando...' : 'Subir y procesar' }}
+      </button>
+    </div>
+
+    @if (resultado(); as res) {
+      <div class="resultado">
+        <p>
+          <strong>{{ res.creados.length }}</strong> de <strong>{{ res.totalFilas }}</strong> filas registradas
+          correctamente.
+        </p>
+
+        @if (res.errores.length > 0) {
+          <div class="errores">
+            <h2>Filas con errores</h2>
+            <ul>
+              @for (error of res.errores; track error) {
+                <li>{{ error }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (res.creados.length > 0) {
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Correlativo</th>
+                  <th>Proveedor</th>
+                  <th>Importe</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (egreso of res.creados; track egreso.id) {
+                  <tr>
+                    <td>{{ egreso.correlativo }}</td>
+                    <td>{{ egreso.proveedor }}</td>
+                    <td>{{ egreso.importe | number: '1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

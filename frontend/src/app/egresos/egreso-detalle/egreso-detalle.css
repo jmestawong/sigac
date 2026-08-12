@@ -1,0 +1,82 @@
+.voucher-page {
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.estado {
+  color: #64748b;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.voucher-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+}
+
+.voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.voucher-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.voucher-correlativo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin: 0.75rem 0 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.voucher-detalle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1rem;
+  margin: 0 0 1.5rem;
+}
+
+.voucher-detalle dt {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.voucher-detalle dd {
+  margin: 0;
+  color: #1e293b;
+}
+
+.voucher-detalle .importe {
+  font-weight: 700;
+}
+
+.estado-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.estado-registrado {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.estado-procesado {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.estado-anulado {
+  background: #fef2f2;
+  color: #b91c1c;
+}
