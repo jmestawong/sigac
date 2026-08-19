@@ -15,8 +15,8 @@ test.describe('Restricción de modulos para el rol OPERADOR', () => {
     await expect(page.getByRole('link', { name: 'Giros', exact: true })).toHaveCount(0);
     await expect(page.getByRole('link', { name: 'Bancos', exact: true })).toHaveCount(0);
     await expect(page.getByRole('link', { name: 'Servicios', exact: true })).toHaveCount(0);
-    await expect(page.getByRole('link', { name: 'Cuentas por cobrar', exact: true })).toHaveCount(0);
 
+    await expect(page.getByRole('link', { name: 'Cuentas por cobrar', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Cobranza', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Recibos', exact: true })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Egresos', exact: true })).toBeVisible();
@@ -37,6 +37,16 @@ test.describe('Restricción de modulos para el rol OPERADOR', () => {
     await page.goto('/cuentas-por-cobrar/generar');
 
     await expect(page).toHaveURL(/\/cobranza$/);
+  });
+
+  test('puede consultar Cuentas por cobrar (deudas) pero sin generar ni eliminar', async ({ page }) => {
+    await login(page, 'operador', 'operador123', /\/cobranza$/);
+
+    await page.goto('/cuentas-por-cobrar');
+
+    await expect(page).toHaveURL(/\/cuentas-por-cobrar$/);
+    await expect(page.getByRole('link', { name: '+ Generar cuentas' })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Eliminar' })).toHaveCount(0);
   });
 
   test('conserva acceso a Cobranza, Recibos, Egresos y Reportes', async ({ page }) => {

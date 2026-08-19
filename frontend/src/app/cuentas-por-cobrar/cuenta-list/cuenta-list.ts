@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { AuthService } from '../../core/services/auth.service';
 import { CuentaPorCobrarService } from '../../core/services/cuenta-por-cobrar.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { CuentaPorCobrar } from '../../core/models/cuenta-por-cobrar.model';
@@ -14,6 +15,7 @@ import { CuentaPorCobrar } from '../../core/models/cuenta-por-cobrar.model';
 export class CuentaList {
   private readonly cuentaService = inject(CuentaPorCobrarService);
   private readonly notificationService = inject(NotificationService);
+  protected readonly authService = inject(AuthService);
 
   readonly cuentas = signal<CuentaPorCobrar[]>([]);
   readonly cargando = signal(true);

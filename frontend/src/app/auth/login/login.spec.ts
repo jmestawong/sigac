@@ -6,7 +6,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { Login } from './login';
 
 describe('Login', () => {
-  let authService: { login: ReturnType<typeof vi.fn> };
+  let authService: { login: ReturnType<typeof vi.fn>; rol: ReturnType<typeof vi.fn> };
   let router: Router;
 
   function crearComponente() {
@@ -16,7 +16,7 @@ describe('Login', () => {
   }
 
   beforeEach(() => {
-    authService = { login: vi.fn() };
+    authService = { login: vi.fn(), rol: vi.fn().mockReturnValue('ADMIN') };
 
     TestBed.configureTestingModule({
       imports: [Login],
@@ -48,6 +48,19 @@ describe('Login', () => {
     expect(authService.login).toHaveBeenCalledWith({ username: 'admin', password: 'admin123' });
     expect(router.navigate).toHaveBeenCalledWith(['/socios']);
     expect(fixture.componentInstance.cargando()).toBe(false);
+  });
+
+  it('navega a /cobranza cuando el login es exitoso y el rol es OPERADOR', () => {
+    authService.login.mockReturnValue(
+      of({ token: 't', tipo: 'Bearer', username: 'operador', rol: 'OPERADOR' }),
+    );
+    authService.rol.mockReturnValue('OPERADOR');
+    const fixture = crearComponente();
+
+    fixture.componentInstance.form.setValue({ username: 'operador', password: 'operador123' });
+    fixture.componentInstance.submit();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/cobranza']);
   });
 
   it('muestra un mensaje de error cuando las credenciales son inválidas', () => {

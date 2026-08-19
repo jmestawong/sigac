@@ -1,7 +1,9 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Cuentas por cobrar</h1>
-    <a class="btn btn-primary" routerLink="/cuentas-por-cobrar/generar">+ Generar cuentas</a>
+    @if (authService.rol() === 'ADMIN') {
+      <a class="btn btn-primary" routerLink="/cuentas-por-cobrar/generar">+ Generar cuentas</a>
+    }
   </header>
 
   <input
@@ -28,7 +30,9 @@
             <th>Período</th>
             <th>Monto</th>
             <th>Estado</th>
-            <th></th>
+            @if (authService.rol() === 'ADMIN') {
+              <th></th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -45,9 +49,11 @@
               <td>{{ cuenta.periodo }}</td>
               <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
               <td><span class="estado-badge">{{ cuenta.estado }}</span></td>
-              <td class="acciones">
-                <button type="button" class="btn btn-danger" (click)="eliminar(cuenta)">Eliminar</button>
-              </td>
+              @if (authService.rol() === 'ADMIN') {
+                <td class="acciones">
+                  <button type="button" class="btn btn-danger" (click)="eliminar(cuenta)">Eliminar</button>
+                </td>
+              }
             </tr>
           }
         </tbody>

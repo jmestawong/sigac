@@ -86,7 +86,7 @@ export const routes: Routes = [
   },
   {
     path: 'cuentas-por-cobrar',
-    canActivate: [authGuard, adminGuard],
+    canActivate: [authGuard],
     loadComponent: () => import('./cuentas-por-cobrar/cuenta-list/cuenta-list').then((m) => m.CuentaList),
   },
   {
