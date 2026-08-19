@@ -35,7 +35,7 @@ export class Login {
     this.authService.login(this.form.getRawValue()).subscribe({
       next: () => {
         this.cargando.set(false);
-        this.router.navigate(['/socios']);
+        this.router.navigate([this.authService.rol() === 'ADMIN' ? '/socios' : '/cobranza']);
       },
       error: () => {
         this.cargando.set(false);

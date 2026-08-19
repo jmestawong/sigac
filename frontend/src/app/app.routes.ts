@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from './core/guards/admin.guard';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -10,87 +11,87 @@ export const routes: Routes = [
   },
   {
     path: 'socios',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./socios/socio-list/socio-list').then((m) => m.SocioList),
   },
   {
     path: 'socios/nuevo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./socios/socio-form/socio-form').then((m) => m.SocioForm),
   },
   {
     path: 'socios/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./socios/socio-form/socio-form').then((m) => m.SocioForm),
   },
   {
     path: 'giros',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./giros/giro-list/giro-list').then((m) => m.GiroList),
   },
   {
     path: 'giros/nuevo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./giros/giro-form/giro-form').then((m) => m.GiroForm),
   },
   {
     path: 'giros/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./giros/giro-form/giro-form').then((m) => m.GiroForm),
   },
   {
     path: 'bancos',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./bancos/banco-list/banco-list').then((m) => m.BancoList),
   },
   {
     path: 'bancos/nuevo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./bancos/banco-form/banco-form').then((m) => m.BancoForm),
   },
   {
     path: 'bancos/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./bancos/banco-form/banco-form').then((m) => m.BancoForm),
   },
   {
     path: 'puestos',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./puestos/puesto-list/puesto-list').then((m) => m.PuestoList),
   },
   {
     path: 'puestos/nuevo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./puestos/puesto-form/puesto-form').then((m) => m.PuestoForm),
   },
   {
     path: 'puestos/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./puestos/puesto-form/puesto-form').then((m) => m.PuestoForm),
   },
   {
     path: 'servicios',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./servicios-cobrables/servicio-list/servicio-list').then((m) => m.ServicioList),
   },
   {
     path: 'servicios/nuevo',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./servicios-cobrables/servicio-form/servicio-form').then((m) => m.ServicioForm),
   },
   {
     path: 'servicios/:id/editar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./servicios-cobrables/servicio-form/servicio-form').then((m) => m.ServicioForm),
   },
   {
     path: 'cuentas-por-cobrar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./cuentas-por-cobrar/cuenta-list/cuenta-list').then((m) => m.CuentaList),
   },
   {
     path: 'cuentas-por-cobrar/generar',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./cuentas-por-cobrar/generar/generar').then((m) => m.Generar),
   },
   {
