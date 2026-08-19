@@ -17,7 +17,7 @@ test.describe('CRUD de socios', () => {
     await page.getByLabel('Nombres').fill('Ana');
     await page.getByLabel('Apellidos').fill('Torres');
     await page.getByLabel('Acción').selectOption('Ordinaria');
-    await page.getByLabel('Etapa').selectOption('Activo');
+    await page.getByLabel('Etapa').selectOption('1');
     await page.getByLabel('Fecha de nacimiento').fill('1992-04-10');
     await page.getByRole('button', { name: 'Guardar' }).click();
 
@@ -26,17 +26,17 @@ test.describe('CRUD de socios', () => {
 
     const fila = page.locator('tr', { hasText: codigo });
     await expect(fila).toBeVisible();
-    await expect(fila.getByText('Activo')).toBeVisible();
+    await expect(fila.getByText('1', { exact: true })).toBeVisible();
 
     await fila.getByRole('link', { name: 'Editar' }).click();
     await expect(page.getByLabel('Código')).toHaveValue(codigo);
 
-    await page.getByLabel('Etapa').selectOption('Suspendido');
+    await page.getByLabel('Etapa').selectOption('2');
     await page.getByRole('button', { name: 'Guardar' }).click();
 
     await expect(page.getByText('Socio actualizado correctamente.')).toBeVisible();
     const filaActualizada = page.locator('tr', { hasText: codigo });
-    await expect(filaActualizada.getByText('Suspendido')).toBeVisible();
+    await expect(filaActualizada.getByText('2', { exact: true })).toBeVisible();
 
     page.once('dialog', (dialog) => dialog.accept());
     await filaActualizada.getByRole('button', { name: 'Eliminar' }).click();
@@ -53,7 +53,7 @@ test.describe('CRUD de socios', () => {
     await page.getByLabel('Nombres').fill('Luis');
     await page.getByLabel('Apellidos').fill('Gómez');
     await page.getByLabel('Acción').selectOption('Preferente');
-    await page.getByLabel('Etapa').selectOption('Activo');
+    await page.getByLabel('Etapa').selectOption('1');
     await page.getByLabel('Fecha de nacimiento').fill('1988-01-15');
     await page.getByRole('button', { name: 'Guardar' }).click();
 
