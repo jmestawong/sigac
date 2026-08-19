@@ -1,10 +1,16 @@
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { EgresoService } from '../../core/services/egreso.service';
 import { Egreso } from '../../core/models/egreso.model';
+import { MatIconModule } from '@angular/material/icon';
 
 function primerDiaDelMes(mes: string): string {
   return `${mes}-01`;
@@ -18,7 +24,16 @@ function ultimoDiaDelMes(mes: string): string {
 
 @Component({
   selector: 'app-egreso-list',
-  imports: [RouterLink, DecimalPipe],
+  imports: [
+    RouterLink,
+    DecimalPipe,
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatIconModule,
+  ],
   templateUrl: './egreso-list.html',
   styleUrl: './egreso-list.css',
 })
@@ -68,7 +83,9 @@ export class EgresoList {
   }
 
   procesar(egreso: Egreso): void {
-    const confirmado = confirm(`¿Procesar el egreso ${egreso.correlativo}? Esta acción no se puede deshacer.`);
+    const confirmado = confirm(
+      `¿Procesar el egreso ${egreso.correlativo}? Esta acción no se puede deshacer.`,
+    );
     if (!confirmado) {
       return;
     }
@@ -76,13 +93,17 @@ export class EgresoList {
     this.egresoService.procesar(egreso.id).subscribe({
       next: (actualizado) => {
         this.reemplazar(actualizado);
-        this.notificationService.exito(`Egreso ${actualizado.correlativo} procesado correctamente.`);
+        this.notificationService.exito(
+          `Egreso ${actualizado.correlativo} procesado correctamente.`,
+        );
       },
     });
   }
 
   anular(egreso: Egreso): void {
-    const confirmado = confirm(`¿Anular el egreso ${egreso.correlativo}? Esta acción no se puede deshacer.`);
+    const confirmado = confirm(
+      `¿Anular el egreso ${egreso.correlativo}? Esta acción no se puede deshacer.`,
+    );
     if (!confirmado) {
       return;
     }

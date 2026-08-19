@@ -5,10 +5,13 @@ import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../core/services/notification.service';
 import { EgresoService } from '../../core/services/egreso.service';
 import { CargaMasivaEgresosResponse } from '../../core/models/egreso.model';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-egreso-carga-masiva',
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, MatIconModule, MatTableModule, MatButtonModule],
   templateUrl: './egreso-carga-masiva.html',
   styleUrl: './egreso-carga-masiva.css',
 })

@@ -1,22 +1,69 @@
 @import '../shared/catalogo.css';
 
-.filtros {
+.catalogo-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1.25rem;
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
-.filtro-fecha,
-.filtro-tipo {
-  padding: 0.55rem 0.75rem;
-  border: 1px solid #cbd5e1;
+.page-header h1 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 2rem;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+.estado {
+  color: #64748b;
+  padding: 3rem 0;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.table-wrapper {
   border-radius: 8px;
-  font-size: 0.9rem;
-  font-family: inherit;
+  overflow: hidden;
 }
 
-.filtros .filtro {
-  margin-bottom: 0;
+.mat-table-full {
+  width: 100%;
+}
+
+.rol-badge {
+  background-color: #e2e8f0;
+  color: #334155;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.monto-text {
+  color: #059669;
+  font-weight: 600;
+}
+
+.col-acciones {
+  text-align: right;
+  padding-right: 1.5rem;
+}
+
+.empty-state-cell {
+  text-align: center;
+  padding: 2rem;
 }

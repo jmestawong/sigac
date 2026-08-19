@@ -4,10 +4,21 @@ import { Router, RouterLink } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { EgresoService } from '../../core/services/egreso.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-egreso-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatButtonModule,
+  ],
   templateUrl: './egreso-form.html',
   styleUrl: './egreso-form.css',
 })

@@ -1,67 +1,125 @@
 <section class="catalogo-page">
   <header class="page-header">
-    <h1>Egresos</h1>
-    <div class="acciones-header">
-      <a class="btn btn-secondary" routerLink="/egresos/carga-masiva">Carga masiva</a>
-      <a class="btn btn-primary" routerLink="/egresos/nuevo">+ Nuevo egreso</a>
+    <h1 class="page-title">Egresos</h1>
+    <div class="header-actions">
+      <a matButton="outlined" routerLink="/egresos/carga-masiva">
+        <mat-icon class="icon-margin-right">upload_file</mat-icon> Carga masiva
+      </a>
+      <a matButton="filled" color="primary" routerLink="/egresos/nuevo">+ Nuevo egreso</a>
     </div>
   </header>
 
-  <div class="filtros">
-    <input
-      type="month"
-      class="filtro-mes"
-      [value]="mes()"
-      (change)="cambiarMes($any($event.target).value)"
-    />
-    <input
-      type="text"
-      class="filtro"
-      placeholder="Buscar por correlativo, documento, proveedor o motivo..."
-      [value]="filtro()"
-      (input)="filtro.set($any($event.target).value)"
-    />
+  <div class="filtros-container">
+    <mat-form-field appearance="outline" class="filtro-mes">
+      <mat-label>Mes</mat-label>
+      <input
+        matInput
+        type="month"
+        [value]="mes()"
+        (change)="cambiarMes($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="search-container">
+      <mat-label>Buscar egreso</mat-label>
+      <input
+        matInput
+        placeholder="Correlativo, documento, proveedor o motivo..."
+        [value]="filtro()"
+        (input)="filtro.set($any($event.target).value)"
+      />
+    </mat-form-field>
   </div>
 
   @if (cargando()) {
     <p class="estado">Cargando egresos...</p>
   } @else if (egresos().length === 0) {
-    <p class="estado">No hay egresos registrados en este mes.</p>
+    <p class="estado empty-state">No hay egresos registrados en este mes.</p>
   } @else if (egresosFiltrados().length === 0) {
-    <p class="estado">No hay egresos que coincidan con "{{ filtro() }}".</p>
+    <p class="estado empty-state">No hay egresos que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Correlativo</th>
-            <th>Documento</th>
-            <th>Proveedor</th>
-            <th>Fecha</th>
-            <th>Importe</th>
-            <th>Estado</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (egreso of egresosFiltrados(); track egreso.id) {
-            <tr>
-              <td>{{ egreso.correlativo }}</td>
-              <td>{{ egreso.numeroDocumento }}</td>
-              <td>{{ egreso.proveedor }}</td>
-              <td>{{ egreso.fecha }}</td>
-              <td>{{ egreso.importe | number: '1.2-2' }}</td>
-              <td><span class="estado-badge estado-{{ egreso.estado.toLowerCase() }}">{{ egreso.estado }}</span></td>
-              <td class="acciones">
-                <a [routerLink]="['/egresos', egreso.id]" class="btn btn-secondary">Ver</a>
-                @if (egreso.estado === 'REGISTRADO') {
-                  <button type="button" class="btn btn-primary" (click)="procesar(egreso)">Procesar</button>
-                  <button type="button" class="btn btn-danger" (click)="anular(egreso)">Anular</button>
-                }
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="egresosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="correlativo">
+          <th mat-header-cell *matHeaderCellDef>Correlativo</th>
+          <td mat-cell *matCellDef="let egreso">
+            <strong>{{ egreso.correlativo }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="documento">
+          <th mat-header-cell *matHeaderCellDef>Documento</th>
+          <td mat-cell *matCellDef="let egreso">{{ egreso.numeroDocumento }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="proveedor">
+          <th mat-header-cell *matHeaderCellDef>Proveedor</th>
+          <td mat-cell *matCellDef="let egreso">{{ egreso.proveedor }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let egreso">{{ egreso.fecha }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="importe">
+          <th mat-header-cell *matHeaderCellDef>Importe</th>
+          <td mat-cell *matCellDef="let egreso">S/ {{ egreso.importe | number: '1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let egreso">
+            <span class="estado-badge" [ngClass]="'estado-' + egreso.estado.toLowerCase()">
+              {{ egreso.estado }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let egreso" class="col-acciones">
+            <div class="action-buttons-cell">
+              <a matButton="outlined" [routerLink]="['/egresos', egreso.id]">Ver</a>
+              @if (egreso.estado === 'REGISTRADO') {
+                <button matButton="filled" color="primary" (click)="procesar(egreso)">
+                  Procesar
+                </button>
+                <button matButton="filled" class="btn-danger" (click)="anular(egreso)">
+                  Anular
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="[
+            'correlativo',
+            'documento',
+            'proveedor',
+            'fecha',
+            'importe',
+            'estado',
+            'acciones',
+          ]"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: [
+              'correlativo',
+              'documento',
+              'proveedor',
+              'fecha',
+              'importe',
+              'estado',
+              'acciones',
+            ]
+          "
+        ></tr>
       </table>
     </div>
   }

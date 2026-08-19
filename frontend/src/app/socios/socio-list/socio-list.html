@@ -1,53 +1,105 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Socios</h1>
-    <a class="btn btn-primary" routerLink="/socios/nuevo">+ Nuevo socio</a>
+    <div class="header-actions">
+      <a matButton="filled" color="primary" routerLink="/socios/nuevo">+ Nuevo socio</a>
+    </div>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por código, nombres, apellidos o etapa..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar socio</mat-label>
+    <input
+      matInput
+      placeholder="Código, nombres, apellidos o etapa..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando socios...</p>
-  } @else if (socios().length === 0) {
-    <p class="estado">Aún no hay socios registrados.</p>
-  } @else if (sociosFiltrados().length === 0) {
-    <p class="estado">No hay socios que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Nombres</th>
-            <th>Apellidos</th>
-            <th>Acción</th>
-            <th>Etapa</th>
-            <th>Fecha nacimiento</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (socio of sociosFiltrados(); track socio.id) {
-            <tr>
-              <td>{{ socio.codigo }}</td>
-              <td>{{ socio.nombres }}</td>
-              <td>{{ socio.apellidos }}</td>
-              <td>{{ socio.accion }}</td>
-              <td><span class="etapa-badge">{{ socio.etapa }}</span></td>
-              <td>{{ socio.fechaNacimiento }}</td>
-              <td class="acciones">
-                <a [routerLink]="['/socios', socio.id, 'editar']" class="btn btn-secondary">Editar</a>
-                <button type="button" class="btn btn-danger" (click)="eliminar(socio)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="sociosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="codigo">
+          <th mat-header-cell *matHeaderCellDef>Código</th>
+          <td mat-cell *matCellDef="let socio">
+            <strong>{{ socio.codigo }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombres">
+          <th mat-header-cell *matHeaderCellDef>Nombres</th>
+          <td mat-cell *matCellDef="let socio">{{ socio.nombres }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="apellidos">
+          <th mat-header-cell *matHeaderCellDef>Apellidos</th>
+          <td mat-cell *matCellDef="let socio">{{ socio.apellidos }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Acción</th>
+          <td mat-cell *matCellDef="let socio">{{ socio.accion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="etapa">
+          <th mat-header-cell *matHeaderCellDef>Etapa</th>
+          <td mat-cell *matCellDef="let socio">
+            <span class="rol-badge">Etapa {{ socio.etapa }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaNacimiento">
+          <th mat-header-cell *matHeaderCellDef>Fecha nacimiento</th>
+          <td mat-cell *matCellDef="let socio">{{ socio.fechaNacimiento }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let socio" class="col-acciones">
+            <div class="action-buttons-cell">
+              <a matButton="outlined" [routerLink]="['/socios', socio.id, 'editar']">Editar</a>
+              <button matButton="filled" class="btn-danger" (click)="eliminar(socio)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="[
+            'codigo',
+            'nombres',
+            'apellidos',
+            'accion',
+            'etapa',
+            'fechaNacimiento',
+            'acciones',
+          ]"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: [
+              'codigo',
+              'nombres',
+              'apellidos',
+              'accion',
+              'etapa',
+              'fechaNacimiento',
+              'acciones',
+            ]
+          "
+        ></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state-cell" colspan="7">
+            No hay socios que coincidan con la búsqueda.
+          </td>
+        </tr>
       </table>
     </div>
   }

@@ -1,351 +1,645 @@
-<section class="cobranza-page">
-  <header class="page-header">
-    <h1>Cobranza</h1>
+<section class="cobranza-page" style="padding: 2rem; max-width: 1400px; margin: 0 auto">
+  <header class="page-header" style="margin-bottom: 2rem">
+    <h1 style="margin: 0; color: #1e293b; font-size: 2rem">Cobranza</h1>
   </header>
 
-  <div class="form-card buscador">
-    <div class="modo-toggle">
-      <button type="button" class="btn" [class.btn-primary]="modo() === 'SOCIO'" [class.btn-secondary]="modo() !== 'SOCIO'" (click)="cambiarModo('SOCIO')">
-        Buscar por socio
-      </button>
-      <button type="button" class="btn" [class.btn-primary]="modo() === 'PUESTO'" [class.btn-secondary]="modo() !== 'PUESTO'" (click)="cambiarModo('PUESTO')">
-        Buscar por puesto
-      </button>
-    </div>
+  <mat-card class="mat-elevation-z2 material-form-card" style="margin-bottom: 2rem">
+    <mat-card-content>
+      <mat-button-toggle-group
+        [value]="modo()"
+        (change)="cambiarModo($event.value)"
+        style="margin-bottom: 1.5rem"
+      >
+        <mat-button-toggle value="SOCIO">Buscar por socio</mat-button-toggle>
+        <mat-button-toggle value="PUESTO">Buscar por puesto</mat-button-toggle>
+      </mat-button-toggle-group>
 
-    <input
-      type="text"
-      class="filtro"
-      [placeholder]="modo() === 'SOCIO' ? 'Buscar por código, nombres o apellidos...' : 'Buscar por número o inquilino...'"
-      [value]="filtroTexto()"
-      (input)="filtroTexto.set($any($event.target).value)"
-    />
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Buscar</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [placeholder]="
+            modo() === 'SOCIO' ? 'Código, nombres o apellidos...' : 'Número o inquilino...'
+          "
+          [value]="filtroTexto()"
+          (input)="filtroTexto.set($any($event.target).value)"
+        />
+      </mat-form-field>
 
-    <div class="lista-resultados">
-      @if (modo() === 'SOCIO') {
-        @for (socio of sociosFiltrados(); track socio.id) {
-          <button
-            type="button"
-            class="opcion-resultado"
-            [class.seleccionada]="seleccionadoId() === socio.id"
-            (click)="seleccionar(socio.id)"
-          >
-            {{ socio.nombres }} {{ socio.apellidos }} ({{ socio.codigo }})
-          </button>
+      <mat-action-list class="search-results-container">
+        @if (modo() === 'SOCIO') {
+          @for (socio of sociosFiltrados(); track socio.id) {
+            <button
+              mat-list-item
+              class="result-item"
+              [class.result-item-selected]="seleccionadoId() === socio.id"
+              (click)="seleccionar(socio.id)"
+            >
+              <mat-icon matListItemIcon style="color: #64748b">person</mat-icon>
+              <span matListItemTitle style="font-weight: 600; color: #1e293b">
+                {{ socio.nombres }} {{ socio.apellidos }}
+              </span>
+              <span matListItemLine style="color: #64748b"> Código: {{ socio.codigo }} </span>
+            </button>
+            <mat-divider></mat-divider>
+          }
+          @if (sociosFiltrados().length === 0) {
+            <p class="empty-results">No se encontraron socios.</p>
+          }
+        } @else {
+          @for (puesto of puestosFiltrados(); track puesto.id) {
+            <button
+              mat-list-item
+              class="result-item"
+              [class.result-item-selected]="seleccionadoId() === puesto.id"
+              (click)="seleccionar(puesto.id)"
+            >
+              <mat-icon matListItemIcon style="color: #64748b">storefront</mat-icon>
+              <span matListItemTitle style="font-weight: 600; color: #1e293b">
+                Puesto {{ puesto.numero }}
+              </span>
+              <span matListItemLine style="color: #64748b">
+                Inquilino: {{ puesto.nombreInquilino }}
+              </span>
+            </button>
+            <mat-divider></mat-divider>
+          }
+          @if (puestosFiltrados().length === 0) {
+            <p class="empty-results">No se encontraron puestos.</p>
+          }
         }
-        @if (sociosFiltrados().length === 0) {
-          <p class="estado">Sin resultados.</p>
-        }
-      } @else {
-        @for (puesto of puestosFiltrados(); track puesto.id) {
-          <button
-            type="button"
-            class="opcion-resultado"
-            [class.seleccionada]="seleccionadoId() === puesto.id"
-            (click)="seleccionar(puesto.id)"
-          >
-            {{ puesto.numero }} — {{ puesto.nombreInquilino }}
-          </button>
-        }
-        @if (puestosFiltrados().length === 0) {
-          <p class="estado">Sin resultados.</p>
-        }
-      }
-    </div>
-  </div>
+      </mat-action-list>
+    </mat-card-content>
+  </mat-card>
 
   @if (cargandoResumen()) {
-    <p class="estado">Cargando resumen...</p>
+    <p class="estado">Cargando resumen de cuentas...</p>
   }
 
   @if (ultimoRecibo(); as recibo) {
-    <div class="form-card recibo-destacado">
-      <h2>Recibo {{ recibo.correlativo }}</h2>
-      <p>{{ recibo.tipo }} · {{ recibo.monto }} · {{ recibo.fecha | date: 'short' }}</p>
-    </div>
+    <mat-card class="success-receipt-card">
+      <mat-card-content class="success-receipt-content">
+        <div>
+          <h2 class="success-receipt-title">Recibo {{ recibo.correlativo }} generado con éxito</h2>
+          <p class="success-receipt-subtitle">
+            {{ recibo.tipo }} · {{ recibo.fecha | date: 'short' }}
+          </p>
+        </div>
+        <div class="success-receipt-amount">S/ {{ recibo.monto }}</div>
+      </mat-card-content>
+    </mat-card>
   }
 
-  <!-- Vista por SOCIO -->
   @if (modo() === 'SOCIO' && resumenSocio(); as resumen) {
-    <div class="form-card">
-      <h2>{{ resumen.socio.nombres }} {{ resumen.socio.apellidos }} ({{ resumen.socio.codigo }})</h2>
+    <div class="mat-elevation-z2 details-panel">
+      <h2 class="panel-header-title">
+        {{ resumen.socio.nombres }} {{ resumen.socio.apellidos }}
+        <span class="panel-header-subtitle">({{ resumen.socio.codigo }})</span>
+      </h2>
 
-      <h3>Cuentas del socio</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Servicio</th>
-              <th>Período</th>
-              <th>Monto</th>
-              <th>Estado</th>
-              <th>Decisión</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cuenta of resumen.cuentasSocio; track cuenta.id) {
-              <tr>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
-                  }
-                </td>
-                <td>{{ cuenta.servicio.nombre }}</td>
-                <td>{{ cuenta.periodo }}</td>
-                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
-                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
-                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
-                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
-                    </select>
-                  }
-                </td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <button type="button" class="btn btn-secondary" (click)="abrirCanje(cuenta.id)">Canjear</button>
-                  }
-                </td>
-              </tr>
-              @if (canjeAbiertoParaCuenta() === cuenta.id) {
-                <tr>
-                  <td colspan="7">
-                    <div class="canje-form">
-                      <select (change)="canjeBancoId.set($any($event.target).value ? Number($any($event.target).value) : null)">
-                        <option value="">Selecciona un banco</option>
-                        @for (banco of bancos(); track banco.id) {
-                          <option [value]="banco.id">{{ banco.nombre }} — {{ banco.numeroCuenta }}</option>
-                        }
-                      </select>
-                      <input type="date" (input)="canjeFecha.set($any($event.target).value)" />
-                      <button type="button" class="btn btn-primary" (click)="confirmarCanje(cuenta.id)">Confirmar canje</button>
-                      <button type="button" class="btn btn-secondary" (click)="cerrarCanje()">Cancelar</button>
-                    </div>
-                  </td>
-                </tr>
+      <h3 class="section-subtitle">Cuentas directas del socio</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.cuentasSocio" class="mat-table-full">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="col-checkbox"></th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE') {
+                <mat-checkbox
+                  color="primary"
+                  (change)="toggleCuenta(cuenta.id, $event.checked)"
+                ></mat-checkbox>
               }
-            }
-            @if (resumen.cuentasSocio.length === 0) {
-              <tr><td colspan="7" class="estado">Sin cuentas directas.</td></tr>
-            }
-          </tbody>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <strong>{{ cuenta.servicio.nombre }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="periodo">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cuenta">
+              {{ cuenta.servicio.moneda }} {{ cuenta.monto }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <span class="estado-badge">{{ cuenta.estado }}</span>
+              @if (cuenta.reciboCorrelativo) {
+                <small class="status-note">{{ cuenta.reciboCorrelativo }}</small>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisión</th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="decision-select"
+                >
+                  <mat-select
+                    [value]="decisionDe(cuenta.id)"
+                    (selectionChange)="cambiarDecision(cuenta.id, $event.value)"
+                  >
+                    <mat-option value="ABONAR">Abonar</mat-option>
+                    <mat-option value="EXONERAR">Exonerar</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones / Canje</th>
+            <td mat-cell *matCellDef="let cuenta" class="col-acciones">
+              @if (cuenta.estado === 'PENDIENTE') {
+                @if (canjeAbiertoParaCuenta() !== cuenta.id) {
+                  <button matButton="outlined" (click)="abrirCanje(cuenta.id)">Canjear</button>
+                } @else {
+                  <div class="embedded-exchange-form">
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                      class="full-width"
+                    >
+                      <mat-label>Selecciona un banco</mat-label>
+                      <mat-select (selectionChange)="canjeBancoId.set($event.value)">
+                        @for (banco of bancos(); track banco.id) {
+                          <mat-option [value]="banco.id"
+                            >{{ banco.nombre }} — {{ banco.numeroCuenta }}</mat-option
+                          >
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                      class="full-width"
+                    >
+                      <input
+                        matInput
+                        type="date"
+                        (input)="canjeFecha.set($any($event.target).value)"
+                      />
+                    </mat-form-field>
+                    <div class="exchange-actions">
+                      <button
+                        matButton="filled"
+                        color="primary"
+                        (click)="confirmarCanje(cuenta.id)"
+                      >
+                        Confirmar
+                      </button>
+                      <button matButton="outlined" (click)="cerrarCanje()">Cancelar</button>
+                    </div>
+                  </div>
+                }
+              }
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="[
+              'select',
+              'servicio',
+              'periodo',
+              'monto',
+              'estado',
+              'decision',
+              'acciones',
+            ]"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: ['select', 'servicio', 'periodo', 'monto', 'estado', 'decision', 'acciones']
+            "
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="7">Sin cuentas directas.</td>
+          </tr>
         </table>
       </div>
 
-      <h3>Cuentas de sus puestos</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Puesto</th>
-              <th>Servicio</th>
-              <th>Período</th>
-              <th>Monto</th>
-              <th>Estado</th>
-              <th>Decisión</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cuenta of resumen.cuentasPuestos; track cuenta.id) {
-              <tr>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
-                  }
-                </td>
-                <td>{{ cuenta.puesto?.numero }}</td>
-                <td>{{ cuenta.servicio.nombre }}</td>
-                <td>{{ cuenta.periodo }}</td>
-                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
-                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
-                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
-                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
-                    </select>
-                  }
-                </td>
-              </tr>
-            }
-            @if (resumen.cuentasPuestos.length === 0) {
-              <tr><td colspan="7" class="estado">Sin cuentas de puestos.</td></tr>
-            }
-          </tbody>
+      <h3 class="section-subtitle">Cuentas de sus puestos</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.cuentasPuestos" class="mat-table-full">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="col-checkbox"></th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE') {
+                <mat-checkbox
+                  color="primary"
+                  (change)="toggleCuenta(cuenta.id, $event.checked)"
+                ></mat-checkbox>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="puesto">
+            <th mat-header-cell *matHeaderCellDef>Puesto</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.puesto?.numero }}</td>
+          </ng-container>
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <strong>{{ cuenta.servicio.nombre }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="periodo">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cuenta">
+              {{ cuenta.servicio.moneda }} {{ cuenta.monto }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <span class="estado-badge">{{ cuenta.estado }}</span>
+              @if (cuenta.reciboCorrelativo) {
+                <small class="status-note">{{ cuenta.reciboCorrelativo }}</small>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisión</th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="decision-select"
+                >
+                  <mat-select
+                    [value]="decisionDe(cuenta.id)"
+                    (selectionChange)="cambiarDecision(cuenta.id, $event.value)"
+                  >
+                    <mat-option value="ABONAR">Abonar</mat-option>
+                    <mat-option value="EXONERAR">Exonerar</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="[
+              'select',
+              'puesto',
+              'servicio',
+              'periodo',
+              'monto',
+              'estado',
+              'decision',
+            ]"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: ['select', 'puesto', 'servicio', 'periodo', 'monto', 'estado', 'decision']
+            "
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="7">Sin cuentas de puestos.</td>
+          </tr>
         </table>
       </div>
 
-      <div class="total-pago">
-        <span>Total a pagar (cuentas marcadas "Abonar"):</span>
-        <strong>{{ totalAPagar() }}</strong>
+      <div class="payment-summary-panel">
+        <span class="payment-label"
+          >Total a pagar <br /><small>(cuentas marcadas como "Abonar")</small></span
+        >
+        <div class="payment-amount-container">
+          <strong class="payment-total">S/ {{ totalAPagar() }}</strong>
+          <button
+            matButton="filled"
+            color="primary"
+            class="payment-button"
+            [disabled]="procesando()"
+            (click)="confirmarPago()"
+          >
+            {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
+          </button>
+        </div>
       </div>
-      <button type="button" class="btn btn-primary" [disabled]="procesando()" (click)="confirmarPago()">
-        {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
-      </button>
 
-      <h3>Movimientos</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead><tr><th>Correlativo</th><th>Tipo</th><th>Fecha</th><th>Monto</th></tr></thead>
-          <tbody>
-            @for (recibo of resumen.movimientos; track recibo.id) {
-              <tr>
-                <td>{{ recibo.correlativo }}</td>
-                <td>{{ recibo.tipo }}</td>
-                <td>{{ recibo.fecha | date: 'short' }}</td>
-                <td>{{ recibo.monto }}</td>
-              </tr>
-            }
-            @if (resumen.movimientos.length === 0) {
-              <tr><td colspan="4" class="estado">Sin movimientos registrados.</td></tr>
-            }
-          </tbody>
+      <h3 class="section-subtitle">Movimientos recientes</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.movimientos" class="mat-table-full">
+          <ng-container matColumnDef="correlativo">
+            <th mat-header-cell *matHeaderCellDef>Correlativo</th>
+            <td mat-cell *matCellDef="let recibo">
+              <strong>{{ recibo.correlativo }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let recibo">{{ recibo.tipo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let recibo">{{ recibo.fecha | date: 'short' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let recibo">S/ {{ recibo.monto }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['correlativo', 'tipo', 'fecha', 'monto']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['correlativo', 'tipo', 'fecha', 'monto']"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="4">Sin movimientos registrados.</td>
+          </tr>
         </table>
       </div>
     </div>
   }
 
-  <!-- Vista por PUESTO -->
   @if (modo() === 'PUESTO' && resumenPuesto(); as resumen) {
-    <div class="form-card">
-      <h2>{{ resumen.puesto.numero }} — {{ resumen.puesto.nombreInquilino }}</h2>
+    <div class="mat-elevation-z2 details-panel">
+      <h2 class="panel-header-title">
+        Puesto {{ resumen.puesto.numero }}
+        <span class="panel-header-subtitle">— {{ resumen.puesto.nombreInquilino }}</span>
+      </h2>
 
-      <h3>Cuentas del puesto</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Servicio</th>
-              <th>Período</th>
-              <th>Monto</th>
-              <th>Estado</th>
-              <th>Decisión</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cuenta of resumen.cuentasPuesto; track cuenta.id) {
-              <tr>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
-                  }
-                </td>
-                <td>{{ cuenta.servicio.nombre }}</td>
-                <td>{{ cuenta.periodo }}</td>
-                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
-                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
-                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
-                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
-                    </select>
-                  }
-                </td>
-              </tr>
-            }
-            @if (resumen.cuentasPuesto.length === 0) {
-              <tr><td colspan="6" class="estado">Sin cuentas del puesto.</td></tr>
-            }
-          </tbody>
-        </table>
-      </div>
-
-      <h3>Cuentas del socio asociado</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Servicio</th>
-              <th>Período</th>
-              <th>Monto</th>
-              <th>Estado</th>
-              <th>Decisión</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cuenta of resumen.cuentasSocioAsociado; track cuenta.id) {
-              <tr>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <input type="checkbox" (change)="toggleCuenta(cuenta.id, $any($event.target).checked)" />
-                  }
-                </td>
-                <td>{{ cuenta.servicio.nombre }}</td>
-                <td>{{ cuenta.periodo }}</td>
-                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-                <td><span class="estado-badge">{{ cuenta.estado }}</span> @if (cuenta.reciboCorrelativo) { <small>({{ cuenta.reciboCorrelativo }})</small> }</td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
-                    <select (change)="cambiarDecision(cuenta.id, $any($event.target).value)">
-                      <option value="ABONAR" [selected]="decisionDe(cuenta.id) === 'ABONAR'">Abonar</option>
-                      <option value="EXONERAR" [selected]="decisionDe(cuenta.id) === 'EXONERAR'">Exonerar</option>
-                    </select>
-                  }
-                </td>
-                <td>
-                  @if (cuenta.estado === 'PENDIENTE') {
-                    <button type="button" class="btn btn-secondary" (click)="abrirCanje(cuenta.id)">Canjear</button>
-                  }
-                </td>
-              </tr>
-              @if (canjeAbiertoParaCuenta() === cuenta.id) {
-                <tr>
-                  <td colspan="7">
-                    <div class="canje-form">
-                      <select (change)="canjeBancoId.set($any($event.target).value ? Number($any($event.target).value) : null)">
-                        <option value="">Selecciona un banco</option>
-                        @for (banco of bancos(); track banco.id) {
-                          <option [value]="banco.id">{{ banco.nombre }} — {{ banco.numeroCuenta }}</option>
-                        }
-                      </select>
-                      <input type="date" (input)="canjeFecha.set($any($event.target).value)" />
-                      <button type="button" class="btn btn-primary" (click)="confirmarCanje(cuenta.id)">Confirmar canje</button>
-                      <button type="button" class="btn btn-secondary" (click)="cerrarCanje()">Cancelar</button>
-                    </div>
-                  </td>
-                </tr>
+      <h3 class="section-subtitle">Cuentas del puesto</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.cuentasPuesto" class="mat-table-full">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="col-checkbox"></th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE') {
+                <mat-checkbox
+                  color="primary"
+                  (change)="toggleCuenta(cuenta.id, $event.checked)"
+                ></mat-checkbox>
               }
-            }
-            @if (resumen.cuentasSocioAsociado.length === 0) {
-              <tr><td colspan="7" class="estado">Este puesto no tiene socio asociado o sin cuentas.</td></tr>
-            }
-          </tbody>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <strong>{{ cuenta.servicio.nombre }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="periodo">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cuenta">
+              {{ cuenta.servicio.moneda }} {{ cuenta.monto }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <span class="estado-badge">{{ cuenta.estado }}</span>
+              @if (cuenta.reciboCorrelativo) {
+                <small class="status-note">{{ cuenta.reciboCorrelativo }}</small>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisión</th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="decision-select"
+                >
+                  <mat-select
+                    [value]="decisionDe(cuenta.id)"
+                    (selectionChange)="cambiarDecision(cuenta.id, $event.value)"
+                  >
+                    <mat-option value="ABONAR">Abonar</mat-option>
+                    <mat-option value="EXONERAR">Exonerar</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="['select', 'servicio', 'periodo', 'monto', 'estado', 'decision']"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: ['select', 'servicio', 'periodo', 'monto', 'estado', 'decision']
+            "
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="6">Sin cuentas del puesto.</td>
+          </tr>
         </table>
       </div>
 
-      <div class="total-pago">
-        <span>Total a pagar (cuentas marcadas "Abonar"):</span>
-        <strong>{{ totalAPagar() }}</strong>
-      </div>
-      <button type="button" class="btn btn-primary" [disabled]="procesando()" (click)="confirmarPago()">
-        {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
-      </button>
+      <h3 class="section-subtitle">Cuentas del socio asociado</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.cuentasSocioAsociado" class="mat-table-full">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef class="col-checkbox"></th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE') {
+                <mat-checkbox
+                  color="primary"
+                  (change)="toggleCuenta(cuenta.id, $event.checked)"
+                ></mat-checkbox>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef>Servicio</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <strong>{{ cuenta.servicio.nombre }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="periodo">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cuenta">
+              {{ cuenta.servicio.moneda }} {{ cuenta.monto }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cuenta">
+              <span class="estado-badge">{{ cuenta.estado }}</span>
+              @if (cuenta.reciboCorrelativo) {
+                <small class="status-note">{{ cuenta.reciboCorrelativo }}</small>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="decision">
+            <th mat-header-cell *matHeaderCellDef>Decisión</th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.estado === 'PENDIENTE' && decisionDe(cuenta.id)) {
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="decision-select"
+                >
+                  <mat-select
+                    [value]="decisionDe(cuenta.id)"
+                    (selectionChange)="cambiarDecision(cuenta.id, $event.value)"
+                  >
+                    <mat-option value="ABONAR">Abonar</mat-option>
+                    <mat-option value="EXONERAR">Exonerar</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones / Canje</th>
+            <td mat-cell *matCellDef="let cuenta" class="col-acciones">
+              @if (cuenta.estado === 'PENDIENTE') {
+                @if (canjeAbiertoParaCuenta() !== cuenta.id) {
+                  <button matButton="outlined" (click)="abrirCanje(cuenta.id)">Canjear</button>
+                } @else {
+                  <div class="embedded-exchange-form">
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                      class="full-width"
+                    >
+                      <mat-label>Selecciona un banco</mat-label>
+                      <mat-select (selectionChange)="canjeBancoId.set($event.value)">
+                        @for (banco of bancos(); track banco.id) {
+                          <mat-option [value]="banco.id"
+                            >{{ banco.nombre }} — {{ banco.numeroCuenta }}</mat-option
+                          >
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field
+                      appearance="outline"
+                      subscriptSizing="dynamic"
+                      class="full-width"
+                    >
+                      <input
+                        matInput
+                        type="date"
+                        (input)="canjeFecha.set($any($event.target).value)"
+                      />
+                    </mat-form-field>
+                    <div class="exchange-actions">
+                      <button
+                        matButton="filled"
+                        color="primary"
+                        (click)="confirmarCanje(cuenta.id)"
+                      >
+                        Confirmar
+                      </button>
+                      <button matButton="outlined" (click)="cerrarCanje()">Cancelar</button>
+                    </div>
+                  </div>
+                }
+              }
+            </td>
+          </ng-container>
 
-      <h3>Movimientos</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead><tr><th>Correlativo</th><th>Tipo</th><th>Fecha</th><th>Monto</th></tr></thead>
-          <tbody>
-            @for (recibo of resumen.movimientos; track recibo.id) {
-              <tr>
-                <td>{{ recibo.correlativo }}</td>
-                <td>{{ recibo.tipo }}</td>
-                <td>{{ recibo.fecha | date: 'short' }}</td>
-                <td>{{ recibo.monto }}</td>
-              </tr>
-            }
-            @if (resumen.movimientos.length === 0) {
-              <tr><td colspan="4" class="estado">Sin movimientos registrados.</td></tr>
-            }
-          </tbody>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="[
+              'select',
+              'servicio',
+              'periodo',
+              'monto',
+              'estado',
+              'decision',
+              'acciones',
+            ]"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: ['select', 'servicio', 'periodo', 'monto', 'estado', 'decision', 'acciones']
+            "
+          ></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="7">
+              Este puesto no tiene socio asociado o sin cuentas.
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="payment-summary-panel">
+        <span class="payment-label"
+          >Total a pagar <br /><small>(cuentas marcadas como "Abonar")</small></span
+        >
+        <div class="payment-amount-container">
+          <strong class="payment-total">S/ {{ totalAPagar() }}</strong>
+          <button
+            matButton="filled"
+            color="primary"
+            class="payment-button"
+            [disabled]="procesando()"
+            (click)="confirmarPago()"
+          >
+            {{ procesando() ? 'Procesando...' : 'Confirmar pago' }}
+          </button>
+        </div>
+      </div>
+
+      <h3 class="section-subtitle">Movimientos recientes</h3>
+      <div class="bordered-table-wrapper">
+        <table mat-table [dataSource]="resumen.movimientos" class="mat-table-full">
+          <ng-container matColumnDef="correlativo">
+            <th mat-header-cell *matHeaderCellDef>Correlativo</th>
+            <td mat-cell *matCellDef="let recibo">
+              <strong>{{ recibo.correlativo }}</strong>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let recibo">{{ recibo.tipo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let recibo">{{ recibo.fecha | date: 'short' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let recibo">S/ {{ recibo.monto }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['correlativo', 'tipo', 'fecha', 'monto']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['correlativo', 'tipo', 'fecha', 'monto']"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state-cell" colspan="4">Sin movimientos registrados.</td>
+          </tr>
         </table>
       </div>
     </div>

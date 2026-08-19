@@ -8,17 +8,45 @@ import { PagoService } from '../core/services/pago.service';
 import { PuestoService } from '../core/services/puesto.service';
 import { SocioService } from '../core/services/socio.service';
 import { Banco } from '../core/models/banco.model';
-import { CuentaPorCobrar, ResumenPuesto, ResumenSocio } from '../core/models/cuenta-por-cobrar.model';
+import {
+  CuentaPorCobrar,
+  ResumenPuesto,
+  ResumenSocio,
+} from '../core/models/cuenta-por-cobrar.model';
 import { Puesto } from '../core/models/puesto.model';
 import { Recibo } from '../core/models/recibo.model';
 import { Socio } from '../core/models/socio.model';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 type Modo = 'SOCIO' | 'PUESTO';
 type Decision = 'ABONAR' | 'EXONERAR';
 
 @Component({
   selector: 'app-cobranza',
-  imports: [DatePipe],
+  imports: [
+    DatePipe,
+    MatTableModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatButtonToggleModule,
+    MatListModule,
+    MatCardModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   templateUrl: './cobranza.html',
   styleUrl: './cobranza.css',
 })
@@ -43,7 +71,9 @@ export class Cobranza {
     if (!termino) {
       return this.socios();
     }
-    return this.socios().filter((s) => `${s.codigo} ${s.nombres} ${s.apellidos}`.toLowerCase().includes(termino));
+    return this.socios().filter((s) =>
+      `${s.codigo} ${s.nombres} ${s.apellidos}`.toLowerCase().includes(termino),
+    );
   });
 
   readonly puestosFiltrados = computed(() => {
@@ -51,7 +81,9 @@ export class Cobranza {
     if (!termino) {
       return this.puestos();
     }
-    return this.puestos().filter((p) => `${p.numero} ${p.nombreInquilino}`.toLowerCase().includes(termino));
+    return this.puestos().filter((p) =>
+      `${p.numero} ${p.nombreInquilino}`.toLowerCase().includes(termino),
+    );
   });
 
   readonly seleccionadoId = signal<number | null>(null);

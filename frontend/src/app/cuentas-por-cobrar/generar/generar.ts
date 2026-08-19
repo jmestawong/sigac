@@ -10,6 +10,12 @@ import { CuentaPorCobrar, LecturaPuestoRequest } from '../../core/models/cuenta-
 import { Puesto } from '../../core/models/puesto.model';
 import { ServicioCobrable } from '../../core/models/servicio-cobrable.model';
 import { Socio } from '../../core/models/socio.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
 
 type Modo = 'PUESTO_MONTO_FIJO' | 'PUESTO_CONSUMO' | 'SOCIO';
 
@@ -40,7 +46,15 @@ function deduplicarSocios(socios: Socio[]): Socio[] {
 
 @Component({
   selector: 'app-generar-cuentas',
-  imports: [RouterLink],
+  imports: [
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatTableModule,
+  ],
   templateUrl: './generar.html',
   styleUrl: './generar.css',
 })
@@ -69,7 +83,9 @@ export class Generar {
   readonly etapasSeleccionadas = signal<Set<string>>(new Set());
   readonly sociosUnicos = signal(false);
 
-  readonly servicioSeleccionado = computed(() => this.servicios().find((s) => s.id === this.servicioId()) ?? null);
+  readonly servicioSeleccionado = computed(
+    () => this.servicios().find((s) => s.id === this.servicioId()) ?? null,
+  );
 
   readonly modo = computed<Modo | null>(() => {
     const servicio = this.servicioSeleccionado();

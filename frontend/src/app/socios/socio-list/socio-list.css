@@ -1,10 +1,11 @@
 @import '../../shared/catalogo.css';
 
 .etapa-badge {
-  background: #eff6ff;
-  color: #1d4ed8;
-  padding: 0.2rem 0.6rem;
+  background-color: #e2e8f0;
+  color: #334155;
+  padding: 0.25rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
 }

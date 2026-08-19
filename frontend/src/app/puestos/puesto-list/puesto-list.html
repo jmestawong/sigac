@@ -1,51 +1,93 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Puestos</h1>
-    <a class="btn btn-primary" routerLink="/puestos/nuevo">+ Nuevo puesto</a>
+    <div class="header-actions">
+      <a matButton="filled" color="primary" routerLink="/puestos/nuevo">+ Nuevo puesto</a>
+    </div>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por número, inquilino, giro o socio..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <!-- Búsqueda con Material -->
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar puesto</mat-label>
+    <input
+      matInput
+      placeholder="Número, inquilino, giro o socio..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando puestos...</p>
-  } @else if (puestos().length === 0) {
-    <p class="estado">Aún no hay puestos registrados.</p>
-  } @else if (puestosFiltrados().length === 0) {
-    <p class="estado">No hay puestos que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Número</th>
-            <th>Inquilino</th>
-            <th>Giro</th>
-            <th>Socio</th>
-            <th>Vigencia</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (puesto of puestosFiltrados(); track puesto.id) {
-            <tr>
-              <td>{{ puesto.numero }}</td>
-              <td>{{ puesto.nombreInquilino }}</td>
-              <td>{{ puesto.giro.nombre }}</td>
-              <td>{{ puesto.socio ? puesto.socio.nombres + ' ' + puesto.socio.apellidos : '—' }}</td>
-              <td>{{ puesto.fechaInicioVigencia }} a {{ puesto.fechaFinVigencia }}</td>
-              <td class="acciones">
-                <a [routerLink]="['/puestos', puesto.id, 'editar']" class="btn btn-secondary">Editar</a>
-                <button type="button" class="btn btn-danger" (click)="eliminar(puesto)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="puestosFiltrados()" class="mat-table-full">
+        <!-- Columna Número -->
+        <ng-container matColumnDef="numero">
+          <th mat-header-cell *matHeaderCellDef>Número</th>
+          <td mat-cell *matCellDef="let puesto">
+            <strong>{{ puesto.numero }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Columna Inquilino -->
+        <ng-container matColumnDef="nombreInquilino">
+          <th mat-header-cell *matHeaderCellDef>Inquilino</th>
+          <td mat-cell *matCellDef="let puesto">{{ puesto.nombreInquilino }}</td>
+        </ng-container>
+
+        <!-- Columna Giro -->
+        <ng-container matColumnDef="giro">
+          <th mat-header-cell *matHeaderCellDef>Giro</th>
+          <td mat-cell *matCellDef="let puesto">{{ puesto.giro.nombre }}</td>
+        </ng-container>
+
+        <!-- Columna Socio -->
+        <ng-container matColumnDef="socio">
+          <th mat-header-cell *matHeaderCellDef>Socio</th>
+          <td mat-cell *matCellDef="let puesto">
+            {{ puesto.socio ? puesto.socio.nombres + ' ' + puesto.socio.apellidos : '—' }}
+          </td>
+        </ng-container>
+
+        <!-- Columna Vigencia -->
+        <ng-container matColumnDef="vigencia">
+          <th mat-header-cell *matHeaderCellDef>Vigencia</th>
+          <td mat-cell *matCellDef="let puesto" class="vigencia-text">
+            {{ puesto.fechaInicioVigencia }} a {{ puesto.fechaFinVigencia }}
+          </td>
+        </ng-container>
+
+        <!-- Columna Acciones -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let puesto" class="col-acciones">
+            <div class="action-buttons-cell">
+              <a matButton="outlined" [routerLink]="['/puestos', puesto.id, 'editar']">Editar</a>
+              <button matButton="filled" class="btn-danger" (click)="eliminar(puesto)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="['numero', 'nombreInquilino', 'giro', 'socio', 'vigencia', 'acciones']"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: ['numero', 'nombreInquilino', 'giro', 'socio', 'vigencia', 'acciones']
+          "
+        ></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state-cell" colspan="6">
+            No hay puestos que coincidan con la búsqueda.
+          </td>
+        </tr>
       </table>
     </div>
   }

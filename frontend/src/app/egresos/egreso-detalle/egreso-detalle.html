@@ -1,39 +1,68 @@
-<section class="voucher-page">
+<section class="detalle-page">
+  <header class="page-header">
+    <div class="header-title-group">
+      <a matIconButton routerLink="/egresos" title="Volver a egresos">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <h1 class="page-title">Comprobante de egreso</h1>
+    </div>
+  </header>
+
   @if (cargando()) {
     <p class="estado">Cargando comprobante...</p>
-  } @else if (egreso(); as egreso) {
-    <div class="voucher-card">
-      <header class="voucher-header">
-        <h1>Comprobante de egreso</h1>
-        <span class="estado-badge estado-{{ egreso.estado.toLowerCase() }}">{{ egreso.estado }}</span>
-      </header>
+  } @else if (egreso(); as data) {
+    <mat-card class="mat-elevation-z3 voucher-card">
+      <mat-card-header class="voucher-card-header">
+        <div class="header-content-row">
+          <div>
+            <h2 class="correlativo-title">Correlativo: {{ data.correlativo }}</h2>
+            <p class="fecha-subtitle">Fecha: {{ data.fecha }}</p>
+          </div>
+          <div class="badge-container">
+            <span class="estado-badge" [ngClass]="'estado-' + data.estado.toLowerCase()">
+              {{ data.estado }}
+            </span>
+          </div>
+        </div>
+      </mat-card-header>
 
-      <div class="voucher-correlativo">{{ egreso.correlativo }}</div>
+      <mat-card-content class="voucher-card-content">
+        <div class="details-grid">
+          <div>
+            <h3 class="detail-label">Importe</h3>
+            <p class="detail-value importe-value">S/ {{ data.importe | number: '1.2-2' }}</p>
+          </div>
 
-      <dl class="voucher-detalle">
-        <dt>Número de documento</dt>
-        <dd>{{ egreso.numeroDocumento }}</dd>
+          <div>
+            <h3 class="detail-label">Proveedor</h3>
+            <p class="detail-value">{{ data.proveedor }}</p>
+          </div>
 
-        <dt>Proveedor</dt>
-        <dd>{{ egreso.proveedor }}</dd>
+          <div>
+            <h3 class="detail-label">N° de documento</h3>
+            <p class="detail-value">{{ data.numeroDocumento }}</p>
+          </div>
 
-        <dt>Fecha</dt>
-        <dd>{{ egreso.fecha }}</dd>
+          @if (data.documentoAsociado) {
+            <div>
+              <h3 class="detail-label">Doc. Asociado</h3>
+              <p class="detail-value">{{ data.documentoAsociado }}</p>
+            </div>
+          }
+        </div>
 
-        <dt>Importe</dt>
-        <dd class="importe">S/ {{ egreso.importe | number: '1.2-2' }}</dd>
+        <mat-divider class="section-divider"></mat-divider>
 
-        @if (egreso.documentoAsociado) {
-          <dt>Documento asociado</dt>
-          <dd>{{ egreso.documentoAsociado }}</dd>
-        }
+        <div>
+          <h3 class="detail-label">Motivo</h3>
+          <p class="detail-text">{{ data.motivo }}</p>
+        </div>
 
-        <dt>Motivo</dt>
-        <dd>{{ egreso.motivo }}</dd>
-      </dl>
-
-      <a routerLink="/egresos" class="btn btn-secondary">Volver al listado</a>
-    </div>
+        <div class="center-actions">
+          <a matButton="outlined" routerLink="/egresos">Volver al listado</a>
+        </div>
+      </mat-card-content>
+    </mat-card>
   } @else {
     <p class="estado">No se encontró el egreso solicitado.</p>
   }

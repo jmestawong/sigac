@@ -5,9 +5,14 @@ import { NotificationService } from '../../core/services/notification.service';
 import { BancoService } from '../../core/services/banco.service';
 import { Banco } from '../../core/models/banco.model';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 @Component({
   selector: 'app-banco-list',
-  imports: [RouterLink],
+  imports: [RouterLink, MatTableModule, MatButtonModule, MatInputModule, MatFormFieldModule],
   templateUrl: './banco-list.html',
   styleUrl: './banco-list.css',
 })
@@ -25,7 +30,10 @@ export class BancoList {
       return this.bancos();
     }
     return this.bancos().filter((banco) =>
-      [banco.nombre, banco.numeroCuenta, banco.cci, banco.moneda].join(' ').toLowerCase().includes(termino),
+      [banco.nombre, banco.numeroCuenta, banco.cci, banco.moneda]
+        .join(' ')
+        .toLowerCase()
+        .includes(termino),
     );
   });
 

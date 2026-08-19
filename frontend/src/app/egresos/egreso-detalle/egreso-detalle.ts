@@ -1,14 +1,26 @@
-import { DecimalPipe } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { EgresoService } from '../../core/services/egreso.service';
 import { Egreso } from '../../core/models/egreso.model';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-egreso-detalle',
-  imports: [RouterLink, DecimalPipe],
+  imports: [
+    RouterLink,
+    DecimalPipe,
+    CommonModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+  ],
   templateUrl: './egreso-detalle.html',
   styleUrl: './egreso-detalle.css',
 })

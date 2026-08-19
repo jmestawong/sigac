@@ -1,69 +1,89 @@
 <section class="form-page">
-  <div class="form-card">
-    <h1>{{ esEdicion() ? 'Editar puesto' : 'Nuevo puesto' }}</h1>
+  <div class="mat-elevation-z3 material-form-card">
+    <h1 class="form-header-title">
+      {{ esEdicion() ? 'Editar puesto' : 'Nuevo puesto' }}
+    </h1>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="field">
-        <label for="numero">Número de puesto</label>
-        <input id="numero" type="text" formControlName="numero" />
-        @if (form.controls.numero.invalid && form.controls.numero.touched) {
-          <span class="field-error">El número de puesto es obligatorio.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="nombreInquilino">Nombre del inquilino</label>
-        <input id="nombreInquilino" type="text" formControlName="nombreInquilino" />
-        @if (form.controls.nombreInquilino.invalid && form.controls.nombreInquilino.touched) {
-          <span class="field-error">El nombre del inquilino es obligatorio.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="giroId">Giro</label>
-        <select id="giroId" formControlName="giroId">
-          <option value="" disabled>Selecciona un giro</option>
-          @for (giro of giros(); track giro.id) {
-            <option [value]="giro.id">{{ giro.nombre }}</option>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-column-layout">
+      <div class="grid-1-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Número de puesto</mat-label>
+          <input matInput formControlName="numero" />
+          @if (form.controls.numero.invalid && form.controls.numero.touched) {
+            <mat-error>El número es obligatorio.</mat-error>
           }
-        </select>
-        @if (form.controls.giroId.invalid && form.controls.giroId.touched) {
-          <span class="field-error">El giro es obligatorio.</span>
-        }
-      </div>
+        </mat-form-field>
 
-      <div class="field">
-        <label for="socioId">Socio asociado (opcional)</label>
-        <select id="socioId" formControlName="socioId">
-          <option [ngValue]="null">Sin socio asociado</option>
-          @for (socio of socios(); track socio.id) {
-            <option [ngValue]="socio.id">{{ socio.nombres }} {{ socio.apellidos }} ({{ socio.codigo }})</option>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre del inquilino</mat-label>
+          <input matInput formControlName="nombreInquilino" />
+          @if (form.controls.nombreInquilino.invalid && form.controls.nombreInquilino.touched) {
+            <mat-error>El inquilino es obligatorio.</mat-error>
           }
-        </select>
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="fechaInicioVigencia">Inicio de vigencia</label>
-        <input id="fechaInicioVigencia" type="date" formControlName="fechaInicioVigencia" />
-        @if (form.controls.fechaInicioVigencia.invalid && form.controls.fechaInicioVigencia.touched) {
-          <span class="field-error">La fecha de inicio es obligatoria.</span>
-        }
+      <div class="grid-1-1">
+        <mat-form-field appearance="outline">
+          <mat-label>Giro</mat-label>
+          <mat-select formControlName="giroId">
+            @for (giro of giros(); track giro.id) {
+              <mat-option [value]="giro.id">{{ giro.nombre }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.giroId.invalid && form.controls.giroId.touched) {
+            <mat-error>El giro es obligatorio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Socio asociado (opcional)</mat-label>
+          <mat-select formControlName="socioId">
+            <mat-option [value]="null">Sin socio asociado</mat-option>
+            @for (socio of socios(); track socio.id) {
+              <mat-option [value]="socio.id"
+                >{{ socio.nombres }} {{ socio.apellidos }} ({{ socio.codigo }})</mat-option
+              >
+            }
+          </mat-select>
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="fechaFinVigencia">Fin de vigencia</label>
-        <input id="fechaFinVigencia" type="date" formControlName="fechaFinVigencia" />
-        @if (form.controls.fechaFinVigencia.invalid && form.controls.fechaFinVigencia.touched) {
-          <span class="field-error">La fecha de fin es obligatoria.</span>
-        }
-        @if (form.errors?.['vigenciaInvalida'] && form.controls.fechaFinVigencia.touched) {
-          <span class="field-error">La fecha de fin no puede ser anterior a la fecha de inicio.</span>
-        }
+      <div class="grid-1-1">
+        <mat-form-field appearance="outline">
+          <mat-label>Inicio de vigencia</mat-label>
+          <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicioVigencia" />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicio></mat-datepicker>
+          @if (
+            form.controls.fechaInicioVigencia.invalid && form.controls.fechaInicioVigencia.touched
+          ) {
+            <mat-error>La fecha de inicio es obligatoria.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fin de vigencia</mat-label>
+          <input matInput [matDatepicker]="pickerFin" formControlName="fechaFinVigencia" />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFin></mat-datepicker>
+          @if (form.controls.fechaFinVigencia.invalid && form.controls.fechaFinVigencia.touched) {
+            <mat-error>La fecha de fin es obligatoria.</mat-error>
+          }
+          @if (form.errors?.['vigenciaInvalida'] && form.controls.fechaFinVigencia.touched) {
+            <mat-error>La fecha de fin no puede ser anterior al inicio.</mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <div class="acciones-form">
-        <a routerLink="/puestos" class="btn btn-secondary">Cancelar</a>
-        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+      <div class="form-actions-bar">
+        <a matButton="outlined" routerLink="/puestos">Cancelar</a>
+        <button
+          matButton="filled"
+          type="submit"
+          color="primary"
+          [disabled]="guardando() || form.invalid"
+        >
           {{ guardando() ? 'Guardando...' : 'Guardar' }}
         </button>
       </div>

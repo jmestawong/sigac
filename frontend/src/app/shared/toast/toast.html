@@ -1,5 +1,9 @@
 @if (notificacion(); as n) {
-  <div class="toast" [class.toast-error]="n.tipo === 'error'" [class.toast-exito]="n.tipo === 'exito'">
-    {{ n.mensaje }}
+  <div
+    class="toast mat-elevation-z4"
+    [ngClass]="n.tipo === 'error' ? 'toast-error' : 'toast-exito'"
+  >
+    <mat-icon>{{ n.tipo === 'error' ? 'error_outline' : 'check_circle' }}</mat-icon>
+    <span>{{ n.mensaje }}</span>
   </div>
 }

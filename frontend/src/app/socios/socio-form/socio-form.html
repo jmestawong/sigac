@@ -1,69 +1,80 @@
 <section class="form-page">
-  <div class="form-card">
-    <h1>{{ esEdicion() ? 'Editar socio' : 'Nuevo socio' }}</h1>
+  <div class="mat-elevation-z3 material-form-card">
+    <h1 class="form-header-title">
+      {{ esEdicion() ? 'Editar socio' : 'Nuevo socio' }}
+    </h1>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="field">
-        <label for="codigo">Código</label>
-        <input id="codigo" type="text" formControlName="codigo" />
-        @if (form.controls.codigo.invalid && form.controls.codigo.touched) {
-          <span class="field-error">El código es obligatorio.</span>
-        }
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-column-layout">
+      <div class="grid-1-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="codigo" placeholder="Ej: 2026-..." />
+          @if (form.controls.codigo.invalid && form.controls.codigo.touched) {
+            <mat-error>El código es obligatorio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input matInput formControlName="nombres" />
+          @if (form.controls.nombres.invalid && form.controls.nombres.touched) {
+            <mat-error>Los nombres son obligatorios.</mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="nombres">Nombres</label>
-        <input id="nombres" type="text" formControlName="nombres" />
-        @if (form.controls.nombres.invalid && form.controls.nombres.touched) {
-          <span class="field-error">Los nombres son obligatorios.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="apellidos">Apellidos</label>
-        <input id="apellidos" type="text" formControlName="apellidos" />
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Apellidos</mat-label>
+        <input matInput formControlName="apellidos" />
         @if (form.controls.apellidos.invalid && form.controls.apellidos.touched) {
-          <span class="field-error">Los apellidos son obligatorios.</span>
+          <mat-error>Los apellidos son obligatorios.</mat-error>
         }
+      </mat-form-field>
+
+      <div class="grid-auto-fit">
+        <mat-form-field appearance="outline">
+          <mat-label>Acción</mat-label>
+          <mat-select formControlName="accion">
+            <mat-option value="Ordinaria">Ordinaria</mat-option>
+            <mat-option value="Preferente">Preferente</mat-option>
+            <mat-option value="Fundador">Fundador</mat-option>
+          </mat-select>
+          @if (form.controls.accion.invalid && form.controls.accion.touched) {
+            <mat-error>La acción es obligatoria.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Etapa</mat-label>
+          <mat-select formControlName="etapa">
+            <mat-option value="1">Etapa 1</mat-option>
+            <mat-option value="2">Etapa 2</mat-option>
+            <mat-option value="3">Etapa 3</mat-option>
+          </mat-select>
+          @if (form.controls.etapa.invalid && form.controls.etapa.touched) {
+            <mat-error>La etapa es obligatoria.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (form.controls.fechaNacimiento.invalid && form.controls.fechaNacimiento.touched) {
+            <mat-error>La fecha es obligatoria.</mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="accion">Acción</label>
-        <select id="accion" formControlName="accion">
-          <option value="" disabled>Selecciona una acción</option>
-          <option value="Ordinaria">Ordinaria</option>
-          <option value="Preferente">Preferente</option>
-          <option value="Fundador">Fundador</option>
-        </select>
-        @if (form.controls.accion.invalid && form.controls.accion.touched) {
-          <span class="field-error">La acción es obligatoria.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="etapa">Etapa</label>
-        <select id="etapa" formControlName="etapa">
-          <option value="" disabled>Selecciona una etapa</option>
-          <option value="1">Etapa 1</option>
-          <option value="2">Etapa 2</option>
-          <option value="3">Etapa 3</option>
-        </select>
-        @if (form.controls.etapa.invalid && form.controls.etapa.touched) {
-          <span class="field-error">La etapa es obligatoria.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="fechaNacimiento">Fecha de nacimiento</label>
-        <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" />
-        @if (form.controls.fechaNacimiento.invalid && form.controls.fechaNacimiento.touched) {
-          <span class="field-error">La fecha de nacimiento es obligatoria.</span>
-        }
-      </div>
-
-      <div class="acciones-form">
-        <a routerLink="/socios" class="btn btn-secondary">Cancelar</a>
-        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+      <div class="form-actions-bar">
+        <a matButton="outlined" routerLink="/socios">Cancelar</a>
+        <button
+          matButton="filled"
+          color="primary"
+          type="submit"
+          [disabled]="guardando() || form.invalid"
+        >
           {{ guardando() ? 'Guardando...' : 'Guardar' }}
         </button>
       </div>

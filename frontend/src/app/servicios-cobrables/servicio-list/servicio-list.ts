@@ -4,10 +4,14 @@ import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../core/services/notification.service';
 import { ServicioCobrableService } from '../../core/services/servicio-cobrable.service';
 import { ServicioCobrable } from '../../core/models/servicio-cobrable.model';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-servicio-list',
-  imports: [RouterLink],
+  imports: [RouterLink, MatTableModule, MatButtonModule, MatInputModule, MatFormFieldModule],
   templateUrl: './servicio-list.html',
   styleUrl: './servicio-list.css',
 })

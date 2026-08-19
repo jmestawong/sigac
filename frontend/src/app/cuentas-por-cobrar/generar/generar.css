@@ -1,55 +1,107 @@
-@import '../../shared/catalogo.css';
-@import '../../shared/formulario.css';
-
 .generar-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-.form-card {
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  margin: 0;
+  color: #1e293b;
+  font-size: 2rem;
+}
+
+.material-form-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.field-margin {
+  margin-bottom: 1rem;
+}
+
+.field-margin-large {
   margin-bottom: 1.5rem;
+}
+
+.section-label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.75rem;
 }
 
 .lista-seleccion {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 260px;
+  max-height: 200px;
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
+  padding: 0.5rem;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 0.75rem;
 }
 
-.lista-seleccion-horizontal {
-  flex-direction: row;
-  flex-wrap: wrap;
-  max-height: none;
-  overflow: visible;
+.estado {
+  color: #64748b;
+  text-align: center;
+  padding: 1rem;
 }
 
-.opcion-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: #334155;
+.inner-table-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.opcion-checkbox input {
-  width: auto;
+.mat-table-full {
+  width: 100%;
+}
+
+.input-table-margin {
+  margin-top: 0.5rem;
 }
 
 .ayuda {
   color: #64748b;
-  font-size: 0.82rem;
-  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
 }
 
-.resultado h2 {
-  margin: 0 0 1rem;
+.checkbox-group-horizontal {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.resumen-texto {
+  color: #334155;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.result-title {
+  margin-top: 0;
   color: #1e293b;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }

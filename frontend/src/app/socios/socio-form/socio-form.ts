@@ -1,13 +1,32 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { SocioService } from '../../core/services/socio.service';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-socio-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
   templateUrl: './socio-form.html',
   styleUrl: './socio-form.css',
 })
@@ -79,7 +98,9 @@ export class SocioForm {
     operacion.subscribe({
       next: () => {
         this.guardando.set(false);
-        this.notificationService.exito(this.esEdicion() ? 'Socio actualizado correctamente.' : 'Socio creado correctamente.');
+        this.notificationService.exito(
+          this.esEdicion() ? 'Socio actualizado correctamente.' : 'Socio creado correctamente.',
+        );
         this.router.navigate(['/socios']);
       },
       error: () => this.guardando.set(false),

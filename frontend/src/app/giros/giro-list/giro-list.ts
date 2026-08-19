@@ -1,13 +1,26 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { GiroService } from '../../core/services/giro.service';
 import { Giro } from '../../core/models/giro.model';
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-giro-list',
-  imports: [RouterLink],
+  imports: [
+    RouterLink,
+    CommonModule,
+    RouterModule,
+    MatTableModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+  ],
   templateUrl: './giro-list.html',
   styleUrl: './giro-list.css',
 })

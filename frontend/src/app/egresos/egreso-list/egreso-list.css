@@ -1,23 +1,79 @@
-@import '../../shared/catalogo.css';
-
-.acciones-header {
-  display: flex;
-  gap: 0.6rem;
+.catalogo-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-.filtros {
+.page-header {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  margin: 0;
+  color: #1e293b;
+  font-size: 2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
   align-items: center;
 }
 
+.icon-margin-right {
+  margin-right: 0.5rem;
+}
+
+/* --- Filtros y Buscador --- */
+.filtros-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
 .filtro-mes {
-  padding: 0.55rem 0.75rem;
-  border: 1px solid #cbd5e1;
+  width: 200px;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 450px;
+}
+
+.estado {
+  color: #64748b;
+  padding: 3rem 0;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.empty-state {
+  padding: 2rem;
+}
+
+/* --- Tabla --- */
+.table-wrapper {
   border-radius: 8px;
-  font-size: 0.9rem;
-  font-family: inherit;
+  overflow: hidden;
+}
+
+.mat-table-full {
+  width: 100%;
+}
+
+.col-acciones {
+  text-align: right;
+  padding-right: 1.5rem;
+}
+
+.action-buttons-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 .estado-badge {
@@ -25,11 +81,14 @@
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
+  border: 1px solid transparent;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .estado-registrado {
-  background: #eff6ff;
-  color: #1d4ed8;
+  background: #e0f2fe;
+  color: #0284c7;
 }
 
 .estado-procesado {
@@ -38,6 +97,6 @@
 }
 
 .estado-anulado {
-  background: #fef2f2;
+  background: #fee2e2;
   color: #b91c1c;
 }

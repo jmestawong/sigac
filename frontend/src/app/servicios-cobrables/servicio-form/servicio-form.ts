@@ -6,10 +6,23 @@ import { NotificationService } from '../../core/services/notification.service';
 import { ServicioCobrableService } from '../../core/services/servicio-cobrable.service';
 import { Moneda } from '../../core/models/banco.model';
 import { Recurrencia, TipoDestinatario } from '../../core/models/servicio-cobrable.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-servicio-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCheckboxModule,
+  ],
   templateUrl: './servicio-form.html',
   styleUrl: './servicio-form.css',
 })
@@ -99,7 +112,9 @@ export class ServicioForm {
       next: () => {
         this.guardando.set(false);
         this.notificationService.exito(
-          this.esEdicion() ? 'Servicio actualizado correctamente.' : 'Servicio creado correctamente.',
+          this.esEdicion()
+            ? 'Servicio actualizado correctamente.'
+            : 'Servicio creado correctamente.',
         );
         this.router.navigate(['/servicios']);
       },

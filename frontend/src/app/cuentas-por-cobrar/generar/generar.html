@@ -1,60 +1,56 @@
 <section class="generar-page">
   <header class="page-header">
-    <h1>Generar cuentas por cobrar</h1>
-    <a class="btn btn-secondary" routerLink="/cuentas-por-cobrar">Ver cuentas generadas</a>
+    <h1 class="page-title">Generar cuentas por cobrar</h1>
+    <a matButton="outlined" routerLink="/cuentas-por-cobrar">Ver cuentas generadas</a>
   </header>
 
-  <div class="form-card">
-    <div class="field">
-      <label for="servicio">Servicio</label>
-      <select id="servicio" (change)="seleccionarServicio($any($event.target).value)">
-        <option value="">Selecciona un servicio</option>
+  <div class="mat-elevation-z3 material-form-card">
+    <mat-form-field appearance="outline" class="full-width field-margin">
+      <mat-label>Servicio</mat-label>
+      <mat-select (selectionChange)="seleccionarServicio($event.value)">
+        <mat-option value="">Selecciona un servicio</mat-option>
         @for (servicio of servicios(); track servicio.id) {
-          <option [value]="servicio.id">
-            {{ servicio.nombre }} ({{ servicio.destinatario }}, {{ servicio.esPorConsumo ? 'consumo' : 'fijo' }})
-          </option>
+          <mat-option [value]="servicio.id">
+            {{ servicio.nombre }} ({{ servicio.destinatario }},
+            {{ servicio.esPorConsumo ? 'consumo' : 'fijo' }})
+          </mat-option>
         }
-      </select>
-    </div>
+      </mat-select>
+    </mat-form-field>
 
+    <!-- Período -->
     @if (modo()) {
-      <div class="field">
-        <label for="periodo">Período</label>
+      <mat-form-field appearance="outline" class="full-width field-margin">
+        <mat-label>Período</mat-label>
         <input
-          id="periodo"
-          type="text"
+          matInput
           placeholder="ej. 2026-01"
           [value]="periodo()"
           (input)="periodo.set($any($event.target).value)"
         />
-      </div>
+      </mat-form-field>
     }
 
-    <!-- Puestos, costo fijo -->
     @if (modo() === 'PUESTO_MONTO_FIJO') {
-      <div class="field">
-        <label for="monto">Monto por puesto</label>
+      <mat-form-field appearance="outline" class="full-width field-margin-large">
+        <mat-label>Monto por puesto</mat-label>
         <input
-          id="monto"
+          matInput
           type="number"
           step="0.01"
           min="0.01"
           [value]="monto()"
           (input)="monto.set($any($event.target).value ? Number($any($event.target).value) : null)"
         />
-      </div>
+      </mat-form-field>
 
-      <div class="field">
-        <label>Puestos a incluir</label>
+      <div class="field-margin-large">
+        <label class="section-label">Puestos a incluir</label>
         <div class="lista-seleccion">
           @for (puesto of puestos(); track puesto.id) {
-            <label class="opcion-checkbox">
-              <input
-                type="checkbox"
-                (change)="togglePuesto(puesto.id, $any($event.target).checked)"
-              />
+            <mat-checkbox color="primary" (change)="togglePuesto(puesto.id, $event.checked)">
               {{ puesto.numero }} — {{ puesto.nombreInquilino }}
-            </label>
+            </mat-checkbox>
           }
           @if (puestos().length === 0) {
             <p class="estado">No hay puestos registrados.</p>
@@ -63,89 +59,106 @@
       </div>
     }
 
-    <!-- Puestos, por consumo -->
     @if (modo() === 'PUESTO_CONSUMO') {
-      <div class="field">
-        <label>Lecturas por puesto</label>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Puesto</th>
-                <th>Lectura inicial</th>
-                <th>Lectura final</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (fila of filasConsumo(); track fila.puesto.id) {
-                <tr>
-                  <td>{{ fila.puesto.numero }} — {{ fila.puesto.nombreInquilino }}</td>
-                  <td>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      [value]="fila.lecturaInicial"
-                      (input)="actualizarLectura(fila.puesto, 'lecturaInicial', $any($event.target).value)"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      [value]="fila.lecturaFinal"
-                      (input)="actualizarLectura(fila.puesto, 'lecturaFinal', $any($event.target).value)"
-                    />
-                  </td>
-                </tr>
-              }
-            </tbody>
+      <div class="field-margin-large">
+        <label class="section-label">Lecturas por puesto</label>
+        <div class="mat-elevation-z1 inner-table-wrapper">
+          <table mat-table [dataSource]="filasConsumo()" class="mat-table-full">
+            <ng-container matColumnDef="puesto">
+              <th mat-header-cell *matHeaderCellDef>Puesto</th>
+              <td mat-cell *matCellDef="let fila">
+                {{ fila.puesto.numero }} — {{ fila.puesto.nombreInquilino }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lecturaInicial">
+              <th mat-header-cell *matHeaderCellDef>Lectura inicial</th>
+              <td mat-cell *matCellDef="let fila">
+                <mat-form-field appearance="outline" class="full-width input-table-margin">
+                  <input
+                    matInput
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    [value]="fila.lecturaInicial"
+                    (input)="
+                      actualizarLectura(fila.puesto, 'lecturaInicial', $any($event.target).value)
+                    "
+                  />
+                </mat-form-field>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lecturaFinal">
+              <th mat-header-cell *matHeaderCellDef>Lectura final</th>
+              <td mat-cell *matCellDef="let fila">
+                <mat-form-field appearance="outline" class="full-width input-table-margin">
+                  <input
+                    matInput
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    [value]="fila.lecturaFinal"
+                    (input)="
+                      actualizarLectura(fila.puesto, 'lecturaFinal', $any($event.target).value)
+                    "
+                  />
+                </mat-form-field>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['puesto', 'lecturaInicial', 'lecturaFinal']"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: ['puesto', 'lecturaInicial', 'lecturaFinal']"
+            ></tr>
           </table>
         </div>
-        <p class="ayuda">Se generará una cuenta solo para los puestos con ambas lecturas registradas.</p>
+        <p class="ayuda">
+          Se generará una cuenta solo para los puestos con ambas lecturas registradas.
+        </p>
       </div>
     }
 
-    <!-- Socios -->
     @if (modo() === 'SOCIO') {
-      <div class="field">
-        <label for="montoSocio">Monto por socio</label>
+      <mat-form-field appearance="outline" class="full-width field-margin-large">
+        <mat-label>Monto por socio</mat-label>
         <input
-          id="montoSocio"
+          matInput
           type="number"
           step="0.01"
           min="0.01"
           [value]="monto()"
           (input)="monto.set($any($event.target).value ? Number($any($event.target).value) : null)"
         />
-      </div>
+      </mat-form-field>
 
-      <div class="field">
-        <label>Filtrar por etapa (vacío = todas)</label>
-        <div class="lista-seleccion lista-seleccion-horizontal">
+      <div class="field-margin-large">
+        <label class="section-label">Filtrar por etapa (vacío = todas)</label>
+        <div class="checkbox-group-horizontal">
           @for (etapa of etapasDisponibles; track etapa) {
-            <label class="opcion-checkbox">
-              <input type="checkbox" (change)="toggleEtapa(etapa, $any($event.target).checked)" />
+            <mat-checkbox color="primary" (change)="toggleEtapa(etapa, $event.checked)">
               Etapa {{ etapa }}
-            </label>
+            </mat-checkbox>
           }
         </div>
       </div>
 
-      <div class="field field-checkbox">
-        <label>
-          <input type="checkbox" (change)="sociosUnicos.set($any($event.target).checked)" />
+      <div class="field-margin-large">
+        <mat-checkbox color="primary" (change)="sociosUnicos.set($event.checked)">
           Socios únicos (evita duplicados por nombre y apellido)
-        </label>
+        </mat-checkbox>
       </div>
 
-      <p class="ayuda">Se generarán cuentas para {{ sociosCandidatos().length }} socio(s) según el filtro actual.</p>
+      <p class="resumen-texto">
+        Se generarán cuentas para <strong>{{ sociosCandidatos().length }}</strong> socio(s) según el
+        filtro actual.
+      </p>
     }
 
     @if (modo()) {
-      <div class="acciones-form">
-        <button type="button" class="btn btn-primary" [disabled]="generando()" (click)="generar()">
+      <div class="form-actions-bar">
+        <button matButton="filled" color="primary" [disabled]="generando()" (click)="generar()">
           {{ generando() ? 'Generando...' : 'Generar cuentas' }}
         </button>
       </div>
@@ -153,34 +166,43 @@
   </div>
 
   @if (cuentasGeneradas(); as cuentas) {
-    <div class="form-card resultado">
-      <h2>Cuentas generadas ({{ cuentas.length }})</h2>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Destinatario</th>
-              <th>Período</th>
-              <th>Monto</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (cuenta of cuentas; track cuenta.id) {
-              <tr>
-                <td>
-                  @if (cuenta.puesto) {
-                    {{ cuenta.puesto.numero }} — {{ cuenta.puesto.nombreInquilino }}
-                  } @else if (cuenta.socio) {
-                    {{ cuenta.socio.nombres }} {{ cuenta.socio.apellidos }} ({{ cuenta.socio.codigo }})
-                  }
-                </td>
-                <td>{{ cuenta.periodo }}</td>
-                <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-                <td>{{ cuenta.estado }}</td>
-              </tr>
-            }
-          </tbody>
+    <div class="mat-elevation-z3 material-form-card">
+      <h2 class="result-title">Cuentas generadas ({{ cuentas.length }})</h2>
+      <div class="mat-elevation-z1 inner-table-wrapper" style="margin-top: 1rem">
+        <table mat-table [dataSource]="cuentas" class="mat-table-full">
+          <ng-container matColumnDef="destinatario">
+            <th mat-header-cell *matHeaderCellDef>Destinatario</th>
+            <td mat-cell *matCellDef="let cuenta">
+              @if (cuenta.puesto) {
+                {{ cuenta.puesto.numero }} — {{ cuenta.puesto.nombreInquilino }}
+              } @else if (cuenta.socio) {
+                {{ cuenta.socio.nombres }} {{ cuenta.socio.apellidos }} ({{ cuenta.socio.codigo }})
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="periodo">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cuenta">
+              {{ cuenta.servicio.moneda }} {{ cuenta.monto }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let cuenta">{{ cuenta.estado }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['destinatario', 'periodo', 'monto', 'estado']"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['destinatario', 'periodo', 'monto', 'estado']"
+          ></tr>
         </table>
       </div>
     </div>

@@ -1,19 +1,26 @@
 <section class="form-page">
-  <div class="form-card">
-    <h1>{{ esEdicion() ? 'Editar giro' : 'Nuevo giro' }}</h1>
+  <div class="mat-elevation-z3 material-form-card">
+    <h1 class="form-header-title">
+      {{ esEdicion() ? 'Editar giro' : 'Nuevo giro' }}
+    </h1>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="field">
-        <label for="nombre">Nombre del giro</label>
-        <input id="nombre" type="text" formControlName="nombre" />
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-column-layout">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre del giro</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ej: Abarrotes, Ferretería..." />
         @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
-          <span class="field-error">El nombre del giro es obligatorio.</span>
+          <mat-error>El nombre del giro es obligatorio.</mat-error>
         }
-      </div>
+      </mat-form-field>
 
-      <div class="acciones-form">
-        <a routerLink="/giros" class="btn btn-secondary">Cancelar</a>
-        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+      <div class="form-actions-bar">
+        <a matButton="outlined" routerLink="/giros">Cancelar</a>
+        <button
+          matButton="filled"
+          color="primary"
+          type="submit"
+          [disabled]="guardando() || form.invalid"
+        >
           {{ guardando() ? 'Guardando...' : 'Guardar' }}
         </button>
       </div>

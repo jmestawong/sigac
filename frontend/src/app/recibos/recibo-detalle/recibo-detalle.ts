@@ -3,12 +3,26 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+
 import { PagoService } from '../../core/services/pago.service';
 import { Recibo } from '../../core/models/recibo.model';
 
 @Component({
   selector: 'app-recibo-detalle',
-  imports: [RouterLink, DatePipe],
+  imports: [
+    RouterLink,
+    DatePipe,
+    MatCardModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   templateUrl: './recibo-detalle.html',
   styleUrl: './recibo-detalle.css',
 })

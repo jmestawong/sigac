@@ -1,49 +1,72 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Bancos</h1>
-    <a class="btn btn-primary" routerLink="/bancos/nuevo">+ Nueva cuenta</a>
+    <div class="header-actions">
+      <a matButton="filled" color="primary" routerLink="/bancos/nuevo">+ Nueva cuenta</a>
+    </div>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por banco, cuenta, CCI o moneda..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar cuenta bancaria</mat-label>
+    <input
+      matInput
+      placeholder="Banco, cuenta, CCI..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando cuentas bancarias...</p>
-  } @else if (bancos().length === 0) {
-    <p class="estado">Aún no hay cuentas bancarias registradas.</p>
-  } @else if (bancosFiltrados().length === 0) {
-    <p class="estado">No hay cuentas que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Banco</th>
-            <th>Número de cuenta</th>
-            <th>CCI</th>
-            <th>Moneda</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (banco of bancosFiltrados(); track banco.id) {
-            <tr>
-              <td>{{ banco.nombre }}</td>
-              <td>{{ banco.numeroCuenta }}</td>
-              <td>{{ banco.cci }}</td>
-              <td>{{ banco.moneda }}</td>
-              <td class="acciones">
-                <a [routerLink]="['/bancos', banco.id, 'editar']" class="btn btn-secondary">Editar</a>
-                <button type="button" class="btn btn-danger" (click)="eliminar(banco)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="bancosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Banco</th>
+          <td mat-cell *matCellDef="let banco">{{ banco.nombre }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroCuenta">
+          <th mat-header-cell *matHeaderCellDef>Número de cuenta</th>
+          <td mat-cell *matCellDef="let banco">{{ banco.numeroCuenta }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="cci">
+          <th mat-header-cell *matHeaderCellDef>CCI</th>
+          <td mat-cell *matCellDef="let banco">{{ banco.cci }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="moneda">
+          <th mat-header-cell *matHeaderCellDef>Moneda</th>
+          <td mat-cell *matCellDef="let banco">{{ banco.moneda }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let banco" class="col-acciones">
+            <div class="action-buttons-cell">
+              <a matButton="outlined" [routerLink]="['/bancos', banco.id, 'editar']">Editar</a>
+              <button matButton="filled" class="btn-danger" (click)="eliminar(banco)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="['nombre', 'numeroCuenta', 'cci', 'moneda', 'acciones']"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['nombre', 'numeroCuenta', 'cci', 'moneda', 'acciones']"
+        ></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state-cell" colspan="5">
+            No hay cuentas que coincidan con la búsqueda.
+          </td>
+        </tr>
       </table>
     </div>
   }

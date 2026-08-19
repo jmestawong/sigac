@@ -1,62 +1,96 @@
 <section class="catalogo-page">
   <header class="page-header">
-    <h1>Cuentas por cobrar</h1>
-    @if (authService.rol() === 'ADMIN') {
-      <a class="btn btn-primary" routerLink="/cuentas-por-cobrar/generar">+ Generar cuentas</a>
-    }
+    <h1 class="page-title">Cuentas por cobrar</h1>
+
+    <div class="header-actions">
+      @if (authService.rol() === 'ADMIN') {
+        <a matButton="filled" color="primary" routerLink="/cuentas-por-cobrar/generar"
+          >+ Generar cuentas</a
+        >
+      }
+    </div>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por servicio, período, estado, puesto o socio..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar cuenta por cobrar</mat-label>
+    <input
+      matInput
+      placeholder="Servicio, período, estado, puesto o socio..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando cuentas por cobrar...</p>
   } @else if (cuentas().length === 0) {
-    <p class="estado">Aún no se han generado cuentas por cobrar.</p>
+    <p class="estado empty-state">Aún no se han generado cuentas por cobrar.</p>
   } @else if (cuentasFiltradas().length === 0) {
-    <p class="estado">No hay cuentas que coincidan con "{{ filtro() }}".</p>
+    <p class="estado empty-state">No hay cuentas que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Servicio</th>
-            <th>Destinatario</th>
-            <th>Período</th>
-            <th>Monto</th>
-            <th>Estado</th>
-            @if (authService.rol() === 'ADMIN') {
-              <th></th>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="cuentasFiltradas()" class="mat-table-full">
+        <ng-container matColumnDef="servicio">
+          <th mat-header-cell *matHeaderCellDef>Servicio</th>
+          <td mat-cell *matCellDef="let cuenta">
+            <strong>{{ cuenta.servicio.nombre }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="destinatario">
+          <th mat-header-cell *matHeaderCellDef>Destinatario</th>
+          <td mat-cell *matCellDef="let cuenta">
+            @if (cuenta.puesto) {
+              {{ cuenta.puesto.numero }} — {{ cuenta.puesto.nombreInquilino }}
+            } @else if (cuenta.socio) {
+              {{ cuenta.socio.nombres }} {{ cuenta.socio.apellidos }} ({{ cuenta.socio.codigo }})
             }
-          </tr>
-        </thead>
-        <tbody>
-          @for (cuenta of cuentasFiltradas(); track cuenta.id) {
-            <tr>
-              <td>{{ cuenta.servicio.nombre }}</td>
-              <td>
-                @if (cuenta.puesto) {
-                  {{ cuenta.puesto.numero }} — {{ cuenta.puesto.nombreInquilino }}
-                } @else if (cuenta.socio) {
-                  {{ cuenta.socio.nombres }} {{ cuenta.socio.apellidos }} ({{ cuenta.socio.codigo }})
-                }
-              </td>
-              <td>{{ cuenta.periodo }}</td>
-              <td>{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
-              <td><span class="estado-badge">{{ cuenta.estado }}</span></td>
-              @if (authService.rol() === 'ADMIN') {
-                <td class="acciones">
-                  <button type="button" class="btn btn-danger" (click)="eliminar(cuenta)">Eliminar</button>
-                </td>
-              }
-            </tr>
-          }
-        </tbody>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="periodo">
+          <th mat-header-cell *matHeaderCellDef>Período</th>
+          <td mat-cell *matCellDef="let cuenta">{{ cuenta.periodo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let cuenta">{{ cuenta.servicio.moneda }} {{ cuenta.monto }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let cuenta">
+            <span class="estado-badge">{{ cuenta.estado }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let cuenta" class="col-acciones">
+            <button matButton="filled" class="btn-danger" (click)="eliminar(cuenta)">
+              Eliminar
+            </button>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="
+            authService.rol() === 'ADMIN'
+              ? ['servicio', 'destinatario', 'periodo', 'monto', 'estado', 'acciones']
+              : ['servicio', 'destinatario', 'periodo', 'monto', 'estado']
+          "
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: authService.rol() === 'ADMIN'
+              ? ['servicio', 'destinatario', 'periodo', 'monto', 'estado', 'acciones']
+              : ['servicio', 'destinatario', 'periodo', 'monto', 'estado']
+          "
+        ></tr>
       </table>
     </div>
   }

@@ -1,47 +1,57 @@
 <section class="form-page">
-  <div class="form-card">
-    <h1>{{ esEdicion() ? 'Editar cuenta bancaria' : 'Nueva cuenta bancaria' }}</h1>
+  <div class="mat-elevation-z3 material-form-card">
+    <h1 class="form-header-title">
+      {{ esEdicion() ? 'Editar cuenta bancaria' : 'Nueva cuenta bancaria' }}
+    </h1>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="field">
-        <label for="nombre">Banco</label>
-        <input id="nombre" type="text" formControlName="nombre" />
-        @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
-          <span class="field-error">El nombre del banco es obligatorio.</span>
-        }
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-column-layout">
+      <div class="grid-1-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Banco</mat-label>
+          <input matInput formControlName="nombre" placeholder="Ej: BCP, Interbank..." />
+          @if (form.controls.nombre.invalid && form.controls.nombre.touched) {
+            <mat-error>El nombre del banco es obligatorio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Moneda</mat-label>
+          <mat-select formControlName="moneda">
+            <mat-option value="PEN">Soles (PEN)</mat-option>
+            <mat-option value="USD">Dólares (USD)</mat-option>
+          </mat-select>
+          @if (form.controls.moneda.invalid && form.controls.moneda.touched) {
+            <mat-error>La moneda es obligatoria.</mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="numeroCuenta">Número de cuenta</label>
-        <input id="numeroCuenta" type="text" formControlName="numeroCuenta" />
-        @if (form.controls.numeroCuenta.invalid && form.controls.numeroCuenta.touched) {
-          <span class="field-error">El número de cuenta es obligatorio.</span>
-        }
+      <div class="grid-1-1">
+        <mat-form-field appearance="outline">
+          <mat-label>Número de cuenta</mat-label>
+          <input matInput formControlName="numeroCuenta" />
+          @if (form.controls.numeroCuenta.invalid && form.controls.numeroCuenta.touched) {
+            <mat-error>El número de cuenta es obligatorio.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>CCI</mat-label>
+          <input matInput formControlName="cci" />
+          @if (form.controls.cci.invalid && form.controls.cci.touched) {
+            <mat-error>El CCI es obligatorio.</mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <div class="field">
-        <label for="cci">CCI</label>
-        <input id="cci" type="text" formControlName="cci" />
-        @if (form.controls.cci.invalid && form.controls.cci.touched) {
-          <span class="field-error">El CCI es obligatorio.</span>
-        }
-      </div>
-
-      <div class="field">
-        <label for="moneda">Moneda</label>
-        <select id="moneda" formControlName="moneda">
-          <option value="" disabled>Selecciona una moneda</option>
-          <option value="PEN">Soles (PEN)</option>
-          <option value="USD">Dólares (USD)</option>
-        </select>
-        @if (form.controls.moneda.invalid && form.controls.moneda.touched) {
-          <span class="field-error">La moneda es obligatoria.</span>
-        }
-      </div>
-
-      <div class="acciones-form">
-        <a routerLink="/bancos" class="btn btn-secondary">Cancelar</a>
-        <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+      <div class="form-actions-bar">
+        <a matButton="outlined" routerLink="/bancos">Cancelar</a>
+        <button
+          matButton="filled"
+          color="primary"
+          type="submit"
+          [disabled]="guardando() || form.invalid"
+        >
           {{ guardando() ? 'Guardando...' : 'Guardar' }}
         </button>
       </div>

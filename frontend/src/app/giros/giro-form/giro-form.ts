@@ -1,13 +1,26 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { GiroService } from '../../core/services/giro.service';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-giro-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './giro-form.html',
   styleUrl: './giro-form.css',
 })
@@ -60,12 +73,16 @@ export class GiroForm {
     const id = this.giroId();
 
     const operacion =
-      this.esEdicion() && id !== null ? this.giroService.actualizar(id, valores) : this.giroService.crear(valores);
+      this.esEdicion() && id !== null
+        ? this.giroService.actualizar(id, valores)
+        : this.giroService.crear(valores);
 
     operacion.subscribe({
       next: () => {
         this.guardando.set(false);
-        this.notificationService.exito(this.esEdicion() ? 'Giro actualizado correctamente.' : 'Giro creado correctamente.');
+        this.notificationService.exito(
+          this.esEdicion() ? 'Giro actualizado correctamente.' : 'Giro creado correctamente.',
+        );
         this.router.navigate(['/giros']);
       },
       error: () => this.guardando.set(false),

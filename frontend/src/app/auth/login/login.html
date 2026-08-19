@@ -1,26 +1,61 @@
 <div class="login-page">
-  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
-    <h1>SIGAC</h1>
-    <p class="subtitle">Sistema de Gestión Administrativa y de Caja</p>
+  <mat-card class="mat-elevation-z4 login-card">
+    <mat-card-header class="login-header">
+      <div class="header-content">
+        <mat-icon class="brand-icon">account_balance</mat-icon>
+        <h1 class="brand-title">SIGAC</h1>
+        <p class="brand-subtitle">Sistema de Gestión Administrativa y de Caja</p>
+      </div>
+    </mat-card-header>
 
-    <label for="username">Usuario</label>
-    <input id="username" type="text" formControlName="username" autocomplete="username" />
-    @if (form.controls.username.invalid && form.controls.username.touched) {
-      <span class="field-error">El usuario es obligatorio.</span>
-    }
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <mat-icon matPrefix style="margin-right: 0.5rem; color: #64748b">person</mat-icon>
+          <input
+            matInput
+            formControlName="username"
+            autocomplete="username"
+            placeholder="Ingresa tu usuario"
+          />
+          @if (form.controls.username.invalid && form.controls.username.touched) {
+            <mat-error>El usuario es obligatorio.</mat-error>
+          }
+        </mat-form-field>
 
-    <label for="password">Contraseña</label>
-    <input id="password" type="password" formControlName="password" autocomplete="current-password" />
-    @if (form.controls.password.invalid && form.controls.password.touched) {
-      <span class="field-error">La contraseña es obligatoria.</span>
-    }
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <mat-icon matPrefix style="margin-right: 0.5rem; color: #64748b">lock</mat-icon>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+            placeholder="••••••••"
+          />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <mat-error>La contraseña es obligatoria.</mat-error>
+          }
+        </mat-form-field>
 
-    @if (errorLogin()) {
-      <p class="form-error">{{ errorLogin() }}</p>
-    }
+        @if (errorLogin()) {
+          <div class="form-error">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ errorLogin() }}</span>
+          </div>
+        }
 
-    <button type="submit" [disabled]="cargando()">
-      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
-    </button>
-  </form>
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="submit-button"
+          [disabled]="cargando()"
+        >
+          {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

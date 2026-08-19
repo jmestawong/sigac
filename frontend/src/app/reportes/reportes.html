@@ -1,28 +1,69 @@
-<section class="catalogo-page">
+<section class="reportes-page">
   <header class="page-header">
-    <h1>Reportes</h1>
+    <h1 class="page-title">Reportes y Exportaciones</h1>
   </header>
 
-  <div class="rango-fechas">
-    <div class="field">
-      <label for="desde">Desde</label>
-      <input id="desde" type="date" [value]="desde()" (change)="desde.set($any($event.target).value)" />
-    </div>
-    <div class="field">
-      <label for="hasta">Hasta</label>
-      <input id="hasta" type="date" [value]="hasta()" (change)="hasta.set($any($event.target).value)" />
-    </div>
-  </div>
+  <mat-card class="mat-elevation-z2 filter-card">
+    <mat-card-content class="filter-card-content">
+      <h3 class="filter-title">Definir rango de fechas para los reportes:</h3>
+
+      <div class="date-filters-container">
+        <mat-form-field appearance="outline" class="date-input">
+          <mat-label>Desde</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerDesde"
+            [value]="desde()"
+            (dateChange)="desde.set(formatearFecha($event.value))"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+          <mat-datepicker #pickerDesde></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="date-input">
+          <mat-label>Hasta</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerHasta"
+            [value]="hasta()"
+            (dateChange)="hasta.set(formatearFecha($event.value))"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+          <mat-datepicker #pickerHasta></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
   <div class="reportes-grid">
     @for (opcion of opciones; track opcion.tipo) {
-      <div class="reporte-card">
-        <h2>{{ opcion.titulo }}</h2>
-        <p>{{ opcion.descripcion }}</p>
-        <button type="button" class="btn btn-primary" [disabled]="descargando() === opcion.tipo" (click)="descargar(opcion)">
-          {{ descargando() === opcion.tipo ? 'Generando...' : 'Descargar XLSX' }}
-        </button>
-      </div>
+      <mat-card class="mat-elevation-z2 reporte-card">
+        <mat-card-header class="reporte-card-header">
+          <mat-card-title class="reporte-title">
+            {{ opcion.titulo }}
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="reporte-card-content">
+          <p class="reporte-desc">
+            {{ opcion.descripcion }}
+          </p>
+        </mat-card-content>
+
+        <mat-card-actions class="reporte-card-actions">
+          <button
+            matButton="filled"
+            color="primary"
+            [disabled]="descargando() === opcion.tipo"
+            (click)="descargar(opcion)"
+          >
+            <mat-icon class="icon-margin-right">
+              {{ descargando() === opcion.tipo ? 'hourglass_empty' : 'download' }}
+            </mat-icon>
+            {{ descargando() === opcion.tipo ? 'Generando...' : 'Descargar XLSX' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
     }
   </div>
 </section>

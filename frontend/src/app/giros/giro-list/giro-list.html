@@ -1,43 +1,53 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Giros</h1>
-    <a class="btn btn-primary" routerLink="/giros/nuevo">+ Nuevo giro</a>
+    <div class="header-actions">
+      <a matButton="filled" color="primary" routerLink="/giros/nuevo">+ Nuevo giro</a>
+    </div>
   </header>
 
-  <input
-    type="text"
-    class="filtro"
-    placeholder="Buscar por nombre..."
-    [value]="filtro()"
-    (input)="filtro.set($any($event.target).value)"
-  />
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar giro</mat-label>
+    <input
+      matInput
+      placeholder="Buscar por nombre..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando giros...</p>
-  } @else if (giros().length === 0) {
-    <p class="estado">Aún no hay giros registrados.</p>
-  } @else if (girosFiltrados().length === 0) {
-    <p class="estado">No hay giros que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (giro of girosFiltrados(); track giro.id) {
-            <tr>
-              <td>{{ giro.nombre }}</td>
-              <td class="acciones">
-                <a [routerLink]="['/giros', giro.id, 'editar']" class="btn btn-secondary">Editar</a>
-                <button type="button" class="btn btn-danger" (click)="eliminar(giro)">Eliminar</button>
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="girosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Nombre del giro</th>
+          <td mat-cell *matCellDef="let giro">
+            <strong>{{ giro.nombre }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let giro" class="col-acciones">
+            <div class="action-buttons-cell">
+              <a matButton="outlined" [routerLink]="['/giros', giro.id, 'editar']">Editar</a>
+              <button matButton="filled" class="btn-danger" (click)="eliminar(giro)">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['nombre', 'acciones']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['nombre', 'acciones']"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state-cell" colspan="2">
+            Aún no hay giros registrados o no coinciden con la búsqueda.
+          </td>
+        </tr>
       </table>
     </div>
   }

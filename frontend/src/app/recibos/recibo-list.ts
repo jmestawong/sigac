@@ -2,12 +2,24 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { PagoService } from '../core/services/pago.service';
 import { Recibo, TipoRecibo } from '../core/models/recibo.model';
 
 @Component({
   selector: 'app-recibo-list',
-  imports: [RouterLink, DatePipe],
+  imports: [
+    RouterLink,
+    DatePipe,
+    MatTableModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+  ],
   templateUrl: './recibo-list.html',
   styleUrl: './recibo-list.css',
 })

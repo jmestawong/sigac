@@ -1,6 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { GiroService } from '../../core/services/giro.service';
@@ -8,6 +14,13 @@ import { PuestoService } from '../../core/services/puesto.service';
 import { SocioService } from '../../core/services/socio.service';
 import { Giro } from '../../core/models/giro.model';
 import { Socio } from '../../core/models/socio.model';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 function vigenciaValida(control: AbstractControl): ValidationErrors | null {
   const inicio = control.get('fechaInicioVigencia')?.value;
@@ -22,7 +35,19 @@ function vigenciaValida(control: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-puesto-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
   templateUrl: './puesto-form.html',
   styleUrl: './puesto-form.css',
 })

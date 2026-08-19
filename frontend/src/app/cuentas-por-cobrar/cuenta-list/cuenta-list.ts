@@ -5,10 +5,14 @@ import { AuthService } from '../../core/services/auth.service';
 import { CuentaPorCobrarService } from '../../core/services/cuenta-por-cobrar.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { CuentaPorCobrar } from '../../core/models/cuenta-por-cobrar.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-cuenta-list',
-  imports: [RouterLink],
+  imports: [RouterLink, MatTableModule, MatButtonModule, MatInput, MatFormFieldModule],
   templateUrl: './cuenta-list.html',
   styleUrl: './cuenta-list.css',
 })
@@ -59,7 +63,9 @@ export class CuentaList {
     const destinatario = cuenta.puesto
       ? `puesto ${cuenta.puesto.numero}`
       : `socio ${cuenta.socio?.nombres} ${cuenta.socio?.apellidos}`;
-    const confirmado = confirm(`¿Eliminar la cuenta por cobrar de ${destinatario} (${cuenta.periodo})?`);
+    const confirmado = confirm(
+      `¿Eliminar la cuenta por cobrar de ${destinatario} (${cuenta.periodo})?`,
+    );
     if (!confirmado) {
       return;
     }

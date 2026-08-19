@@ -1,13 +1,28 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { BancoService } from '../../core/services/banco.service';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-banco-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+  ],
   templateUrl: './banco-form.html',
   styleUrl: './banco-form.css',
 })
@@ -77,7 +92,9 @@ export class BancoForm {
       next: () => {
         this.guardando.set(false);
         this.notificationService.exito(
-          this.esEdicion() ? 'Cuenta bancaria actualizada correctamente.' : 'Cuenta bancaria creada correctamente.',
+          this.esEdicion()
+            ? 'Cuenta bancaria actualizada correctamente.'
+            : 'Cuenta bancaria creada correctamente.',
         );
         this.router.navigate(['/bancos']);
       },

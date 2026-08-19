@@ -2,37 +2,122 @@
 @import '../../shared/catalogo.css';
 
 .form-page {
-  max-width: 800px;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.material-form-card {
+  background: white;
+  border-radius: 8px;
+  padding: 2.5rem;
+  box-shadow:
+    0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+}
+
+.form-header-title {
+  margin-top: 0;
+  color: #1e293b;
+  font-size: 1.8rem;
 }
 
 .ayuda {
   color: #64748b;
-  font-size: 0.85rem;
-  margin: -0.5rem 0 1.25rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
-.resultado {
-  margin-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  padding-top: 1.25rem;
-}
-
-.errores {
-  background: #fef2f2;
+.upload-zone {
+  border: 2px dashed #cbd5e1;
   border-radius: 8px;
-  padding: 0.75rem 1rem;
-  margin: 1rem 0;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  background: #f8fafc;
 }
 
-.errores h2 {
-  font-size: 0.9rem;
-  color: #b91c1c;
-  margin: 0 0 0.5rem;
+.upload-label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #334155;
 }
 
-.errores ul {
+.upload-input {
+  margin: 0 auto;
+  display: block;
+}
+
+.form-actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.results-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.success-banner {
+  background: #ecfdf5;
+  border-left: 4px solid #10b981;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+.success-text {
   margin: 0;
-  padding-left: 1.25rem;
+  color: #065f46;
+}
+
+.error-banner {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.error-title {
+  margin-top: 0;
+  color: #b91c1c;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-list {
   color: #991b1b;
-  font-size: 0.85rem;
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.error-list-item {
+  margin-bottom: 0.25rem;
+}
+
+.created-items-title {
+  color: #1e293b;
+  font-size: 1.4rem;
+}
+
+.inner-table-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.mat-table-full {
+  width: 100%;
+}
+
+.col-number {
+  text-align: right;
+  padding-right: 1.5rem;
 }

@@ -1,67 +1,78 @@
 <section class="catalogo-page">
   <header class="page-header">
-    <h1>Recibos</h1>
-    <a class="btn btn-primary" routerLink="/ingresos-externos">+ Ingreso externo</a>
+    <h1>Recibos emitidos</h1>
   </header>
 
-  <div class="filtros">
-    <input type="date" class="filtro-fecha" [value]="fecha()" (change)="cambiarFecha($any($event.target).value)" />
-    <select class="filtro-tipo" [value]="tipo()" (change)="cambiarTipo($any($event.target).value)">
-      <option value="">Todos los tipos</option>
-      <option value="PAGO_CUENTAS">Pago de cuentas</option>
-      <option value="CANJE_BANCARIO">Canje bancario</option>
-      <option value="INGRESO_EXTERNO">Ingreso externo</option>
-    </select>
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar recibo</mat-label>
     <input
-      type="text"
-      class="filtro"
-      placeholder="Buscar por correlativo, tipo, depositante o categoría..."
+      matInput
+      placeholder="Correlativo, socio, puesto o fecha..."
       [value]="filtro()"
       (input)="filtro.set($any($event.target).value)"
     />
-  </div>
+  </mat-form-field>
 
   @if (cargando()) {
     <p class="estado">Cargando recibos...</p>
-  } @else if (recibos().length === 0) {
-    <p class="estado">Aún no se han generado recibos.</p>
-  } @else if (recibosFiltrados().length === 0) {
-    <p class="estado">No hay recibos que coincidan con "{{ filtro() }}".</p>
   } @else {
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Correlativo</th>
-            <th>Tipo</th>
-            <th>Fecha</th>
-            <th>Monto</th>
-            <th>Detalle</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (recibo of recibosFiltrados(); track recibo.id) {
-            <tr>
-              <td>{{ recibo.correlativo }}</td>
-              <td>{{ recibo.tipo }}</td>
-              <td>{{ recibo.fecha | date: 'short' }}</td>
-              <td>{{ recibo.monto }}</td>
-              <td>
-                @if (recibo.tipo === 'CANJE_BANCARIO' && recibo.banco) {
-                  {{ recibo.banco.nombre }} · depósito {{ recibo.fechaDeposito }}
-                } @else if (recibo.tipo === 'INGRESO_EXTERNO') {
-                  {{ recibo.depositante }} · {{ recibo.categoria }} · {{ recibo.concepto }}
-                } @else {
-                  {{ recibo.cuentas.length }} cuenta(s)
-                }
-              </td>
-              <td class="acciones">
-                <a [routerLink]="['/recibos', recibo.id]" class="btn btn-secondary">Ver voucher</a>
-              </td>
-            </tr>
-          }
-        </tbody>
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="recibosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="correlativo">
+          <th mat-header-cell *matHeaderCellDef>Correlativo</th>
+          <td mat-cell *matCellDef="let recibo">
+            <strong>{{ recibo.correlativo }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let recibo">
+            <span class="rol-badge">{{ recibo.tipo }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef>Fecha y Hora</th>
+          <td mat-cell *matCellDef="let recibo">{{ recibo.fecha | date: 'medium' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="destinatario">
+          <th mat-header-cell *matHeaderCellDef>Destinatario</th>
+          <td mat-cell *matCellDef="let recibo">
+            {{ recibo.destinatarioNombre }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <td mat-cell *matCellDef="let recibo" class="monto-text">S/ {{ recibo.montoTotal }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
+          <td mat-cell *matCellDef="let recibo" class="col-acciones">
+            <a matButton="outlined" [routerLink]="['/recibos', recibo.id]">Ver detalle</a>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="['correlativo', 'tipo', 'fecha', 'destinatario', 'monto', 'acciones']"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: ['correlativo', 'tipo', 'fecha', 'destinatario', 'monto', 'acciones']
+          "
+        ></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell empty-state-cell" colspan="6">
+            No hay recibos que coincidan con la búsqueda.
+          </td>
+        </tr>
       </table>
     </div>
   }

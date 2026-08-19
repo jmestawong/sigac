@@ -1,28 +1,68 @@
 @if (authService.isAuthenticated()) {
-  <nav class="topbar">
-    <div class="topbar-izquierda">
-      <span class="brand">SIGAC</span>
-      @if (authService.rol() === 'ADMIN') {
-        <a routerLink="/socios" routerLinkActive="activo">Socios</a>
-        <a routerLink="/puestos" routerLinkActive="activo">Puestos</a>
-        <a routerLink="/giros" routerLinkActive="activo">Giros</a>
-        <a routerLink="/bancos" routerLinkActive="activo">Bancos</a>
-        <a routerLink="/servicios" routerLinkActive="activo">Servicios</a>
-      }
-      <a routerLink="/cuentas-por-cobrar" routerLinkActive="activo">Cuentas por cobrar</a>
-      <a routerLink="/cobranza" routerLinkActive="activo">Cobranza</a>
-      <a routerLink="/recibos" routerLinkActive="activo">Recibos</a>
-      <a routerLink="/egresos" routerLinkActive="activo">Egresos</a>
-      <a routerLink="/reportes" routerLinkActive="activo">Reportes</a>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand-container">
+        <span class="brand-title">SIGAC</span>
+        <span class="brand-subtitle">GESTIÓN ADMINISTRATIVA</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        @if (authService.rol() === 'ADMIN') {
+          <a routerLink="/socios" routerLinkActive="activo"> <mat-icon>people</mat-icon> Socios </a>
+          <a routerLink="/puestos" routerLinkActive="activo">
+            <mat-icon>storefront</mat-icon> Puestos
+          </a>
+          <a routerLink="/giros" routerLinkActive="activo"> <mat-icon>category</mat-icon> Giros </a>
+          <a routerLink="/bancos" routerLinkActive="activo">
+            <mat-icon>account_balance</mat-icon> Bancos
+          </a>
+          <a routerLink="/servicios" routerLinkActive="activo">
+            <mat-icon>build</mat-icon> Servicios
+          </a>
+        }
+
+        <mat-divider style="margin: 1rem 0; border-color: rgba(255, 255, 255, 0.1)"></mat-divider>
+
+        <a routerLink="/cuentas-por-cobrar" routerLinkActive="activo">
+          <mat-icon>request_quote</mat-icon> Cuentas por cobrar
+        </a>
+        <a routerLink="/cobranza" routerLinkActive="activo">
+          <mat-icon>payments</mat-icon> Cobranza
+        </a>
+        <a routerLink="/recibos" routerLinkActive="activo">
+          <mat-icon>receipt</mat-icon> Recibos
+        </a>
+        <a routerLink="/egresos" routerLinkActive="activo">
+          <mat-icon>trending_down</mat-icon> Egresos
+        </a>
+        <a routerLink="/reportes" routerLinkActive="activo">
+          <mat-icon>bar_chart</mat-icon> Reportes
+        </a>
+      </nav>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="top-header">
+        <div class="spacer"></div>
+
+        <div class="user-profile-section">
+          <span class="usuario-info">
+            {{ authService.username() }}
+            <span class="rol-badge-header">{{ authService.rol() }}</span>
+          </span>
+          <button mat-icon-button color="warn" (click)="logout()" title="Cerrar sesión">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <router-outlet></router-outlet>
+      </main>
     </div>
-    <div class="topbar-usuario">
-      <span class="usuario-info">
-        {{ authService.username() }} <span class="rol-badge">{{ authService.rol() }}</span>
-      </span>
-      <button type="button" class="btn btn-secondary" (click)="logout()">Cerrar sesión</button>
-    </div>
-  </nav>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
 }
 
-<router-outlet></router-outlet>
 <app-toast></app-toast>
