@@ -127,5 +127,22 @@ class SocioFlowIntegrationTest {
 
         mockMvc.perform(delete("/api/socios/1").header("Authorization", authHeader))
                 .andExpect(status().isForbidden());
+
+        // Puede consultar cuentas por cobrar (deudas), pero no generarlas ni eliminarlas
+        mockMvc.perform(get("/api/cuentas-por-cobrar").header("Authorization", authHeader))
+                .andExpect(status().isOk());
+
+        String generarBody = """
+                {"servicioId":1,"periodo":"2026-08","monto":10,"puestoIds":[1]}
+                """;
+
+        mockMvc.perform(post("/api/cuentas-por-cobrar/generar/puestos-monto-fijo")
+                        .header("Authorization", authHeader)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(generarBody))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(delete("/api/cuentas-por-cobrar/1").header("Authorization", authHeader))
+                .andExpect(status().isForbidden());
     }
 }

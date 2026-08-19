@@ -69,6 +69,16 @@ public class SecurityConfig {
             "/api/bancos", "/api/bancos/**",
     };
 
+    /**
+     * La generacion masiva y la eliminacion de cuentas por cobrar quedan
+     * reservadas al administrador; la consulta (listado, detalle y resumen
+     * por socio/puesto) sigue abierta a cualquier autenticado, ya que el
+     * Operador de caja la usa para consultar deudas.
+     */
+    private static final String[] GENERACION_CUENTAS_ADMIN = {
+            "/api/cuentas-por-cobrar/generar/**",
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -80,6 +90,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, CATALOGOS_ADMIN).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, CATALOGOS_ADMIN).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, CATALOGOS_ADMIN).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, GENERACION_CUENTAS_ADMIN).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/cuentas-por-cobrar/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint(authenticationEntryPoint())
