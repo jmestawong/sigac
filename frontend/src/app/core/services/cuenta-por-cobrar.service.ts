@@ -22,6 +22,10 @@ export class CuentaPorCobrarService {
     return this.http.get<CuentaPorCobrar[]>(this.baseUrl);
   }
 
+  obtener(id: number): Observable<CuentaPorCobrar> {
+    return this.http.get<CuentaPorCobrar>(`${this.baseUrl}/${id}`);
+  }
+
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

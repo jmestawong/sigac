@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { NotificationService } from '../../core/services/notification.service';
 import { EgresoService } from '../../core/services/egreso.service';
 import { Egreso } from '../../core/models/egreso.model';
+import { mesActualIsoLocal } from '../../core/utils/fecha-local';
 import { MatIconModule } from '@angular/material/icon';
 
 function primerDiaDelMes(mes: string): string {
@@ -44,7 +45,7 @@ export class EgresoList {
   readonly egresos = signal<Egreso[]>([]);
   readonly cargando = signal(true);
   readonly filtro = signal('');
-  readonly mes = signal(new Date().toISOString().slice(0, 7));
+  readonly mes = signal(mesActualIsoLocal());
 
   readonly egresosFiltrados = computed(() => {
     const termino = this.filtro().trim().toLowerCase();

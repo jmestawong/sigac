@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 
 import { NotificationService } from '../../core/services/notification.service';
 import { EgresoService } from '../../core/services/egreso.service';
+import { hoyIsoLocal } from '../../core/utils/fecha-local';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -33,7 +34,7 @@ export class EgresoForm {
   readonly form = this.fb.nonNullable.group({
     numeroDocumento: ['', Validators.required],
     proveedor: ['', Validators.required],
-    fecha: [new Date().toISOString().slice(0, 10), Validators.required],
+    fecha: [hoyIsoLocal(), Validators.required],
     importe: [0, [Validators.required, Validators.min(0.01)]],
     documentoAsociado: [''],
     motivo: ['', Validators.required],

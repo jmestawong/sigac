@@ -9,17 +9,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { aIsoLocal, hoyIsoLocal, primerDiaDelMesIsoLocal } from '../core/utils/fecha-local';
 
 interface OpcionReporte {
   tipo: TipoReporte;
   titulo: string;
   descripcion: string;
-}
-
-function primerDiaDelMes(): string {
-  const hoy = new Date();
-  return new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().slice(0, 10);
 }
 
 @Component({
@@ -32,7 +27,6 @@ function primerDiaDelMes(): string {
     MatButtonModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule,
   ],
   templateUrl: './reportes.html',
   styleUrl: './reportes.css',
@@ -41,8 +35,8 @@ export class Reportes {
   private readonly reporteService = inject(ReporteService);
   private readonly notificationService = inject(NotificationService);
 
-  readonly desde = signal(primerDiaDelMes());
-  readonly hasta = signal(new Date().toISOString().slice(0, 10));
+  readonly desde = signal(primerDiaDelMesIsoLocal());
+  readonly hasta = signal(hoyIsoLocal());
   readonly descargando = signal<TipoReporte | null>(null);
 
   readonly opciones: OpcionReporte[] = [
@@ -99,12 +93,9 @@ export class Reportes {
       },
     });
   }
-  // Agrega esto dentro de tu clase Reportes
-  formatearFecha(fecha: Date | null | any): string {
-    if (!fecha) return '';
-    const d = new Date(fecha);
-    const mes = ('0' + (d.getMonth() + 1)).slice(-2);
-    const dia = ('0' + d.getDate()).slice(-2);
-    return `${d.getFullYear()}-${mes}-${dia}`;
+
+  /** Convierte la fecha elegida en el selector a "AAAA-MM-DD" (hora local). */
+  formatearFecha(fecha: Date | string | null): string {
+    return aIsoLocal(fecha);
   }
 }

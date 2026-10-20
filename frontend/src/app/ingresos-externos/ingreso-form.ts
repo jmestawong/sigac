@@ -1,5 +1,9 @@
+import { DecimalPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 
 import { NotificationService } from '../core/services/notification.service';
@@ -8,7 +12,14 @@ import { Recibo } from '../core/models/recibo.model';
 
 @Component({
   selector: 'app-ingreso-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    DecimalPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './ingreso-form.html',
   styleUrl: './ingreso-form.css',
 })

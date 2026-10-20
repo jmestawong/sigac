@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { Socio, SocioRequest } from '../../core/models/socio.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { SocioService } from '../../core/services/socio.service';
+import { provideFechasLocales } from '../../core/utils/fecha-adapter';
 import { SocioForm } from './socio-form';
 
 describe('SocioForm', () => {
@@ -47,6 +48,7 @@ describe('SocioForm', () => {
       imports: [SocioForm],
       providers: [
         provideRouter([]),
+        ...provideFechasLocales(),
         { provide: SocioService, useValue: socioService },
         { provide: NotificationService, useValue: notificationService },
         {
@@ -85,6 +87,16 @@ describe('SocioForm', () => {
     expect(socioService.crear).toHaveBeenCalledWith(solicitud);
     expect(notificationService.exito).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/socios']);
+  });
+
+  it('modo creación: envía la fecha elegida en el calendario como AAAA-MM-DD en hora local', () => {
+    const fixture = configurar(null);
+
+    // El selector de fechas entrega un Date a medianoche local (10 de abril de 1992).
+    fixture.componentInstance.form.setValue({ ...solicitud, fechaNacimiento: new Date(1992, 3, 10) });
+    fixture.componentInstance.submit();
+
+    expect(socioService.crear).toHaveBeenCalledWith({ ...solicitud, fechaNacimiento: '1992-04-10' });
   });
 
   it('modo edición: precarga los datos del socio existente', () => {

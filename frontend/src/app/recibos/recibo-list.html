@@ -1,17 +1,42 @@
 <section class="catalogo-page">
   <header class="page-header">
     <h1>Recibos emitidos</h1>
+    <div class="header-actions">
+      <a matButton="filled" color="primary" routerLink="/ingresos-externos">+ Ingreso externo</a>
+    </div>
   </header>
 
-  <mat-form-field appearance="outline" class="search-container">
-    <mat-label>Buscar recibo</mat-label>
-    <input
-      matInput
-      placeholder="Correlativo, socio, puesto o fecha..."
-      [value]="filtro()"
-      (input)="filtro.set($any($event.target).value)"
-    />
-  </mat-form-field>
+  <div class="filtros-container">
+    <mat-form-field appearance="outline" class="filtro-fecha">
+      <mat-label>Fecha</mat-label>
+      <input
+        matInput
+        type="date"
+        [value]="fecha()"
+        (change)="cambiarFecha($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filtro-tipo">
+      <mat-label>Tipo</mat-label>
+      <mat-select [value]="tipo()" (selectionChange)="cambiarTipo($event.value)">
+        <mat-option value="">Todos los tipos</mat-option>
+        <mat-option value="PAGO_CUENTAS">Pago de cuentas</mat-option>
+        <mat-option value="CANJE_BANCARIO">Canje bancario</mat-option>
+        <mat-option value="INGRESO_EXTERNO">Ingreso externo</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="search-container">
+      <mat-label>Buscar recibo</mat-label>
+      <input
+        matInput
+        placeholder="Correlativo, socio, puesto o depositante..."
+        [value]="filtro()"
+        (input)="filtro.set($any($event.target).value)"
+      />
+    </mat-form-field>
+  </div>
 
   @if (cargando()) {
     <p class="estado">Cargando recibos...</p>
@@ -39,20 +64,20 @@
 
         <ng-container matColumnDef="destinatario">
           <th mat-header-cell *matHeaderCellDef>Destinatario</th>
-          <td mat-cell *matCellDef="let recibo">
-            {{ recibo.destinatarioNombre }}
-          </td>
+          <td mat-cell *matCellDef="let recibo">{{ destinatarioDe(recibo) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="monto">
           <th mat-header-cell *matHeaderCellDef>Total</th>
-          <td mat-cell *matCellDef="let recibo" class="monto-text">S/ {{ recibo.montoTotal }}</td>
+          <td mat-cell *matCellDef="let recibo" class="monto-text">
+            S/ {{ recibo.monto | number: '1.2-2' }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef class="col-acciones">Acciones</th>
           <td mat-cell *matCellDef="let recibo" class="col-acciones">
-            <a matButton="outlined" [routerLink]="['/recibos', recibo.id]">Ver detalle</a>
+            <a matButton="outlined" [routerLink]="['/recibos', recibo.id]">Ver voucher</a>
           </td>
         </ng-container>
 
@@ -70,7 +95,7 @@
 
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell empty-state-cell" colspan="6">
-            No hay recibos que coincidan con la búsqueda.
+            No hay recibos que coincidan con los filtros.
           </td>
         </tr>
       </table>

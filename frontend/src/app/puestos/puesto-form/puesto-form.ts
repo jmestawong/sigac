@@ -20,16 +20,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { aIsoLocal } from '../../core/utils/fecha-local';
 
 function vigenciaValida(control: AbstractControl): ValidationErrors | null {
-  const inicio = control.get('fechaInicioVigencia')?.value;
-  const fin = control.get('fechaFinVigencia')?.value;
+  const inicio = aIsoLocal(control.get('fechaInicioVigencia')?.value);
+  const fin = aIsoLocal(control.get('fechaFinVigencia')?.value);
 
   if (!inicio || !fin) {
     return null;
   }
 
+  // Ambas en formato "AAAA-MM-DD", por lo que la comparacion de texto es cronologica.
   return fin < inicio ? { vigenciaInvalida: true } : null;
 }
 
@@ -46,7 +47,6 @@ function vigenciaValida(control: AbstractControl): ValidationErrors | null {
     MatSelectModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule,
   ],
   templateUrl: './puesto-form.html',
   styleUrl: './puesto-form.css',
@@ -70,8 +70,9 @@ export class PuestoForm {
     {
       numero: ['', Validators.required],
       nombreInquilino: ['', Validators.required],
-      fechaInicioVigencia: ['', Validators.required],
-      fechaFinVigencia: ['', Validators.required],
+      // El selector de fechas entrega un Date; al cargar un puesto llega "AAAA-MM-DD".
+      fechaInicioVigencia: ['' as Date | string, Validators.required],
+      fechaFinVigencia: ['' as Date | string, Validators.required],
       giroId: ['' as number | '', Validators.required],
       socioId: [null as number | null],
     },
@@ -122,8 +123,8 @@ export class PuestoForm {
     const puestoRequest = {
       numero: valores.numero,
       nombreInquilino: valores.nombreInquilino,
-      fechaInicioVigencia: valores.fechaInicioVigencia,
-      fechaFinVigencia: valores.fechaFinVigencia,
+      fechaInicioVigencia: aIsoLocal(valores.fechaInicioVigencia),
+      fechaFinVigencia: aIsoLocal(valores.fechaFinVigencia),
       giroId: Number(valores.giroId),
       socioId: valores.socioId ? Number(valores.socioId) : null,
     };

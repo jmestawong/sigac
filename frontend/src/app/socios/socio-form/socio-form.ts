@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { aIsoLocal } from '../../core/utils/fecha-local';
 
 @Component({
   selector: 'app-socio-form',
@@ -25,7 +25,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSelectModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule,
   ],
   templateUrl: './socio-form.html',
   styleUrl: './socio-form.css',
@@ -47,7 +46,8 @@ export class SocioForm {
     apellidos: ['', Validators.required],
     accion: ['', Validators.required],
     etapa: ['', Validators.required],
-    fechaNacimiento: ['', Validators.required],
+    // El selector de fechas entrega un Date; al cargar un socio llega "AAAA-MM-DD".
+    fechaNacimiento: ['' as Date | string, Validators.required],
   });
 
   private readonly valoresIniciales = this.form.getRawValue();
@@ -88,12 +88,14 @@ export class SocioForm {
 
     this.guardando.set(true);
     const valores = this.form.getRawValue();
+    // Se envia "AAAA-MM-DD" en hora local (no un Date serializado en UTC).
+    const solicitud = { ...valores, fechaNacimiento: aIsoLocal(valores.fechaNacimiento) };
     const id = this.socioId();
 
     const operacion =
       this.esEdicion() && id !== null
-        ? this.socioService.actualizar(id, valores)
-        : this.socioService.crear(valores);
+        ? this.socioService.actualizar(id, solicitud)
+        : this.socioService.crear(solicitud);
 
     operacion.subscribe({
       next: () => {
