@@ -24,7 +24,7 @@ class SocioRepositoryTest {
                 .nombres("Maria")
                 .apellidos("Lopez")
                 .accion("Ordinaria")
-                .etapa("Activo")
+                .etapa("1")
                 .fechaNacimiento(LocalDate.of(1985, 3, 15))
                 .build();
     }
@@ -51,14 +51,14 @@ class SocioRepositoryTest {
     void actualizar_debeModificarLosCamposDelSocio() {
         Socio guardado = socioRepository.save(nuevoSocio("S-103"));
 
-        guardado.setEtapa("Suspendido");
+        guardado.setEtapa("2");
         guardado.setNombres("Maria Fernanda");
         socioRepository.save(guardado);
 
         Optional<Socio> actualizado = socioRepository.findById(guardado.getId());
 
         assertThat(actualizado).isPresent();
-        assertThat(actualizado.get().getEtapa()).isEqualTo("Suspendido");
+        assertThat(actualizado.get().getEtapa()).isEqualTo("2");
         assertThat(actualizado.get().getNombres()).isEqualTo("Maria Fernanda");
     }
 
