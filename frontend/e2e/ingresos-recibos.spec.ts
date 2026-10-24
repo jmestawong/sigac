@@ -2,7 +2,6 @@ import { Page, expect, test } from '@playwright/test';
 
 import { login } from './helpers';
 
-/** Registra un ingreso externo desde el menu lateral y devuelve el nombre del depositante. */
 async function registrarIngresoExterno(page: Page, monto: string): Promise<string> {
   const depositante = `Depositante E2E ${Date.now()}`;
 
@@ -48,7 +47,6 @@ test.describe('Ingresos externos y recibos (RF-25, RF-29, RF-31)', () => {
     await page.getByRole('link', { name: 'Ver recibos' }).click();
     await expect(page.locator('tr', { hasText: depositante })).toBeVisible();
 
-    // Filtro por tipo: no hay canjes bancarios con ese depositante; sí ingresos externos.
     await page.getByRole('combobox', { name: 'Tipo' }).click();
     await page.getByRole('option', { name: 'Canje bancario' }).click();
     await expect(page.locator('tr', { hasText: depositante })).toHaveCount(0);
@@ -58,7 +56,6 @@ test.describe('Ingresos externos y recibos (RF-25, RF-29, RF-31)', () => {
     await page.getByRole('option', { name: 'Ingreso externo' }).click();
     await expect(page.locator('tr', { hasText: depositante })).toBeVisible();
 
-    // Filtro por fecha: un dia sin movimientos deja la lista vacia.
     await page.getByLabel('Fecha').fill('2000-01-01');
     await expect(page.getByText('No hay recibos que coincidan con los filtros.')).toBeVisible();
   });

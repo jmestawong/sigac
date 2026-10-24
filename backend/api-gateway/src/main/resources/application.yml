@@ -1,0 +1,53 @@
+server:
+  port: ${SERVER_PORT:8762}
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:4200"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
+                allowCredentials: true
+          routes:
+            - id: ms-auth
+              uri: lb://ms-auth
+              predicates:
+                - Path=/api/auth/**
+            - id: ms-catalogos
+              uri: lb://ms-catalogos
+              predicates:
+                - Path=/api/socios/**,/api/puestos/**,/api/giros/**,/api/servicios/**,/api/bancos/**
+            - id: ms-cobranza
+              uri: lb://ms-cobranza
+              predicates:
+                - Path=/api/cuentas-por-cobrar/**,/api/pagos/**,/api/recibos/**
+            - id: ms-egresos
+              uri: lb://ms-egresos
+              predicates:
+                - Path=/api/egresos/**
+            - id: ms-reportes
+              uri: lb://ms-reportes
+              predicates:
+                - Path=/api/reportes/**
+            - id: ms-auditoria
+              uri: lb://ms-auditoria
+              predicates:
+                - Path=/api/auditoria/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}

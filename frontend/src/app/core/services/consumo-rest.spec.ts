@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { AuditoriaService } from './auditoria.service';
 import { BancoService } from './banco.service';
 import { CuentaPorCobrarService } from './cuenta-por-cobrar.service';
 import { EgresoService } from './egreso.service';
@@ -14,10 +15,6 @@ import { ReporteService, TipoReporte } from './reporte.service';
 import { ServicioCobrableService } from './servicio-cobrable.service';
 import { SocioService } from './socio.service';
 
-/**
- * Verifica que la aplicacion Angular consume los servicios REST del backend con
- * los metodos HTTP GET, POST, PUT y DELETE correctos, en cada servicio.
- */
 describe('Consumo de servicios REST desde Angular', () => {
   let httpMock: HttpTestingController;
   const api = environment.apiUrl;
@@ -29,7 +26,6 @@ describe('Consumo de servicios REST desde Angular', () => {
 
   afterEach(() => httpMock.verify());
 
-  /** Dispara la llamada, comprueba metodo + URL (+ cuerpo) y responde para completar el Observable. */
   function verificar(
     llamada: Observable<unknown>,
     metodo: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -122,6 +118,8 @@ describe('Consumo de servicios REST desde Angular', () => {
       verificar(TestBed.inject(CuentaPorCobrarService).resumenPorSocio(4), 'GET', `${base}/resumen/socio/4`);
       verificar(TestBed.inject(CuentaPorCobrarService).resumenPorPuesto(5), 'GET', `${base}/resumen/puesto/5`);
     });
+    it('referencias (uso en cobranza) -> GET', () =>
+      verificar(TestBed.inject(CuentaPorCobrarService).referencias('socio', 8), 'GET', `${base}/referencias/socio/8`));
   });
 
   describe('PagoService (/api/pagos y /api/recibos)', () => {
@@ -222,5 +220,25 @@ describe('Consumo de servicios REST desde Angular', () => {
         req.flush(new Blob(['xlsx']));
       });
     }
+  });
+  describe('AuditoriaService (/api/auditoria)', () => {
+    it('listar -> GET con filtros opcionales de modulo y usuario', () => {
+      TestBed.inject(AuditoriaService).listar('COBRANZA', 'operador').subscribe();
+      const req = httpMock.expectOne(
+        (r) =>
+          r.method === 'GET' &&
+          r.url === `${api}/auditoria` &&
+          r.params.get('modulo') === 'COBRANZA' &&
+          r.params.get('usuario') === 'operador',
+      );
+      req.flush([]);
+    });
+
+    it('listar sin filtros -> GET sin parametros', () => {
+      TestBed.inject(AuditoriaService).listar().subscribe();
+      const req = httpMock.expectOne((r) => r.method === 'GET' && r.url === `${api}/auditoria`);
+      expect(req.request.params.keys()).toHaveLength(0);
+      req.flush([]);
+    });
   });
 });

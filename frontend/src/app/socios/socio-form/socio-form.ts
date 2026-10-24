@@ -46,7 +46,7 @@ export class SocioForm {
     apellidos: ['', Validators.required],
     accion: ['', Validators.required],
     etapa: ['', Validators.required],
-    // El selector de fechas entrega un Date; al cargar un socio llega "AAAA-MM-DD".
+
     fechaNacimiento: ['' as Date | string, Validators.required],
   });
 
@@ -88,7 +88,7 @@ export class SocioForm {
 
     this.guardando.set(true);
     const valores = this.form.getRawValue();
-    // Se envia "AAAA-MM-DD" en hora local (no un Date serializado en UTC).
+
     const solicitud = { ...valores, fechaNacimiento: aIsoLocal(valores.fechaNacimiento) };
     const id = this.socioId();
 

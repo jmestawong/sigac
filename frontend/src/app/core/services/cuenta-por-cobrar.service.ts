@@ -49,4 +49,13 @@ export class CuentaPorCobrarService {
   resumenPorPuesto(puestoId: number): Observable<ResumenPuesto> {
     return this.http.get<ResumenPuesto>(`${this.baseUrl}/resumen/puesto/${puestoId}`);
   }
+
+  referencias(
+    tipo: 'socio' | 'puesto' | 'servicio' | 'banco',
+    id: number,
+  ): Observable<{ tipo: string; id: number; cantidad: number }> {
+    return this.http.get<{ tipo: string; id: number; cantidad: number }>(
+      `${this.baseUrl}/referencias/${tipo}/${id}`,
+    );
+  }
 }

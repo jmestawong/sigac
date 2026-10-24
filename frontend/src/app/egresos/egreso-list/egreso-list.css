@@ -27,7 +27,6 @@
   margin-right: 0.5rem;
 }
 
-/* --- Filtros y Buscador --- */
 .filtros-container {
   display: flex;
   gap: 1.5rem;
@@ -55,7 +54,6 @@
   padding: 2rem;
 }
 
-/* --- Tabla --- */
 .table-wrapper {
   border-radius: 8px;
   overflow: hidden;

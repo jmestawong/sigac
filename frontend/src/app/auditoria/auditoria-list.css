@@ -1,0 +1,51 @@
+.catalogo-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  margin: 0;
+  color: #1e293b;
+  font-size: 2rem;
+}
+
+.descripcion {
+  margin: 0 0 1.5rem;
+  color: #475569;
+  max-width: 760px;
+}
+
+.icon-margin-right {
+  margin-right: 0.5rem;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.estado {
+  color: #475569;
+}
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.mat-table-full {
+  width: 100%;
+}

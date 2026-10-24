@@ -11,7 +11,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { PagoService } from '../core/services/pago.service';
 import { Recibo, TipoRecibo } from '../core/models/recibo.model';
 
-/** Texto del destinatario de un recibo segun su tipo (socio, puesto o depositante). */
 export function destinatarioDeRecibo(recibo: Recibo): string {
   if (recibo.tipo === 'INGRESO_EXTERNO') {
     return recibo.depositante ?? '';

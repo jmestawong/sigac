@@ -41,6 +41,11 @@
         <a routerLink="/reportes" routerLinkActive="activo">
           <mat-icon>bar_chart</mat-icon> Reportes
         </a>
+        @if (authService.rol() === 'ADMIN') {
+          <a routerLink="/auditoria" routerLinkActive="activo">
+            <mat-icon>fact_check</mat-icon> Auditoría
+          </a>
+        }
       </nav>
     </aside>
 

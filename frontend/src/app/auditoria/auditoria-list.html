@@ -1,0 +1,79 @@
+<section class="catalogo-page">
+  <header class="page-header">
+    <h1 class="page-title">Auditoría</h1>
+    <button matButton="outlined" (click)="cargar()">
+      <mat-icon class="icon-margin-right">refresh</mat-icon> Actualizar
+    </button>
+  </header>
+
+  <p class="descripcion">
+    Bitácora de movimientos: cada cobro, canje, ingreso, egreso y cuenta generada se registra
+    de forma asíncrona (RabbitMQ) indicando el usuario que lo realizó.
+  </p>
+
+  <mat-form-field appearance="outline" class="search-container">
+    <mat-label>Buscar en la bitácora</mat-label>
+    <input
+      matInput
+      placeholder="Usuario, módulo, acción o referencia..."
+      [value]="filtro()"
+      (input)="filtro.set($any($event.target).value)"
+    />
+  </mat-form-field>
+
+  @if (cargando()) {
+    <p class="estado">Cargando bitácora...</p>
+  } @else if (registros().length === 0) {
+    <p class="estado empty-state">Todavía no hay movimientos registrados.</p>
+  } @else if (registrosFiltrados().length === 0) {
+    <p class="estado empty-state">No hay movimientos que coincidan con "{{ filtro() }}".</p>
+  } @else {
+    <div class="mat-elevation-z2 table-wrapper">
+      <table mat-table [dataSource]="registrosFiltrados()" class="mat-table-full">
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let registro">{{ registro.fecha | date: 'dd/MM/yyyy HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="usuario">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let registro">
+            <strong>{{ registro.usuario }}</strong>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="modulo">
+          <th mat-header-cell *matHeaderCellDef>Módulo</th>
+          <td mat-cell *matCellDef="let registro">{{ registro.modulo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Acción</th>
+          <td mat-cell *matCellDef="let registro">{{ registro.accion }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="referencia">
+          <th mat-header-cell *matHeaderCellDef>Referencia</th>
+          <td mat-cell *matCellDef="let registro">{{ registro.referencia }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="detalle">
+          <th mat-header-cell *matHeaderCellDef>Detalle</th>
+          <td mat-cell *matCellDef="let registro">{{ registro.detalle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let registro">
+            @if (registro.monto !== null) {
+              S/ {{ registro.monto | number: '1.2-2' }}
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas"></tr>
+      </table>
+    </div>
+  }
+</section>

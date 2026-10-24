@@ -1,10 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'node:path';
 
-// Maven Wrapper segun el sistema operativo; el prefijo "./" es necesario porque
-// el directorio actual no esta en el PATH al lanzar el comando desde Playwright.
-const mavenWrapper = process.platform === 'win32' ? '.\\mvnw.cmd' : './mvnw';
-
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
@@ -23,11 +19,11 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `${mavenWrapper} -q spring-boot:run -Dspring-boot.run.profiles=e2e`,
+      command: 'node scripts/levantar-servicios.js e2e --ready-port=8790',
       cwd: path.resolve(__dirname, '../backend'),
-      port: 8081,
+      url: 'http://localhost:8790',
       reuseExistingServer: !process.env.CI,
-      timeout: 120_000,
+      timeout: 360_000,
     },
     {
       command: 'npm run start',
