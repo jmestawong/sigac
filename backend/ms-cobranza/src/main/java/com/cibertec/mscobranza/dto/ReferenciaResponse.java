@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Cuantos registros de cobranza (cuentas o recibos) usan un elemento del catalogo. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

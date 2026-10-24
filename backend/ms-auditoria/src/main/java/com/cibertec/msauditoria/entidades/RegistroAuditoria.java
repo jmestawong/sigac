@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Una fila de la bitacora: quien hizo que movimiento, sobre que documento y cuando. */
 @Entity
 @Table(name = "auditoria")
 @Data

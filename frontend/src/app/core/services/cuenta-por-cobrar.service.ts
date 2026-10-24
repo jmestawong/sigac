@@ -50,7 +50,6 @@ export class CuentaPorCobrarService {
     return this.http.get<ResumenPuesto>(`${this.baseUrl}/resumen/puesto/${puestoId}`);
   }
 
-  /** Cuantas cuentas o recibos usan un socio, puesto, servicio o banco (ms-catalogos lo consulta antes de eliminar). */
   referencias(
     tipo: 'socio' | 'puesto' | 'servicio' | 'banco',
     id: number,

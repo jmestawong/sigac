@@ -15,12 +15,6 @@ import com.cibertec.mscobranza.entidades.EstadoCuenta;
 import com.cibertec.mscobranza.entidades.Recibo;
 import com.cibertec.mscobranza.entidades.TipoRecibo;
 
-/**
- * Pruebas del repositorio de CuentaPorCobrar: operaciones basicas (insertar,
- * listar, actualizar, eliminar) y las consultas derivadas que usa la cobranza
- * (por estado, por socio, por puesto, por varios puestos, por recibo y los
- * conteos que consulta ms-catalogos antes de eliminar).
- */
 @DataJpaTest
 class CuentaPorCobrarRepositoryTest {
 

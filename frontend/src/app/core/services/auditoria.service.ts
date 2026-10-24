@@ -10,7 +10,6 @@ export class AuditoriaService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/auditoria`;
 
-  /** Bitacora de movimientos que ms-auditoria recibe por RabbitMQ (solo ADMIN). */
   listar(modulo?: string, usuario?: string): Observable<RegistroAuditoria[]> {
     let params = new HttpParams();
     if (modulo) {

@@ -8,12 +8,6 @@ import com.cibertec.sigac.common.exception.DuplicateResourceException;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * Cada microservicio tiene su propia base de datos, asi que la base ya no
- * puede impedir (con una llave foranea) que se elimine un socio, puesto,
- * servicio o banco que ms-cobranza sigue usando. Esta validacion se hace
- * consultando a ms-cobranza con OpenFeign antes de eliminar.
- */
 @Component
 @RequiredArgsConstructor
 public class ReferenciasCobranza {

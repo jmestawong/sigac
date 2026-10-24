@@ -21,11 +21,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.cibertec.mscatalogos.client.CobranzaClient;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Verifica la seguridad de TODOS los endpoints de ms-catalogos, descubiertos
- * automaticamente desde los controladores: exigen JWT valido; el OPERADOR solo
- * puede consultar (GET) y el ADMIN puede todo.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class SeguridadEndpointsIntegrationTest {

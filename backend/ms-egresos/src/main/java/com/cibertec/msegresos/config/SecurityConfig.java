@@ -17,7 +17,6 @@ public class SecurityConfig {
 
     private final ResourceServerSecurity seguridad;
 
-    /** Los egresos los opera tanto el ADMIN como el OPERADOR de caja: basta con estar autenticado. */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return seguridad.construir(http, auth -> auth.anyRequest().authenticated());

@@ -15,7 +15,6 @@ import com.cibertec.mscobranza.dto.ServicioCobrableResponse;
 import com.cibertec.mscobranza.dto.SocioResponse;
 import com.cibertec.mscobranza.dto.TipoDestinatario;
 
-/** Datos de ms-catalogos simulados para las pruebas de integracion de ms-cobranza. */
 final class CobranzaTestSupport {
 
     private CobranzaTestSupport() {

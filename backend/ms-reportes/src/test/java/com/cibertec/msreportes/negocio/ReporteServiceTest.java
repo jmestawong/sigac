@@ -127,9 +127,9 @@ class ReporteServiceTest {
 
         try (Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(contenido))) {
             Sheet hoja = workbook.getSheet("Totales");
-            assertThat(hoja.getRow(1).getCell(1).getNumericCellValue()).isEqualTo(100.00); // ingresos
-            assertThat(hoja.getRow(2).getCell(1).getNumericCellValue()).isEqualTo(100.00); // egresos validos
-            assertThat(hoja.getRow(3).getCell(1).getNumericCellValue()).isEqualTo(0.00); // neto
+            assertThat(hoja.getRow(1).getCell(1).getNumericCellValue()).isEqualTo(100.00);
+            assertThat(hoja.getRow(2).getCell(1).getNumericCellValue()).isEqualTo(100.00);
+            assertThat(hoja.getRow(3).getCell(1).getNumericCellValue()).isEqualTo(0.00);
         }
     }
 

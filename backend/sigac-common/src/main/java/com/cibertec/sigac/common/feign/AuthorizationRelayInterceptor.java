@@ -6,7 +6,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 
-/** Reenvia el token del usuario a los servicios que se consumen con OpenFeign. */
 public class AuthorizationRelayInterceptor implements RequestInterceptor {
 
     @Override

@@ -30,7 +30,6 @@ function vigenciaValida(control: AbstractControl): ValidationErrors | null {
     return null;
   }
 
-  // Ambas en formato "AAAA-MM-DD", por lo que la comparacion de texto es cronologica.
   return fin < inicio ? { vigenciaInvalida: true } : null;
 }
 
@@ -70,7 +69,7 @@ export class PuestoForm {
     {
       numero: ['', Validators.required],
       nombreInquilino: ['', Validators.required],
-      // El selector de fechas entrega un Date; al cargar un puesto llega "AAAA-MM-DD".
+
       fechaInicioVigencia: ['' as Date | string, Validators.required],
       fechaFinVigencia: ['' as Date | string, Validators.required],
       giroId: ['' as number | '', Validators.required],

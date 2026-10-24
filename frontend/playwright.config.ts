@@ -1,9 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'node:path';
 
-// Los microservicios (Eureka, API Gateway y los 6 servicios de negocio) se levantan con el perfil "e2e"
-// (H2 en memoria, sin RabbitMQ) mediante el lanzador de la carpeta backend/scripts. Cuando todo responde,
-// el lanzador publica el puerto 8790, que es el que espera Playwright.
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,

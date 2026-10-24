@@ -8,7 +8,6 @@ spring:
     gateway:
       server:
         webflux:
-          # El navegador (Angular en :4200) solo habla con el gateway; los microservicios no exponen CORS.
           globalcors:
             cors-configurations:
               '[/**]':

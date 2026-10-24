@@ -12,12 +12,6 @@ import com.cibertec.mscobranza.dto.ServicioCobrableResponse;
 import com.cibertec.mscobranza.dto.SocioResponse;
 import com.cibertec.sigac.common.exception.ResourceNotFoundException;
 
-/**
- * Obtiene datos de ms-catalogos y los recuerda durante UNA operacion: si 30
- * cuentas pertenecen al mismo socio, se consulta a ms-catalogos una sola vez
- * (evita el problema de las "N+1 llamadas"). Si un elemento ya no existe en
- * catalogos, devuelve null en lugar de romper el listado completo.
- */
 public class CatalogoResolver {
 
     private final CatalogosClient client;

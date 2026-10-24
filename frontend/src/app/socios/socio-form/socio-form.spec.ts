@@ -92,7 +92,6 @@ describe('SocioForm', () => {
   it('modo creación: envía la fecha elegida en el calendario como AAAA-MM-DD en hora local', () => {
     const fixture = configurar(null);
 
-    // El selector de fechas entrega un Date a medianoche local (10 de abril de 1992).
     fixture.componentInstance.form.setValue({ ...solicitud, fechaNacimiento: new Date(1992, 3, 10) });
     fixture.componentInstance.submit();
 

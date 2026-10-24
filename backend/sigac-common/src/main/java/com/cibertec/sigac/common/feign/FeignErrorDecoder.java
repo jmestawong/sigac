@@ -12,11 +12,6 @@ import com.cibertec.sigac.common.exception.ResourceNotFoundException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 
-/**
- * Traduce los errores de otro microservicio a las excepciones de negocio
- * locales, para que el usuario reciba el mismo 404/400/409 con el mensaje
- * original (por ejemplo "Socio no encontrado con id 7").
- */
 public class FeignErrorDecoder implements ErrorDecoder {
 
     private static final Pattern MENSAJE = Pattern.compile("\"message\"\\s*:\\s*\"([^\"]*)\"");

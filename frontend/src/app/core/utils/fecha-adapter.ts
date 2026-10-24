@@ -9,13 +9,6 @@ import {
 
 import { crearFechaLocal, desdeIsoLocal } from './fecha-local';
 
-/**
- * Adaptador de fechas de Angular Material para el sistema:
- *  - Los valores "AAAA-MM-DD" que llegan del backend se interpretan en hora
- *    local (el adaptador nativo los toma como UTC y en Lima mostraba un dia menos).
- *  - Lo que el usuario escribe se interpreta con el formato peruano dd/MM/aaaa
- *    (tambien acepta AAAA-MM-DD), en lugar del formato mes/dia de Date.parse.
- */
 @Injectable()
 export class FechaLocalDateAdapter extends NativeDateAdapter {
   override deserialize(valor: unknown): Date | null {
@@ -49,7 +42,6 @@ export class FechaLocalDateAdapter extends NativeDateAdapter {
   }
 }
 
-/** Formato de visualizacion dd/MM/aaaa en el campo de entrada del selector de fechas. */
 export const FORMATOS_FECHA_PE: MatDateFormats = {
   parse: { dateInput: null },
   display: {
@@ -60,7 +52,6 @@ export const FORMATOS_FECHA_PE: MatDateFormats = {
   },
 };
 
-/** Proveedores globales del selector de fechas (aplicacion y pruebas). */
 export function provideFechasLocales(): Provider[] {
   return [
     { provide: DateAdapter, useClass: FechaLocalDateAdapter },

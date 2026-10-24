@@ -15,10 +15,6 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Arma la cadena de seguridad comun de los microservicios (stateless, JWT,
- * respuestas 401/403 en JSON). Cada servicio solo aporta sus reglas por ruta.
- */
 @Component
 public class ResourceServerSecurity {
 
@@ -44,11 +40,6 @@ public class ResourceServerSecurity {
         return http.build();
     }
 
-    /**
-     * Escribe el JSON directamente (sin response.sendError): sendError() hace un
-     * forward interno a /error que vuelve a pasar por la cadena y pisaba el 403
-     * original con un 401.
-     */
     private void escribirError(HttpServletResponse response, HttpStatus status, String mensaje) throws IOException {
         String json = """
                 {"timestamp":"%s","status":%d,"error":"%s","message":"%s","detalles":null}"""

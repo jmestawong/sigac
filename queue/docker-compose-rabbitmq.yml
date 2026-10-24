@@ -1,9 +1,3 @@
-# RabbitMQ para la auditoria asincrona de SIGAC.
-#   ms-cobranza y ms-egresos publican en el exchange "sigac.auditoria.exchange";
-#   ms-auditoria consume la cola "sigac.auditoria.queue".
-# Panel de administracion: http://localhost:15672  (usuario guest / clave guest)
-#
-# Uso:   docker compose -f docker-compose-rabbitmq.yml up -d
 services:
   rabbitmq:
     image: rabbitmq:3-management

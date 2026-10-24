@@ -142,9 +142,6 @@ class EgresoServiceTest {
         assertThat(resultado.getErrores().get(0)).contains("Fila 3");
     }
 
-    /**
-     * Fila 2: valida. Fila 3: importe vacio -> debe fallar sin abortar la fila valida.
-     */
     private byte[] construirXlsxDePrueba() throws Exception {
         try (XSSFWorkbook workbook = new XSSFWorkbook(); ByteArrayOutputStream salida = new ByteArrayOutputStream()) {
             var sheet = workbook.createSheet("Egresos");
@@ -166,7 +163,7 @@ class EgresoServiceTest {
             filaInvalida.createCell(0).setCellValue("F-101");
             filaInvalida.createCell(1).setCellValue("Proveedor Invalido");
             filaInvalida.createCell(2).setCellValue("2026-08-02");
-            // importe vacio a proposito
+
             filaInvalida.createCell(5).setCellValue("Motivo cualquiera");
 
             workbook.write(salida);

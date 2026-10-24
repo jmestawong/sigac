@@ -13,7 +13,6 @@ import com.cibertec.sigac.common.dto.ErrorResponse;
 
 import feign.FeignException;
 
-/** Si otro microservicio no responde, el cliente recibe un 503 claro en lugar de un 500. */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class FeignExceptionHandler {

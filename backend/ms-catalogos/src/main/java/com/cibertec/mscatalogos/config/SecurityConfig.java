@@ -18,11 +18,6 @@ public class SecurityConfig {
 
     private final ResourceServerSecurity seguridad;
 
-    /**
-     * Todos los endpoints de este servicio son catalogos: cualquier usuario
-     * autenticado puede consultarlos (el operador de caja los necesita para
-     * cobrar), pero solo el ADMIN puede crear, editar o eliminar.
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return seguridad.construir(http, auth -> auth

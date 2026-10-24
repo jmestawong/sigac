@@ -15,10 +15,6 @@ import { ReporteService, TipoReporte } from './reporte.service';
 import { ServicioCobrableService } from './servicio-cobrable.service';
 import { SocioService } from './socio.service';
 
-/**
- * Verifica que la aplicacion Angular consume los servicios REST del backend con
- * los metodos HTTP GET, POST, PUT y DELETE correctos, en cada servicio.
- */
 describe('Consumo de servicios REST desde Angular', () => {
   let httpMock: HttpTestingController;
   const api = environment.apiUrl;
@@ -30,7 +26,6 @@ describe('Consumo de servicios REST desde Angular', () => {
 
   afterEach(() => httpMock.verify());
 
-  /** Dispara la llamada, comprueba metodo + URL (+ cuerpo) y responde para completar el Observable. */
   function verificar(
     llamada: Observable<unknown>,
     metodo: 'GET' | 'POST' | 'PUT' | 'DELETE',

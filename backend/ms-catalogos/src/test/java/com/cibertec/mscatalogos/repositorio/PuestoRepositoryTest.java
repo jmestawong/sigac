@@ -14,10 +14,6 @@ import com.cibertec.mscatalogos.entidades.Giro;
 import com.cibertec.mscatalogos.entidades.Puesto;
 import com.cibertec.mscatalogos.entidades.Socio;
 
-/**
- * Pruebas del repositorio de Puesto, que ademas valida las relaciones
- * obligatoria (giro) y opcional (socio) del catalogo.
- */
 @DataJpaTest
 class PuestoRepositoryTest {
 

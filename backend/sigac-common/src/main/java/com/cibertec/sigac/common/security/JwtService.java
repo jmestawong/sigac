@@ -13,11 +13,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-/**
- * Emite (ms-auth) y valida (todos los servicios) los tokens JWT. Todos los
- * microservicios comparten la misma clave de firma mediante la propiedad
- * sigac.security.jwt.secret / variable de entorno JWT_SECRET.
- */
 @Service
 public class JwtService {
 
@@ -38,7 +33,6 @@ public class JwtService {
                 .compact();
     }
 
-    /** Lanza JwtException si el token esta mal formado, vencido o con firma invalida. */
     public Claims leerClaims(String token) {
         return Jwts.parser().verifyWith(clave()).build().parseSignedClaims(token).getPayload();
     }

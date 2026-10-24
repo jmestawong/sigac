@@ -19,7 +19,6 @@ public class AuditoriaController {
 
     private final AuditoriaService auditoriaService;
 
-    /** Bitacora de movimientos, de la mas reciente a la mas antigua; filtrable por modulo o por usuario. */
     @GetMapping
     public List<RegistroAuditoria> listar(@RequestParam(required = false) String modulo,
             @RequestParam(required = false) String usuario) {

@@ -102,7 +102,6 @@ class CuentaPorCobrarServiceTest {
                 .costo(new BigDecimal("100.00")).moneda(Moneda.PEN)
                 .destinatario(TipoDestinatario.SOCIO).esPorConsumo(false).build();
 
-        // Datos que ms-catalogos devolveria; lenient porque cada prueba usa solo algunos
         lenient().when(catalogosClient.obtenerServicio(1L)).thenReturn(servicioMontoFijoPuesto);
         lenient().when(catalogosClient.obtenerServicio(2L)).thenReturn(servicioConsumoPuesto);
         lenient().when(catalogosClient.obtenerServicio(3L)).thenReturn(servicioSocio);
@@ -116,8 +115,6 @@ class CuentaPorCobrarServiceTest {
                 .accion("Ordinaria").etapa(etapa).fechaNacimiento(LocalDate.of(1990, 1, 1))
                 .build();
     }
-
-    // --- Puestos, monto fijo ---
 
     @Test
     void generarParaPuestosMontoFijo_debeCrearUnaCuentaPorCadaPuesto() {
@@ -172,8 +169,6 @@ class CuentaPorCobrarServiceTest {
         verify(cuentaPorCobrarRepository, never()).saveAll(anyList());
     }
 
-    // --- Puestos, por consumo ---
-
     @Test
     void generarParaPuestosConsumo_conDiferenciaPositiva_calculaImporteMultiplicandoPorCostoUnitario() {
         GenerarPuestosConsumoRequest request = new GenerarPuestosConsumoRequest(
@@ -183,7 +178,6 @@ class CuentaPorCobrarServiceTest {
 
         List<CuentaPorCobrarResponse> resultado = cuentaPorCobrarService.generarParaPuestosConsumo(request);
 
-        // (140 - 100) * 3.50 = 140.00
         assertThat(resultado).hasSize(1);
         assertThat(resultado.get(0).getMonto()).isEqualByComparingTo("140.00");
         assertThat(resultado.get(0).getLecturaInicial()).isEqualByComparingTo("100");
@@ -214,8 +208,6 @@ class CuentaPorCobrarServiceTest {
         assertThatThrownBy(() -> cuentaPorCobrarService.generarParaPuestosConsumo(request))
                 .isInstanceOf(BusinessRuleException.class);
     }
-
-    // --- Socios ---
 
     @Test
     void generarParaSocios_filtraPorEtapaIndicada() {
@@ -267,8 +259,6 @@ class CuentaPorCobrarServiceTest {
         assertThatThrownBy(() -> cuentaPorCobrarService.generarParaSocios(request))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
-
-    // --- Consultas, resumenes y eliminacion ---
 
     @Test
     void listarTodas_consultaCadaSocioUnaSolaVezAunqueTengaVariasCuentas() {

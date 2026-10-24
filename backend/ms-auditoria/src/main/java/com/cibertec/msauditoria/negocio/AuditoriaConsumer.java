@@ -10,7 +10,6 @@ import com.cibertec.sigac.common.auditoria.AuditoriaEvento;
 
 import lombok.RequiredArgsConstructor;
 
-/** Consume los eventos que publican ms-cobranza y ms-egresos en la cola de RabbitMQ y los guarda en la bitacora. */
 @Component
 @RequiredArgsConstructor
 public class AuditoriaConsumer {

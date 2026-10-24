@@ -25,7 +25,6 @@ public class GenerarSociosRequest {
     @DecimalMin(value = "0.01", message = "El monto debe ser mayor a 0")
     private BigDecimal monto;
 
-    /** Etapas a incluir; vacío o nulo = todas las etapas. */
     private List<String> etapas;
 
     private boolean sociosUnicos;

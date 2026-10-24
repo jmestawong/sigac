@@ -16,11 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.cibertec.msauth.entidades.Rol;
 import com.cibertec.msauth.entidades.Usuario;
 
-/**
- * Pruebas de la capa de acceso a datos de Usuario (base del servicio de login):
- * insertar, listar, actualizar y eliminar, mas la consulta por username y la
- * verificacion de que el password se persiste cifrado con BCrypt.
- */
 @DataJpaTest
 class UsuarioRepositoryTest {
 

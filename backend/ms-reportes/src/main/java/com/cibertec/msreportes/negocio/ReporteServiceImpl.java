@@ -30,10 +30,6 @@ import com.cibertec.sigac.common.exception.BusinessRuleException;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * Este servicio no tiene base de datos propia: arma los reportes consultando
- * por OpenFeign a ms-cobranza (recibos con sus cuentas) y a ms-egresos.
- */
 @Service
 @RequiredArgsConstructor
 public class ReporteServiceImpl implements ReporteService {
@@ -41,7 +37,6 @@ public class ReporteServiceImpl implements ReporteService {
     private final CobranzaClient cobranzaClient;
     private final EgresosClient egresosClient;
 
-    /** Una cuenta cobrada junto con el recibo que la cubrio. */
     private record CuentaCobrada(ReciboResponse recibo, CuentaPorCobrarResponse cuenta) {
     }
 

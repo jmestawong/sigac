@@ -17,11 +17,6 @@ import org.springframework.context.annotation.Bean;
 import com.cibertec.sigac.common.auditoria.AuditoriaAmqp;
 import com.cibertec.sigac.common.auditoria.AuditoriaPublisher;
 
-/**
- * Topologia RabbitMQ de la auditoria: exchange directo + cola durable +
- * binding, mensajes en JSON. Solo se activa en los servicios que traen
- * spring-boot-starter-amqp.
- */
 @AutoConfiguration(after = RabbitAutoConfiguration.class)
 @ConditionalOnClass(RabbitTemplate.class)
 public class AuditoriaAmqpAutoConfiguration {

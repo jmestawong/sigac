@@ -26,11 +26,6 @@ import com.cibertec.sigac.common.security.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 
-/**
- * Pruebas del servicio web REST de login (POST /api/auth/login): credenciales
- * validas, credenciales invalidas, validacion de campos obligatorios, contenido
- * del token emitido y verificacion de que el password sembrado esta cifrado.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class AuthControllerIntegrationTest {

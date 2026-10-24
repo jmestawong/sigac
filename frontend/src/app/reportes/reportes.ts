@@ -94,7 +94,6 @@ export class Reportes {
     });
   }
 
-  /** Convierte la fecha elegida en el selector a "AAAA-MM-DD" (hora local). */
   formatearFecha(fecha: Date | string | null): string {
     return aIsoLocal(fecha);
   }

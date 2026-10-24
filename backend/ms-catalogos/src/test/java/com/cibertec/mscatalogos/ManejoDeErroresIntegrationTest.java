@@ -18,10 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.cibertec.mscatalogos.client.CobranzaClient;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Los errores originados en la propia peticion HTTP se informan con su codigo
- * 4xx y el formato ErrorResponse, en lugar de un 500 generico.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class ManejoDeErroresIntegrationTest {

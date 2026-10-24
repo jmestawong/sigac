@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.cibertec.mscatalogos.dto.ReferenciaResponse;
 
-/** Cliente OpenFeign de ms-cobranza (descubierto por Eureka como "ms-cobranza"). */
 @FeignClient(name = "ms-cobranza")
 public interface CobranzaClient {
 

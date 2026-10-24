@@ -11,10 +11,6 @@ import com.cibertec.mscobranza.dto.PuestoResponse;
 import com.cibertec.mscobranza.dto.ServicioCobrableResponse;
 import com.cibertec.mscobranza.dto.SocioResponse;
 
-/**
- * Cliente OpenFeign de ms-catalogos (descubierto por Eureka como "ms-catalogos").
- * El token del usuario se reenvia automaticamente (AuthorizationRelayInterceptor).
- */
 @FeignClient(name = "ms-catalogos")
 public interface CatalogosClient {
 

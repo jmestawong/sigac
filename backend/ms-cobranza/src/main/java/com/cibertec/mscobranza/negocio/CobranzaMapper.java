@@ -12,7 +12,6 @@ import com.cibertec.mscobranza.entidades.Recibo;
 
 import lombok.RequiredArgsConstructor;
 
-/** Convierte entidades en respuestas completando socio, puesto, servicio y banco desde ms-catalogos. */
 @Component
 @RequiredArgsConstructor
 public class CobranzaMapper {

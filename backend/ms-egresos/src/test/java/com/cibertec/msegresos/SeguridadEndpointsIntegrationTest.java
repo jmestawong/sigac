@@ -19,10 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Seguridad de TODOS los endpoints de ms-egresos (descubiertos desde los
- * controladores): exigen JWT valido; tanto ADMIN como OPERADOR pueden operarlos.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class SeguridadEndpointsIntegrationTest {

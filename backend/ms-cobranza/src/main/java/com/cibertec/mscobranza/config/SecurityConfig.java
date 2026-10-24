@@ -18,12 +18,6 @@ public class SecurityConfig {
 
     private final ResourceServerSecurity seguridad;
 
-    /**
-     * La generacion masiva y la eliminacion de cuentas por cobrar quedan
-     * reservadas al administrador; la consulta, la cobranza y los recibos
-     * estan abiertos a cualquier usuario autenticado (el operador de caja
-     * los usa a diario).
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return seguridad.construir(http, auth -> auth

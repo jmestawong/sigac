@@ -20,10 +20,6 @@ import com.cibertec.msauditoria.negocio.AuditoriaConsumer;
 import com.cibertec.sigac.common.auditoria.AuditoriaEvento;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * El consumidor (que en produccion recibe el mensaje de RabbitMQ) guarda el
- * evento en la bitacora y solo el ADMIN puede consultarla por la API.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional

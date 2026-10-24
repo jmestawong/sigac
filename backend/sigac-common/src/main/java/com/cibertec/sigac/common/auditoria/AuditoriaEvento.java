@@ -8,11 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Mensaje que los servicios operativos (cobranza, egresos) publican en
- * RabbitMQ y que ms-auditoria consume para guardar la bitacora: responde a
- * "quien hizo que movimiento y cuando" (RNF-14).
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

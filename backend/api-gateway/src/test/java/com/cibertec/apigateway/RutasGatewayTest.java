@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.cloud.gateway.route.RouteLocator;
 
-/** El gateway enruta cada grupo de rutas /api/... al microservicio correcto (descubierto por Eureka). */
 @SpringBootTest(properties = { "eureka.client.enabled=false", "spring.cloud.discovery.enabled=false" })
 class RutasGatewayTest {
 

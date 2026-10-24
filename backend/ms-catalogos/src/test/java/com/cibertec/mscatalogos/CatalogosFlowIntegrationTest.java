@@ -24,11 +24,6 @@ import com.cibertec.mscatalogos.client.CobranzaClient;
 import com.cibertec.mscatalogos.dto.ReferenciaResponse;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Flujo completo del microservicio de catalogos: JWT emitido por ms-auth
- * (aqui simulado con el mismo JwtService), CRUD de socios sobre H2 y reglas de
- * rol. ms-cobranza se reemplaza por un mock del cliente OpenFeign.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class CatalogosFlowIntegrationTest {

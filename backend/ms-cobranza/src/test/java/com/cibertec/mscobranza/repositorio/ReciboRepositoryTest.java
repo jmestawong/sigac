@@ -14,10 +14,6 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import com.cibertec.mscobranza.entidades.Recibo;
 import com.cibertec.mscobranza.entidades.TipoRecibo;
 
-/**
- * Pruebas del repositorio de Recibo: operaciones basicas (insertar, listar,
- * actualizar, eliminar) y el conteo por banco que usa ms-catalogos.
- */
 @DataJpaTest
 class ReciboRepositoryTest {
 

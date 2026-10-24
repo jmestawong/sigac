@@ -28,21 +28,6 @@ import com.cibertec.sigac.common.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * Correlativo de recibos: se apoya en el AUTO_INCREMENT (IDENTITY) de la
- * tabla "recibos". En MySQL no existen las secuencias nativas de
- * PostgreSQL/Oracle, pero el contador AUTO_INCREMENT de InnoDB cumple el
- * mismo rol y es seguro ante concurrencia (el motor asigna el siguiente
- * valor bajo un lock interno muy breve, sin que dos inserciones puedan
- * recibir el mismo id). Por eso el correlativo se deriva del id generado
- * en vez de mantener un contador propio con bloqueo optimista: un contador
- * manual (columna con @Version) solo detecta colisiones y obliga a
- * reintentar, mientras que AUTO_INCREMENT las evita de raiz sin retries.
- *
- * Los pagos son transaccionales: las cuentas y el recibo viven en la misma
- * base de datos de este servicio, asi que se confirman o se revierten juntos.
- * La auditoria se publica en RabbitMQ de forma asincrona y no afecta al cobro.
- */
 @Service
 @RequiredArgsConstructor
 @Transactional

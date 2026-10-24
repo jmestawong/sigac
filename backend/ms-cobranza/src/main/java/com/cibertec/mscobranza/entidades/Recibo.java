@@ -17,12 +17,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * El correlativo se asigna despues de persistir (dos fases dentro de la
- * misma transaccion), por eso la columna admite null a nivel de esquema
- * aunque en la practica ningun recibo confirmado queda sin el.
- * El banco pertenece a ms-catalogos: aqui solo se guarda su id.
- */
 @Entity
 @Table(name = "recibos")
 @Data

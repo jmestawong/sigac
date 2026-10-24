@@ -22,11 +22,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.cibertec.mscobranza.client.CatalogosClient;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Seguridad de TODOS los endpoints de ms-cobranza (descubiertos desde los
- * controladores): exigen JWT valido; el OPERADOR consulta y cobra, pero no
- * puede generar ni eliminar cuentas por cobrar (solo ADMIN).
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 class SeguridadEndpointsIntegrationTest {

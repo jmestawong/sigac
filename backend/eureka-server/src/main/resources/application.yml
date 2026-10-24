@@ -10,5 +10,4 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
   server:
-    # En desarrollo: no esperar 5 minutos para sacar instancias caidas del registro
     enable-self-preservation: false

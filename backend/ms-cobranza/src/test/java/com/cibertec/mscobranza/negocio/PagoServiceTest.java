@@ -90,8 +90,6 @@ class PagoServiceTest {
         lenient().when(catalogosClient.obtenerSocio(1L)).thenReturn(socio);
         lenient().when(catalogosClient.obtenerPuesto(1L)).thenReturn(puesto);
 
-        // Simula el AUTO_INCREMENT de MySQL: el primer save asigna id si aun no tiene.
-        // lenient() porque varios tests de validacion nunca llegan a crear un recibo.
         lenient().when(reciboRepository.save(any(Recibo.class))).thenAnswer(inv -> {
             Recibo r = inv.getArgument(0);
             if (r.getId() == null) {
@@ -106,8 +104,6 @@ class PagoServiceTest {
                 .id(id).estado(EstadoCuenta.PENDIENTE).monto(monto).periodo("2026").servicioId(1L);
         return deSocio ? builder.socioId(1L).build() : builder.puestoId(1L).build();
     }
-
-    // --- procesarPagoCuentas ---
 
     @Test
     void procesarPago_conCuentasAbonadas_creaUnReciboConElTotalYCorrelativo() {
@@ -166,8 +162,7 @@ class PagoServiceTest {
 
     @Test
     void procesarPago_cuandoUnaCuentaAbonadaYaFueProcesada_noDebeCrearReciboNiAuditar() {
-        // Simula que otra operacion ya proceso la cuenta 2 (estado ya no es PENDIENTE)
-        // justo antes de confirmar este pago, para probar que no queda estado a medias.
+
         CuentaPorCobrar exoneradaValida = cuentaPendiente(1L, new BigDecimal("50"), true);
         CuentaPorCobrar yaAbonada = cuentaPendiente(2L, new BigDecimal("30"), true);
         yaAbonada.setEstado(EstadoCuenta.ABONADA);
@@ -179,9 +174,6 @@ class PagoServiceTest {
 
         assertThatThrownBy(() -> pagoService.procesarPagoCuentas(request)).isInstanceOf(BusinessRuleException.class);
 
-        // Ningun recibo debe crearse: la validacion de "abonadas" corre despues de
-        // guardar "exoneradas" en la misma transaccion, por lo que @Transactional
-        // revertira tambien ese guardado al propagar la excepcion.
         verify(reciboRepository, never()).save(any(Recibo.class));
         verify(auditoria, never()).registrar(anyString(), anyString(), anyString(), anyString(), any());
     }
@@ -194,8 +186,6 @@ class PagoServiceTest {
 
         assertThatThrownBy(() -> pagoService.procesarPagoCuentas(request)).isInstanceOf(ResourceNotFoundException.class);
     }
-
-    // --- canjeBancario ---
 
     @Test
     void canjeBancario_debeCrearReciboYMarcarLaCuentaComoAbonada() {
@@ -238,8 +228,6 @@ class PagoServiceTest {
         verify(reciboRepository, never()).save(any(Recibo.class));
     }
 
-    // --- registrarIngresoExterno ---
-
     @Test
     void registrarIngresoExterno_debeCrearReciboSinCuentasAsociadas() {
         IngresoExternoRequest request = new IngresoExternoRequest("Municipalidad", "Donacion", "Aporte anual", new BigDecimal("500"));
@@ -253,8 +241,6 @@ class PagoServiceTest {
         assertThat(resultado.getCorrelativo()).isEqualTo("R-000001");
         verify(auditoria).registrar(eq("COBRANZA"), eq("INGRESO_EXTERNO"), eq("R-000001"), anyString(), any());
     }
-
-    // --- consultas ---
 
     @Test
     void obtenerRecibo_cuandoNoExiste_debeLanzarExcepcion() {

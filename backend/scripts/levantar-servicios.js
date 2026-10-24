@@ -1,17 +1,5 @@
 #!/usr/bin/env node
-/**
- * Levanta todos los microservicios de SIGAC en el orden correcto:
- *   eureka-server -> ms-auth, ms-catalogos, ms-cobranza, ms-egresos, ms-reportes, ms-auditoria -> api-gateway
- *
- * Uso (desde la carpeta backend/):
- *   node scripts/levantar-servicios.js            # perfil por defecto: MySQL (docker-compose) + RabbitMQ
- *   node scripts/levantar-servicios.js dev        # H2 en archivo (sin MySQL); RabbitMQ sigue siendo necesario para la auditoria
- *   node scripts/levantar-servicios.js e2e        # H2 en memoria, sin RabbitMQ (pruebas Playwright)
- *   node scripts/levantar-servicios.js e2e --ready-port=8790   # ademas publica http://localhost:8790/ listo cuando todo responde
- *
- * Si faltan los .jar los compila antes con ./mvnw package -DskipTests.
- * Ctrl+C detiene todos los servicios.
- */
+
 const { spawn, spawnSync } = require('node:child_process');
 const fs = require('node:fs');
 const http = require('node:http');
@@ -98,7 +86,6 @@ async function esperar(condicion, descripcion, maximoSeg = 240) {
   throw new Error(`Tiempo agotado esperando: ${descripcion}`);
 }
 
-/** El stack esta listo cuando el login de admin funciona a traves del gateway y el catalogo responde. */
 async function stackListo() {
   try {
     const login = await fetch('http://localhost:8762/api/auth/login', {

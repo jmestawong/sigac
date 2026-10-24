@@ -22,11 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cibertec.mscobranza.client.CatalogosClient;
 import com.cibertec.sigac.common.security.JwtService;
 
-/**
- * Flujo de cobranza de punta a punta contra H2, con ms-catalogos simulado:
- * generar cuentas (ADMIN), cobrarlas (OPERADOR), emitir el recibo con su
- * correlativo y consultar los recibos. Verifica tambien las reglas de rol.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -100,7 +95,6 @@ class CobranzaFlowIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
-        // La cuenta ya fue procesada: no se puede cobrar dos veces
         mockMvc.perform(post("/api/pagos/procesar-cuentas")
                         .header("Authorization", operador()).contentType(MediaType.APPLICATION_JSON).content(pago))
                 .andExpect(status().isBadRequest());

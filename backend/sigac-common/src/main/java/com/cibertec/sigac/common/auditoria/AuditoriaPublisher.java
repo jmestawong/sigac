@@ -9,11 +9,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-/**
- * Publica los eventos de auditoria de forma asincrona. Es "mejor esfuerzo":
- * si RabbitMQ no esta disponible, la operacion de negocio (por ejemplo, el
- * cobro) NO falla; solo se deja una advertencia en el log.
- */
 public class AuditoriaPublisher {
 
     private static final Logger log = LoggerFactory.getLogger(AuditoriaPublisher.class);

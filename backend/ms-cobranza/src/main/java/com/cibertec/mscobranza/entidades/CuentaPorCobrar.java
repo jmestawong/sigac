@@ -18,11 +18,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Los socios, puestos y servicios pertenecen a ms-catalogos (otra base de
- * datos), por eso aqui solo se guardan sus identificadores; los datos se
- * consultan con OpenFeign cuando hay que mostrarlos.
- */
 @Entity
 @Table(name = "cuentas_por_cobrar")
 @Data

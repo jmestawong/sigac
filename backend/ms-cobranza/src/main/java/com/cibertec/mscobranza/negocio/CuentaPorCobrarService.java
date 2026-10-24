@@ -28,6 +28,5 @@ public interface CuentaPorCobrarService {
 
     ResumenPuestoResponse resumenPorPuesto(Long puestoId);
 
-    /** Usado por ms-catalogos antes de eliminar un socio, puesto, servicio o banco. */
     ReferenciaResponse referencias(String tipo, Long id);
 }

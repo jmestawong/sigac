@@ -30,7 +30,6 @@ import com.cibertec.msreportes.client.CobranzaClient;
 import com.cibertec.msreportes.client.EgresosClient;
 import com.cibertec.sigac.common.security.JwtService;
 
-/** Descargas XLSX de ms-reportes (con ms-cobranza y ms-egresos simulados) y su seguridad. */
 @SpringBootTest
 @AutoConfigureMockMvc
 class ReportesIntegrationTest {

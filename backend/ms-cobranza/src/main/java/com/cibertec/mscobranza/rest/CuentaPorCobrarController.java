@@ -77,7 +77,6 @@ public class CuentaPorCobrarController {
         return cuentaPorCobrarService.resumenPorPuesto(puestoId);
     }
 
-    /** Consultado por ms-catalogos (OpenFeign) antes de eliminar un socio, puesto, servicio o banco. */
     @GetMapping("/referencias/{tipo}/{id}")
     public ReferenciaResponse referencias(@PathVariable String tipo, @PathVariable Long id) {
         return cuentaPorCobrarService.referencias(tipo, id);

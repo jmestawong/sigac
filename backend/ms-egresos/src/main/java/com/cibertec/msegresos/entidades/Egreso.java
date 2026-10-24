@@ -16,11 +16,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * El correlativo (comprobante) se asigna en dos fases igual que en Recibo:
- * se persiste primero para obtener el id via AUTO_INCREMENT, y luego se
- * formatea y se guarda de nuevo dentro de la misma transaccion.
- */
 @Entity
 @Table(name = "egresos")
 @Data

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cibertec.msreportes.dto.EgresoResponse;
 
-/** Cliente OpenFeign de ms-egresos. */
 @FeignClient(name = "ms-egresos")
 public interface EgresosClient {
 

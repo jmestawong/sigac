@@ -17,11 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Cada microservicio valida por si mismo el token (no confia solo en el
- * gateway): lee el usuario y el rol desde los claims, sin consultar la base
- * de datos de usuarios (que pertenece a ms-auth).
- */
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

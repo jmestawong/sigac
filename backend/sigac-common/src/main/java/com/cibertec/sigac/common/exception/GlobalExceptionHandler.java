@@ -56,12 +56,6 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Error de validacion", detalles);
     }
 
-    /**
-     * Errores de la peticion HTTP en si (cuerpo ausente o ilegible, parametros
-     * faltantes o mal tipados, metodo o media type no soportado, ruta
-     * inexistente). Sin estos manejadores, el catch-all de abajo los convertia
-     * en un 500 cuando en realidad son errores del cliente (4xx).
-     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleCuerpoIlegible(HttpMessageNotReadableException ex) {
         return build(HttpStatus.BAD_REQUEST, "El cuerpo de la solicitud falta o tiene un formato invalido", null);

@@ -17,7 +17,6 @@ public class SecurityConfig {
 
     private final ResourceServerSecurity seguridad;
 
-    /** La bitacora solo la consulta el administrador. */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return seguridad.construir(http, auth -> auth.anyRequest().hasRole("ADMIN"));

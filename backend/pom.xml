@@ -17,8 +17,6 @@
 	<name>sigac</name>
 	<description>SIGAC - Sistema de Gestion Administrativa y de Caja (microservicios)</description>
 
-	<!-- Un proyecto Maven por servicio: se compilan y prueban juntos desde esta carpeta,
-	     pero cada uno se levanta de forma independiente (spring-boot:run -pl <modulo>). -->
 	<modules>
 		<module>sigac-common</module>
 		<module>eureka-server</module>

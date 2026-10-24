@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.cibertec.sigac.common.security.JwtService;
 
-/** Flujo de egresos de punta a punta (registrar, consultar, procesar, anular) y errores 4xx. */
 @SpringBootTest
 @AutoConfigureMockMvc
 class EgresosFlowIntegrationTest {

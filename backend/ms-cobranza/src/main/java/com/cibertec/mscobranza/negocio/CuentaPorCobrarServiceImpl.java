@@ -245,7 +245,6 @@ public class CuentaPorCobrarServiceImpl implements CuentaPorCobrarService {
         }
     }
 
-    /** Confirma con ms-catalogos que el puesto existe (si no, responde 404 con su mensaje). */
     private Long validarPuesto(Long puestoId) {
         return catalogosClient.obtenerPuesto(puestoId).getId();
     }

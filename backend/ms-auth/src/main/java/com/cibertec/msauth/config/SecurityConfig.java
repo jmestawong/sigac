@@ -24,7 +24,6 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final ResourceServerSecurity seguridad;
 
-    /** Las contrasenas se guardan siempre cifradas con BCrypt. */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

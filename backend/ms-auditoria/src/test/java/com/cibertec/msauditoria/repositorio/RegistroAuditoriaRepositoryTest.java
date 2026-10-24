@@ -12,7 +12,6 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import com.cibertec.msauditoria.entidades.RegistroAuditoria;
 
-/** Operaciones basicas (insertar, listar, actualizar, eliminar) y filtros de la bitacora. */
 @DataJpaTest
 class RegistroAuditoriaRepositoryTest {
 
