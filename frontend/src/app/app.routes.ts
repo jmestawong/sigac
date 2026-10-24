@@ -140,5 +140,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./reportes/reportes').then((m) => m.Reportes),
   },
+  {
+    path: 'auditoria',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./auditoria/auditoria-list').then((m) => m.AuditoriaList),
+  },
   { path: '**', redirectTo: 'socios' },
 ];

@@ -1,16 +1,16 @@
 -- ============================================================================
--- SIGAC - Datos iniciales (usuarios de demostracion)
+-- SIGAC - Datos iniciales (usuarios de demostracion de ms-auth)
 --
 -- Las contrasenas se almacenan cifradas con BCrypt (BCryptPasswordEncoder);
 -- nunca en texto plano. Credenciales de demostracion:
 --     admin     / admin123      (rol ADMIN)
 --     operador  / operador123   (rol OPERADOR)
 --
--- Nota: la aplicacion crea estos dos usuarios automaticamente al arrancar si no
+-- Nota: ms-auth crea estos dos usuarios automaticamente al arrancar si no
 -- existen (clase DataSeeder), por lo que este script es opcional.
 -- ============================================================================
 
-USE sigac_db;
+USE sigac_auth;
 
 INSERT INTO usuarios (username, password, rol) VALUES
   ('admin',    '$2a$10$K8QmP0jbwYoAYnD16Q.oCu/QcElSFIIeITAJ3zKVd9D.nuf8Np0V2', 'ADMIN'),

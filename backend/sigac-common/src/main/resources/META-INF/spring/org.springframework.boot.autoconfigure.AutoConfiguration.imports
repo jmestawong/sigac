@@ -1,0 +1,3 @@
+com.cibertec.sigac.common.config.CommonAutoConfiguration
+com.cibertec.sigac.common.config.FeignCommonAutoConfiguration
+com.cibertec.sigac.common.config.AuditoriaAmqpAutoConfiguration

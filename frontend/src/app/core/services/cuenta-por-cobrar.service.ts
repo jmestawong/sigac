@@ -49,4 +49,14 @@ export class CuentaPorCobrarService {
   resumenPorPuesto(puestoId: number): Observable<ResumenPuesto> {
     return this.http.get<ResumenPuesto>(`${this.baseUrl}/resumen/puesto/${puestoId}`);
   }
+
+  /** Cuantas cuentas o recibos usan un socio, puesto, servicio o banco (ms-catalogos lo consulta antes de eliminar). */
+  referencias(
+    tipo: 'socio' | 'puesto' | 'servicio' | 'banco',
+    id: number,
+  ): Observable<{ tipo: string; id: number; cantidad: number }> {
+    return this.http.get<{ tipo: string; id: number; cantidad: number }>(
+      `${this.baseUrl}/referencias/${tipo}/${id}`,
+    );
+  }
 }

@@ -1,0 +1,37 @@
+# MySQL + phpMyAdmin para los microservicios de SIGAC (mismo esquema del docker-compose del curso).
+# Los servicios usan el puerto 5510 y el usuario root (variable DB_USER/DB_PASSWORD).
+# Cada microservicio crea su propia base: sigac_auth, sigac_catalogos, sigac_cobranza,
+# sigac_egresos y sigac_auditoria (createDatabaseIfNotExist=true).
+#
+# Uso:   docker compose up -d
+services:
+  db:
+    image: ${DB_IMAGE}
+    container_name: ${DB_HOST}
+    restart: always
+    volumes:
+      - my-db:/var/lib/mysql
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWD}
+    networks:
+      - net-mobile
+
+  phpmyadmin:
+    image: ${DB_IMAGE_PHPMA}
+    container_name: ${DB_HOST_PHPMA}
+    ports:
+      - "${DB_PORT_PHPMA}:80"
+    depends_on:
+      - db
+    networks:
+      - net-mobile
+volumes:
+  my-db:
+networks:
+  net-mobile:
+    name: net-mobile
